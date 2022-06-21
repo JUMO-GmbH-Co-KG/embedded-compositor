@@ -18,8 +18,8 @@ find_package(Qt5 5.15 REQUIRED COMPONENTS Core Quick WaylandCompositor)
 
 
 add_executable(compositor
-    main.cpp
-	main.qml
+	compositor/main.cpp
+	compositor/main.qml
 )
 
 target_link_libraries(compositor PRIVATE Qt5::Core Qt5::WaylandCompositor Qt5::Quick)
@@ -39,3 +39,19 @@ add_executable(topclient
 	testclients/topclient/main.qml
 	)
 target_link_libraries(topclient PRIVATE Qt5::Core Qt5::WaylandCompositor Qt5::Quick)
+
+
+add_executable(rightclient
+	testclients/rightclient/main.cpp
+	testclients/rightclient/qml.qrc
+	testclients/rightclient/main.qml
+	)
+target_link_libraries(rightclient PRIVATE Qt5::Core Qt5::WaylandCompositor Qt5::Quick)
+
+
+add_executable(bottomclient
+	testclients/bottomclient/main.cpp
+	testclients/bottomclient/qml.qrc
+	testclients/bottomclient/main.qml
+	)
+target_link_libraries(bottomclient PRIVATE Qt5::Core Qt5::WaylandCompositor Qt5::Quick)

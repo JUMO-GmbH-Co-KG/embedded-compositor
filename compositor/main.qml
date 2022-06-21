@@ -20,11 +20,6 @@ WaylandCompositor {
                     width:4
                     color:"red"
                 }
-                color: ma.pressed ? "red" : "darkred"
-                MouseArea {
-                    id: ma
-                    anchors.fill: parent
-                }
                 property Item surfaceItem
             }
             Rectangle {
@@ -94,7 +89,6 @@ WaylandCompositor {
             property int initialWidth: -1
 
             function handleResized() {
-                console.log(width, height)
                 if(width <= 0 || height <=0) return;
                 if(initialWidth < 0) initialWidth = width;
                 if(initialHeight < 0) initialHeight = height;
