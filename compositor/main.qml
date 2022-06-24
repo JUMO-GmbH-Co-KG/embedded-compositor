@@ -6,8 +6,8 @@ WaylandCompositor {
         sizeFollowsWindow: true
         window: Window {
             id: window
-            width: 1280
-            height: 720
+            width: 800
+            height: 480
             visible: true
             property real initialSize: 0
             Rectangle {
@@ -89,7 +89,8 @@ WaylandCompositor {
             property int initialWidth: -1
 
             function handleResized() {
-                if(width <= 0 || height <=0) return;
+                console.log(shellSurface.iviId+": "+width+"x"+height);
+                if(width < 0 || height <0) return;
                 if(initialWidth < 0) initialWidth = width;
                 if(initialHeight < 0) initialHeight = height;
                 shellSurface.sendConfigure(Qt.size(width, height));
@@ -99,11 +100,18 @@ WaylandCompositor {
 
     IviApplication {
         onIviSurfaceCreated: {
+            console.log("surface created ivi id:"+iviSurface.iviId+
+                        "\nwindow type "+iviSurface.windowType+
+                        "\nsurface client process "+iviSurface.surface.client.processId
+                        );
+            iviSurface.surface.childAdded.connect((child) => {
+                        console.log("child added "+child);
+                    });
             var targetArea = centerArea;
             if(iviSurface.iviId === 1000) targetArea = leftArea;
-            if(iviSurface.iviId === 1001) targetArea = rightArea;
-            if(iviSurface.iviId === 1002) targetArea = topArea;
-            if(iviSurface.iviId === 1003) targetArea = bottomArea;
+            if(iviSurface.iviId === 2000) targetArea = rightArea;
+            if(iviSurface.iviId === 3000) targetArea = topArea;
+            if(iviSurface.iviId === 4000) targetArea = bottomArea;
 
             var item = chromeComponent.createObject(targetArea, { "shellSurface": iviSurface } );
             item.anchors.left = targetArea != rightArea ? targetArea.left : undefined;

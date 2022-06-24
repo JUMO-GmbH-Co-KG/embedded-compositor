@@ -3,7 +3,7 @@ import QtQuick.Window 2.15
 
 Window {
     id: window
-    height: menu.open ? menu.height: bar.height
+    height: menu.visible ? menu.height: bar.height
     width: 100
     visible: true
     title: qsTr("Hello World")
@@ -15,7 +15,7 @@ Window {
         color: "#d02020ef"
         height: 200
         width: parent.width
-        visible: open
+        visible: y != -height
         y: open ? 0 : -height
         Behavior on y { PropertyAnimation {  }}
 

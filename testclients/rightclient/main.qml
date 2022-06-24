@@ -14,7 +14,14 @@ Window {
         color: "#d02020ff"
         height: parent.height
         width: 400
-        visible: false
+        property bool open: false
+        x: open ? 0 : width
+        Behavior on x {
+            PropertyAnimation {}
+        }
+
+        visible: x != width
+
         border {
             width:1
             color:"white"
@@ -26,25 +33,25 @@ Window {
         color: "#3030b0"
         width: 64
         height: parent.height
+        anchors.right: parent.right
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                menu.visible= !menu.visible
+                menu.open= !menu.open
             }
         }
-    }
+        MouseArea {
+            width:32
+            height:32
+            onClicked: Qt.quit()
+            Rectangle {
+                anchors.fill: parent
+            }
 
-    MouseArea {
-        width:32
-        height:32
-        onClicked: Qt.quit()
-        Rectangle {
-            anchors.fill: parent
-        }
-
-        Text {
-            text: "quit"
-            anchors.centerIn: parent
+            Text {
+                text: "quit"
+                anchors.centerIn: parent
+            }
         }
     }
 

@@ -3,7 +3,7 @@ import QtQuick.Window 2.15
 
 Window {
     id: window
-    height: menu.open ? menu.height: bar.height
+    height: menu.visible ? menu.height: bar.height
     width: 100
     visible: true
     title: qsTr("Hello World")
@@ -15,8 +15,8 @@ Window {
         color: "#d02020ef"
         height: 200
         width: parent.width
-        visible: open
-        y: open ? 0 : -height
+        visible: y != height
+        y: open ? 0 : height
         Behavior on y { PropertyAnimation {  }}
 
         MouseArea {
@@ -40,6 +40,7 @@ Window {
         color: menu.open ? "#1818ff" : "#181871"
         width: parent.width
         height: 32
+        anchors.bottom: parent.bottom
         MouseArea {
             anchors.fill: parent
             onClicked: {
@@ -50,24 +51,6 @@ Window {
         border {
             width:1
             color:"white"
-        }
-
-        Text {
-            color: "white"
-            anchors.right: parent.right
-            anchors.rightMargin: 16
-            anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 24
-            Timer {
-                interval: 1000
-                running: true
-                repeat: true
-                onTriggered: {
-                    var d = new Date();
-                    var f = [d.getHours(), d.getMinutes(), d.getSeconds()];
-                    parent.text = f.map((v) => v<10?"0"+v:""+v).join(":");
-                }
-            }
         }
     }
 }
