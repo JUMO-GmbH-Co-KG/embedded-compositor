@@ -1,16 +1,26 @@
 #!/bin/bash
 export QT_SCREEN_SCALE_FACTORS=
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
-../build-compositor-5_15_2-Debug/compositor &
-sleep 1
-export QT_QPA_PLATFORM=wayland
-export QT_WAYLAND_SHELL_INTEGRATION=ivi-shell
 
-QT_IVI_SURFACE_ID=1 kcalc &
-QT_IVI_SURFACE_ID=1000 ../build-compositor-5_15_2-Debug/leftclient &
-QT_IVI_SURFACE_ID=2000 ../build-compositor-5_15_2-Debug/rightclient &
-QT_IVI_SURFACE_ID=3000 ../build-compositor-5_15_2-Debug/topclient &
-QT_IVI_SURFACE_ID=4000 ../build-compositor-5_15_2-Debug/bottomclient &
+BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
+#BUILD_ROOT=../build-compositor-5_15_2-Debug
+$BUILD_ROOT/compositor/compositor &
+sleep 1
+
+export QT_QPA_PLATFORM=wayland
+export QT_WAYLAND_SHELL_INTEGRATION=embedded-shell
+export QT_PLUGIN_PATH=$BUILD_ROOT/plugins
+export QML2_IMPORT_PATH=$BUILD_ROOT/
+export QML_IMPORT_TRACE=1
+#export QT_DEBUG_PLUGINS=1
+#export WAYLAND_DEBUG=1
+export LD_LIBRARY_PATH=$BUILD_ROOT/embeddedshellwindow
+
+#kcalc &
+$BUILD_ROOT/testclients/leftclient/leftclient &
+#$BUILD_ROOT/testclients/rightclient/rightclient &
+#$BUILD_ROOT/testclients/topclient/topclient &
+#$BUILD_ROOT/testclients/bottomclient/bottomclient &
 wait
 
 

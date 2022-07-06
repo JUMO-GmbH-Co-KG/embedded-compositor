@@ -1,6 +1,9 @@
 import QtQuick 2.0
 import QtWayland.Compositor 1.0
 import QtQuick.Window 2.2
+
+import com.embeddedcompositor.embeddedshell 1.0
+
 WaylandCompositor {
     WaylandOutput {
         sizeFollowsWindow: true
@@ -98,28 +101,10 @@ WaylandCompositor {
         }
     }
 
-    IviApplication {
-        onIviSurfaceCreated: {
-            console.log("surface created ivi id:"+iviSurface.iviId+
-                        "\nwindow type "+iviSurface.windowType+
-                        "\nsurface client process "+iviSurface.surface.client.processId
-                        );
-            iviSurface.surface.childAdded.connect((child) => {
-                        console.log("child added "+child);
-                    });
-            var targetArea = centerArea;
-            if(iviSurface.iviId === 1000) targetArea = leftArea;
-            if(iviSurface.iviId === 2000) targetArea = rightArea;
-            if(iviSurface.iviId === 3000) targetArea = topArea;
-            if(iviSurface.iviId === 4000) targetArea = bottomArea;
-
-            var item = chromeComponent.createObject(targetArea, { "shellSurface": iviSurface } );
-            item.anchors.left = targetArea != rightArea ? targetArea.left : undefined;
-            item.anchors.right = targetArea != leftArea ? targetArea.right : undefined;
-            item.anchors.top = targetArea != bottomArea ? targetArea.top : undefined;
-            item.anchors.bottom = targetArea != topArea ? targetArea.bottom : undefined;
-            targetArea.surfaceItem = item;
-            item.handleResized();
+    EmbeddedShell {
+        Component.onCompleted: console.log("INITIALIZED!");
+        onSurfaceAdded: {
+            console.log("QML: shell surface created: "+surface+" "+surface.anchor);
         }
     }
 }
