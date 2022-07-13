@@ -4,7 +4,7 @@ SOURCES +=  main.cpp
 OTHER_FILES += main.qml
 RESOURCES += qml.qrc
 
-unix:!macx: LIBS += -L$$OUT_PWD/../../embeddedshellwindow/ -lembeddedshellwindow
+unix:!macx: LIBS += -L$$OUT_PWD/../../quickembeddedshellwindow/EmbeddedShell -lquickembeddedshellwindow
 
-INCLUDEPATH += $$PWD/../../embeddedshellwindow
-DEPENDPATH += $$PWD/../../embeddedshellwindow
+INCLUDEPATH += $$PWD/../../quickembeddedshellwindow
+DEPENDPATH += $$PWD/../../quickembeddedshellwindow

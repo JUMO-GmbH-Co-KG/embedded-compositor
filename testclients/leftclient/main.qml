@@ -1,16 +1,14 @@
 import QtQuick 2.15
-import QtQuick.Window 2.15
-import com.embeddedcompositor.window 1.0
+import EmbeddedShell 1.0
 
-EmbeddedShellWindow {
+Window {
     id: window
     width: menu.visible ? menu.width : bar.width
     height: 700
     visible: true
     title: qsTr("Hello from LeftCLient")
-    anchor: 42
+    anchor: Window.Anchor.Left
     color: "transparent"
-
     Rectangle {
         id: menu
         color: "#d02020ff"

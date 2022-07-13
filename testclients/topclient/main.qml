@@ -1,5 +1,5 @@
 import QtQuick 2.15
-import QtQuick.Window 2.15
+import EmbeddedShell 1.0
 
 Window {
     id: window
@@ -8,6 +8,7 @@ Window {
     visible: true
     title: qsTr("Hello World")
     color: "transparent"
+    anchor: Window.Anchor.Top
 
     Rectangle {
         id: menu

@@ -79,6 +79,7 @@ WaylandCompositor {
             }
         }
     }
+
     Component {
         id: chromeComponent
         ShellSurfaceItem {
@@ -86,13 +87,39 @@ WaylandCompositor {
             onSurfaceDestroyed: {
                 destroy()
             }
+            Component.onCompleted: {
+                console.log(shellSurface)
+            }
+
             onWidthChanged: handleResized()
             onHeightChanged: handleResized()
             property int initialHeight: -1
             property int initialWidth: -1
 
+            function reanchor(anchor) {
+                console.log("reanchor!! " + shellSurface.anchor);
+                var targetArea = centerArea;
+                if(shellSurface.anchor === 1) targetArea = topArea;
+                if(shellSurface.anchor === 2) targetArea = bottomArea;
+                if(shellSurface.anchor === 3) targetArea = leftArea;
+                if(shellSurface.anchor === 4) targetArea = rightArea;
+                if(shellSurface.anchor === 5) targetArea = centerArea;
+
+                shellSurfaceItem.parent = targetArea;
+                shellSurfaceItem.anchors.left = targetArea != rightArea ? targetArea.left : undefined;
+                shellSurfaceItem.anchors.right = targetArea != leftArea ? targetArea.right : undefined;
+                shellSurfaceItem.anchors.top = targetArea != bottomArea ? targetArea.top : undefined;
+                shellSurfaceItem.anchors.bottom = targetArea != topArea ? targetArea.bottom : undefined;
+                targetArea.surfaceItem = shellSurfaceItem;
+            }
+
+            onShellSurfaceChanged: {
+                console.log(shellSurface)
+                shellSurface.anchorChanged.connect(reanchor)
+            }
+
             function handleResized() {
-                console.log(shellSurface.iviId+": "+width+"x"+height);
+                console.log(shellSurface.anchor+": "+width+"x"+height);
                 if(width < 0 || height <0) return;
                 if(initialWidth < 0) initialWidth = width;
                 if(initialHeight < 0) initialHeight = height;
@@ -105,6 +132,10 @@ WaylandCompositor {
         Component.onCompleted: console.log("INITIALIZED!");
         onSurfaceAdded: {
             console.log("QML: shell surface created: "+surface+" "+surface.anchor);
+
+                var item = chromeComponent.createObject(centerArea, { "shellSurface": surface } );
+                item.handleResized();
+
         }
     }
 }

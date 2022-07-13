@@ -1,7 +1,7 @@
 #include "embeddedshellintegration.h"
 #include "embeddedshellsurface.h"
 #include "QtWaylandClient/private/qwaylandwindow_p.h"
-#include "embeddedshellwindow.h"
+#include "quickembeddedshellwindow.h"
 
 EmbeddedShellIntegration::EmbeddedShellIntegration()
     : QWaylandClientExtension(1)
@@ -17,17 +17,21 @@ QWaylandShellSurface *EmbeddedShellIntegration::createShellSurface(QWaylandWindo
         return nullptr;
     embedded_shell_anchor_border anchor = embedded_shell_anchor_border::EMBEDDED_SHELL_ANCHOR_BORDER_UNDEFINED;
 
-
-    qDebug()<<"XXXXXXX"<<window->window();
-    qDebug()<<"XXXXXXXX"<<window->window()->title();
-
     QuickEmbeddedShellWindow* qew =  qobject_cast<QuickEmbeddedShellWindow*>(window->window());
     if(qew != nullptr) {
-        qDebug()<<"XXXXXXXX AAAAA"<<qew->anchor();
         anchor = static_cast<embedded_shell_anchor_border>(qew->anchor());
     }
     auto *surface = surface_create(window->wlSurface(), anchor);
-    return new EmbeddedShellSurface(surface, window, anchor);
+    auto ess = new EmbeddedShellSurface(surface, window, anchor);
+
+    if(qew != nullptr) {
+        connect(qew, &QuickEmbeddedShellWindow::anchorChanged, ess,
+                [ess](auto anchor) {
+            qDebug()<<"sending anchor"<<anchor;
+            ess->sendAnchor(static_cast<embedded_shell_anchor_border>(anchor));
+        });
+    }
+    return ess;
 }
 
 bool EmbeddedShellIntegration::initialize(QWaylandDisplay *display)

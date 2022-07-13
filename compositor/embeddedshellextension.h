@@ -41,10 +41,20 @@ public:
     QWaylandQuickShellIntegration *createIntegration(QWaylandQuickShellSurfaceItem *item) override;
     QWaylandSurface *surface() const { return m_surface; }
     embedded_shell_anchor_border getAnchor() { return m_anchor; }
-    Q_PROPERTY(uint anchor READ getAnchor)
+    Q_PROPERTY(uint anchor READ getAnchor NOTIFY anchorChanged)
+    void setAnchor(embedded_shell_anchor_border newAnchor);
+    Q_INVOKABLE void sendConfigure(const QSize size);
+
+signals:
+    void anchorChanged(embedded_shell_anchor_border anchor);
+
 private:
     QWaylandSurface* m_surface;
-    embedded_shell_anchor_border m_anchor;
+    embedded_shell_anchor_border m_anchor = embedded_shell_anchor_border::EMBEDDED_SHELL_ANCHOR_BORDER_UNDEFINED;
+
+    // embedded_shell_surface interface
+protected:
+    void embedded_shell_surface_set_anchor(Resource *resource, uint32_t anchor) override;
 };
 
 
@@ -55,8 +65,11 @@ class QuickEmbeddedShellIntegration : public  QWaylandQuickShellIntegration
 public:
     QuickEmbeddedShellIntegration(QWaylandQuickShellSurfaceItem *item);
     ~QuickEmbeddedShellIntegration() override;
+
     Q_PROPERTY(uint anchor READ getAnchor)
+
     uint getAnchor() { return m_shellSurface->getAnchor(); }
+    void sendConfigure(const QSize size);
 
 private slots:
     void handleEmbeddedShellSurfaceDestroyed();

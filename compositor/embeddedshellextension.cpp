@@ -57,20 +57,12 @@ void EmbeddedShellExtension::embedded_shell_surface_create(Resource *resource, w
     emit surfaceAdded(embeddedShellSurface);
 }
 
-/*
-const wl_interface *EmbeddedShellExtension::extensionInterface() const
-{
-    qDebug()<<__PRETTY_FUNCTION__;
-    return nullptr;
-}
-*/
 EmbeddedShellSurface::EmbeddedShellSurface(EmbeddedShellExtension *ext, QWaylandSurface *surface, const QWaylandResource &resource, embedded_shell_anchor_border anchor)
     : QWaylandShellSurfaceTemplate<EmbeddedShellSurface>(this)
     , m_surface(surface)
     , m_anchor(anchor)
 {
     qDebug()<<__PRETTY_FUNCTION__<<anchor;
-    // initialize(application, surface, resource);
     init(resource.resource());
     setExtensionContainer(surface);
     QWaylandCompositorExtension::initialize();
@@ -80,6 +72,12 @@ QWaylandQuickShellIntegration *EmbeddedShellSurface::createIntegration(QWaylandQ
 {
     qDebug()<<__PRETTY_FUNCTION__;
     return new QuickEmbeddedShellIntegration(item);
+}
+
+void EmbeddedShellSurface::sendConfigure(const QSize size)
+{
+    qDebug()<<__PRETTY_FUNCTION__<<size;
+    send_configure(size.width(), size.height());
 }
 
 QuickEmbeddedShellIntegration::QuickEmbeddedShellIntegration(QWaylandQuickShellSurfaceItem *item)
@@ -98,8 +96,21 @@ QuickEmbeddedShellIntegration::~QuickEmbeddedShellIntegration()
     m_item->setSurface(nullptr);
 }
 
+void QuickEmbeddedShellIntegration::sendConfigure(const QSize size)
+{
+    m_shellSurface->send_configure(size.width(), size.height());
+}
+
 void QuickEmbeddedShellIntegration::handleEmbeddedShellSurfaceDestroyed()
 {
     qDebug()<<__PRETTY_FUNCTION__;
     m_shellSurface = nullptr;
+}
+
+void EmbeddedShellSurface::embedded_shell_surface_set_anchor(Resource *resource, uint32_t anchor)
+{
+    Q_UNUSED(resource)
+    qDebug()<<__PRETTY_FUNCTION__<<m_anchor<<"->"<<anchor;
+    m_anchor = static_cast<embedded_shell_anchor_border>(anchor);
+    emit anchorChanged(m_anchor);
 }
