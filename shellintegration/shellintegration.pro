@@ -1,30 +1,32 @@
 QT += gui-private waylandclient-private quick
 CONFIG += wayland-scanner c++17
+TEMPLATE = lib
+DEFINES += EMBEDDEDSHELLINTEGRATION_LIBRARY
 
 QMAKE_USE += wayland-client
 
 qtConfig(xkbcommon): \
     QMAKE_USE += xkbcommon
 
-WAYLANDCLIENTSOURCES += ../protocol/embedded-shell.xml
 
 HEADERS += \
-    embeddedshellintegration.h \
-	embeddedshellsurface.h
+    embeddedshellintegration.h
 
 SOURCES += \
     main.cpp \
-	embeddedshellintegration.cpp \
-	embeddedshellsurface.cpp
+	embeddedshellintegration.cpp
 
 OTHER_FILES += \
     embedded-shell.json
+
+
+TARGET = $$qtLibraryTarget($$TARGET)
 
 PLUGIN_TYPE = wayland-shell-integration
 PLUGIN_CLASS_NAME = EmbeddedShellIntegrationPlugin
 load(qt_plugin)
 
-unix:!macx: LIBS += -L$$OUT_PWD/../quickembeddedshellwindow/EmbeddedShell -lquickembeddedshellwindow
+unix:!macx: LIBS += -L$$OUT_PWD/../embeddedplatform/ -lembeddedplatform
 
-INCLUDEPATH += $$PWD/../quickembeddedshellwindow
-DEPENDPATH += $$PWD/../quickembeddedshellwindow
+INCLUDEPATH += $$PWD/../embeddedplatform
+DEPENDPATH += $$PWD/../embeddedplatform

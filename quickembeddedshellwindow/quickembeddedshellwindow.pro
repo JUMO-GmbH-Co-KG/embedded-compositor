@@ -1,5 +1,5 @@
 QT -= gui
-QT += quick
+QT += quick waylandclient-private
 
 TEMPLATE = lib
 DEFINES += QUICKEMBEDDEDSHELLWINDOW_LIBRARY
@@ -39,3 +39,7 @@ installPath = $$[QT_INSTALL_QML]/$$replace(uri, \\., /)
 qmldir.path = $$installPath
 target.path = $$installPath
 INSTALLS += target qmldir
+
+unix:!macx: LIBS += -L$$OUT_PWD/../embeddedplatform/ -lembeddedplatform
+INCLUDEPATH += $$PWD/../embeddedplatform
+DEPENDPATH += $$PWD/../embeddedplatform

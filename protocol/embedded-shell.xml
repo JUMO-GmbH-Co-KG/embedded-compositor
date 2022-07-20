@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <protocol name="embedded_shell">
-    <copyright>
+	<copyright>
 	FIXME
     </copyright>
 
-  <interface name="embedded_shell_surface" version="1">
-    <request name="destroy" type="destructor"> </request>
-	<request name="set_anchor">
-	    <arg name="anchor" type="uint" />
+	<interface name="embedded_shell_surface" version="1">
+		<request name="destroy" type="destructor"></request>
+		<request name="set_anchor">
+			<arg name="anchor" type="uint" />
 		</request>
-<!--
-    <request name="set_window_title">
-        <arg name="window_title" type="string" />
-    </request>
-
-    <request name="set_minimized">
-        <arg name="minimized" type="uint" />
-    </request>
-    <event name="minimize">
-      <arg name="minimized" type="uint"/>
-    </event>
--->
-    <event name="configure">
-	  <description summary="suggest resize">
+		<event name="configure">
+			<description summary="suggest resize">
 	    The configure event asks the client to resize its surface.
 		The width and height arguments specify the size of the window
 		in surface local coordinates.
 		</description>
-	  <arg name="width" type="int"/>
-	  <arg name="height" type="int"/>
-	</event>
-	<event name="switch_view">
-	  <description summary="switch to view">inform client of requested view </description>
-	  <arg name="view_index" type="uint"/>
-	</event>
-  </interface>
+			<arg name="width" type="int" />
+			<arg name="height" type="int" />
+		</event>
 
-  <interface name="embedded_shell" version="1">
-    <request name="surface_create">
-      <arg name="surface" type="object" interface="wl_surface"/>
-	  <arg name="id" type="new_id" interface="embedded_shell_surface"/>
-	  <arg name="anchor" type="uint" />
-    </request>
+		<request name="view_create">
+			<arg name="shell_surface" type="object" interface="embedded_shell_surface"></arg>
+			<arg name="id" type="new_id" interface="surface_view"></arg>
+		</request>
+	</interface>
 
-    <enum name="error">
-      <entry name="role" value="0" summary="wl_surface already has a different role"/>
-    </enum>
+	<interface name="embedded_shell" version="1">
+		<request name="surface_create">
+			<arg name="surface" type="object" interface="wl_surface" />
+			<arg name="id" type="new_id" interface="embedded_shell_surface" />
+			<arg name="anchor" type="uint" />
+		</request>
 
-    <enum name="anchor_border">
-	  <description summary="screen border anchor"> Which screen border the surface will be anchored to </description>
-	  <entry name="undefined" value="0"/>
-	  <entry name="top" value="1"/>
-	  <entry name="bottom" value="2"/>
-	  <entry name="left" value="3"/>
-	  <entry name="right" value="4"/>
-	  <entry name="center" value="5"/>
-	</enum>
-  </interface>
+		<request name="create_view">
+			<arg name="label" type="string" />
+		</request>
 
+		<enum name="error">
+			<entry name="role" value="0" summary="wl_surface already has a different role" />
+		</enum>
+
+		<enum name="anchor_border">
+			<description summary="screen border anchor"> Which screen border the surface will be anchored to </description>
+			<entry name="undefined" value="0" />
+			<entry name="top" value="1" />
+			<entry name="bottom" value="2" />
+			<entry name="left" value="3" />
+			<entry name="right" value="4" />
+			<entry name="center" value="5" />
+		</enum>
+	</interface>
+
+	<interface name="surface_view" version="1">
+		<request name="set_label">
+			<arg name="text" type="string" />
+		</request>
+		<event name="selected"></event>
+		<request name="destroy" type="destructor"></request>
+	</interface>
 </protocol>

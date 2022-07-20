@@ -7,7 +7,7 @@ Window {
     height: 700
     visible: true
     title: qsTr("Hello from LeftCLient")
-    anchor: Window.Anchor.Left
+    anchor: Platform.Left
     color: "transparent"
     Rectangle {
         id: menu
@@ -59,36 +59,20 @@ Window {
             MouseArea {
                 width:32
                 height:32
-                onClicked: popup.show();
+                onClicked: {
+                    var view =  window.createView();
+                    console.log("view:"+view);
+                }
                 Rectangle {
                     anchors.fill: parent
                 }
 
                 Text {
-                    text: "show"
-                    anchors.centerIn: parent
-                }
-            }
-            MouseArea {
-                width:32
-                height:32
-                onClicked: popup.hide();
-                Rectangle {
-                    anchors.fill: parent
-                }
-
-                Text {
-                    text: "hide"
+                    text: "createView"
                     anchors.centerIn: parent
                 }
             }
         }
 
-    }
-    Window {
-        id: popup
-        width:48
-        height:48
-        color:"red"
     }
 }

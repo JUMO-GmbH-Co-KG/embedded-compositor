@@ -1,19 +1,14 @@
 QT       += core gui
 TEMPLATE = subdirs
 SUBDIRS = shellintegration \
-    compositor \
+        compositor \
+    embeddedplatform \
 	quickembeddedshellwindow \
-	testclients/leftclient \
-	testclients/rightclient \
-	testclients/topclient \
-	testclients/bottomclient
+        testclients \
 
 QT_FOR_CONFIG += waylandclient-private
 
-OTHER_FILES = run.sh
+OTHER_FILES = run.sh protocol/*.xml
 
-shellintegration.depends += quickembeddedshellwindow
-testclients/leftclient.depends+=quickembeddedshellwindow
-testclients/rightclient.depends+=quickembeddedshellwindow
-testclients/topclient.depends+=quickembeddedshellwindow
-testclients/bottomclient.depends+=quickembeddedshellwindow
+quickembeddedshellwindow.depends += shellintegration
+testclients.depends += quickembeddedshellwindow

@@ -113,9 +113,15 @@ WaylandCompositor {
                 targetArea.surfaceItem = shellSurfaceItem;
             }
 
+            function createView()
+            {
+                console.log("compositor: create view!");
+            }
+
             onShellSurfaceChanged: {
                 console.log(shellSurface)
                 shellSurface.anchorChanged.connect(reanchor)
+                shellSurface.createView.connect(createView)
             }
 
             function handleResized() {
