@@ -31,9 +31,9 @@ EmbeddedShellSurface::Anchor EmbeddedShellSurface::getAnchor() const {
   return d->m_anchor;
 }
 
-void EmbeddedShellSurface::applyConfigure() {
-  Q_D(EmbeddedShellSurface);
-  d->window()->resizeFromApplyConfigure(d->m_pendingSize);
+void EmbeddedShellSurfacePrivate::applyConfigure() {
+  qDebug() << __PRETTY_FUNCTION__ << m_pendingSize;
+  window()->resizeFromApplyConfigure(m_pendingSize);
 }
 
 void EmbeddedShellSurfacePrivate::embedded_shell_surface_configure(
@@ -43,10 +43,11 @@ void EmbeddedShellSurfacePrivate::embedded_shell_surface_configure(
   window()->applyConfigureWhenPossible();
 }
 
-EmbeddedShellSurfaceView *EmbeddedShellSurface::createView() {
+EmbeddedShellSurfaceView *
+EmbeddedShellSurface::createView(const QString &label) {
   Q_D(EmbeddedShellSurface);
-  auto view = d->view_create(d->embedded_shell_surface::object());
-  auto ret = new EmbeddedShellSurfaceView(view, this);
+  auto view = d->view_create(d->embedded_shell_surface::object(), label);
+  auto ret = new EmbeddedShellSurfaceView(view, this, label);
   return ret;
 }
 
@@ -61,15 +62,30 @@ void EmbeddedShellSurface::sendAnchor(Anchor anchor) {
 }
 
 EmbeddedShellSurfaceViewPrivate::EmbeddedShellSurfaceViewPrivate(
-    ::surface_view *view, EmbeddedShellSurface *surf)
-    : QObject(surf), QtWayland::surface_view(view), m_owningSurface(surf) {
+    EmbeddedShellSurfaceView *q, ::surface_view *view,
+    EmbeddedShellSurface *surf, const QString &label)
+    : QObject(surf), QtWayland::surface_view(view), m_label(label), q_ptr(q) {
   qDebug() << __PRETTY_FUNCTION__;
 }
 
 EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(::surface_view *view,
-                                                   EmbeddedShellSurface *surf)
-    : d_ptr(new EmbeddedShellSurfaceViewPrivate(view, surf)) {}
+                                                   EmbeddedShellSurface *surf,
+                                                   const QString &label)
+    : d_ptr(new EmbeddedShellSurfaceViewPrivate(this, view, surf, label)) {}
 
 EmbeddedShellSurfaceView::~EmbeddedShellSurfaceView() {
   qDebug() << __PRETTY_FUNCTION__;
+}
+
+const QString &EmbeddedShellSurfaceView::label() const {
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_label;
+}
+
+void EmbeddedShellSurfaceView::setLabel(const QString &newLabel) {
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_label == newLabel)
+    return;
+  d->m_label = newLabel;
+  emit labelChanged();
 }

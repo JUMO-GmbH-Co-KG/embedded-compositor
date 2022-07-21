@@ -18,10 +18,11 @@ public:
   ~EmbeddedShellSurfacePrivate() override;
   Anchor getAnchor() const { return m_anchor; }
 
+  void applyConfigure() override;
+
 private:
   EmbeddedShellSurface::Anchor m_anchor;
   QSize m_pendingSize = {0, 0};
-  //    QtWaylandClient::QWaylandWindow *m_window = nullptr;
   EmbeddedShellSurface *q_ptr = nullptr;
 
 protected:
@@ -32,14 +33,18 @@ class EmbeddedShellSurfaceViewPrivate : public QObject,
                                         public QtWayland::surface_view {
   Q_DECLARE_PUBLIC(EmbeddedShellSurfaceView)
   Q_OBJECT
+  QString m_label;
+
 public:
-  EmbeddedShellSurfaceViewPrivate(::surface_view *view,
-                                  EmbeddedShellSurface *surf);
+  EmbeddedShellSurfaceViewPrivate(EmbeddedShellSurfaceView *q,
+                                  ::surface_view *view,
+                                  EmbeddedShellSurface *surf,
+                                  const QString &label);
   void surface_view_selected() override {
+    qDebug() << __PRETTY_FUNCTION__;
     Q_Q(EmbeddedShellSurfaceView);
     emit q->selected();
   }
-  EmbeddedShellSurface *m_owningSurface = nullptr;
   EmbeddedShellSurfaceView *q_ptr = nullptr;
 };
 #endif // EMBEDDEDSHELLSURFACE_P_H

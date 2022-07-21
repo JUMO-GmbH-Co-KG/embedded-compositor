@@ -7,14 +7,11 @@ Window {
     title: qsTr("Hello from CenterCLient")
     anchor: Platform.Center
     color: "darkgray"
-
-    onViewSelected: {
-        console.log("view selected "+view);
-    }
+    width: 200
+    height:200
 
     Column {
         spacing: 8
-        anchors.centerIn: parent
         MouseArea {
             width:32
             height:32
@@ -32,8 +29,16 @@ Window {
         MouseArea {
             width:32
             height:32
+            property int idx:0
+
             onClicked: {
-                window.createView();
+                var names = ["List view", "Tree view", "Overview" ];
+                var view = window.createView(names[idx++]);
+                console.log("client: view", view);
+                view.selected.connect(function(){
+                    console.log("view "+ view.label +" was selected");
+                    viewLabel.text = view.label;
+                })
             }
             Rectangle {
                 anchors.fill: parent
@@ -44,6 +49,11 @@ Window {
                 anchors.centerIn: parent
             }
         }
+    }
+    Text {
+        id: viewLabel
+        anchors.centerIn: parent
+        text: "view?"
     }
 
 }

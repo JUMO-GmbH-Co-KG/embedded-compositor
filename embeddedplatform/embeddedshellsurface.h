@@ -30,13 +30,10 @@ public:
   ~EmbeddedShellSurface() override;
 
   Anchor getAnchor() const;
-  void applyConfigure();
-  EmbeddedShellSurfaceView *createView();
+  EmbeddedShellSurfaceView *createView(const QString &label);
 
   QtWaylandClient::QWaylandShellSurface *shellSurface();
 signals:
-  void viewCreated(EmbeddedShellSurfaceView *view);
-  void viewSelected(EmbeddedShellSurfaceView *view);
 
 public slots:
   void sendAnchor(Anchor anchor);
@@ -45,16 +42,20 @@ public slots:
 class EmbeddedShellSurfaceView : public QObject {
   Q_OBJECT
   Q_DECLARE_PRIVATE(EmbeddedShellSurfaceView)
-  EmbeddedShellSurface *m_owningSurface;
   QScopedPointer<EmbeddedShellSurfaceViewPrivate> d_ptr;
+  Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
 
 public:
   EmbeddedShellSurfaceView(struct ::surface_view *view,
-                           EmbeddedShellSurface *surf);
+                           EmbeddedShellSurface *surf, const QString &label);
   ~EmbeddedShellSurfaceView() override;
+
+  const QString &label() const;
+  void setLabel(const QString &newLabel);
 
 signals:
   void selected();
+  void labelChanged();
 };
 
 #endif // EMBEDDEDSHELLSURFACE_H

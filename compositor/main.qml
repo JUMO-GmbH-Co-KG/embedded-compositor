@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtWayland.Compositor 1.0
 import QtQuick.Window 2.2
+import QtQml.Models 2.1
 
 import com.embeddedcompositor.embeddedshell 1.0
 
@@ -24,6 +25,12 @@ WaylandCompositor {
                     color:"red"
                 }
                 property Item surfaceItem
+                Row {
+                    z:1000
+                    id: viewsContainer
+                    height:100
+                    anchors.bottom: parent.bottom
+                }
             }
             Rectangle {
                 id:leftArea
@@ -84,6 +91,7 @@ WaylandCompositor {
         id: chromeComponent
         ShellSurfaceItem {
             id: shellSurfaceItem
+
             onSurfaceDestroyed: {
                 destroy()
             }
@@ -113,9 +121,10 @@ WaylandCompositor {
                 targetArea.surfaceItem = shellSurfaceItem;
             }
 
-            function createView()
+            function createView(view)
             {
-                console.log("compositor: create view!");
+                console.log("compositor: create view! ", view);
+                var viewItem = viewComponent.createObject(viewsContainer, {view: view});
             }
 
             onShellSurfaceChanged: {
@@ -130,6 +139,33 @@ WaylandCompositor {
                 if(initialWidth < 0) initialWidth = width;
                 if(initialHeight < 0) initialHeight = height;
                 shellSurface.sendConfigure(Qt.size(width, height));
+            }
+        }
+    }
+    Component {
+        id: viewComponent
+        Rectangle {
+            width:100
+            height: 100
+            id: viewChrome
+            property SurfaceView view
+            color:Qt.rgba(0,0.5,0,0.5);
+            border {
+                width:1
+                color: "white"
+            }
+            Text {
+                anchors.centerIn: parent
+                text: "<"+view.label+">"
+                color:"white"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    console.log("selecting");
+                    view.select();
+                }
             }
         }
     }

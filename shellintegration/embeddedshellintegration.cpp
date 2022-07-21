@@ -1,46 +1,30 @@
 #include "embeddedshellintegration.h"
 #include "QtWaylandClient/private/qwaylandwindow_p.h"
 #include "embeddedshellsurface.h"
-//#include "quickembeddedshellwindow.h"
 
 EmbeddedShellIntegration::EmbeddedShellIntegration()
     : QWaylandClientExtension(1)
 
 {
-  qDebug() << __PRETTY_FUNCTION__ << isActive();
+  qDebug() << __PRETTY_FUNCTION__ << "active?" << isActive();
 }
+
 QWaylandShellSurface *
 EmbeddedShellIntegration::createShellSurface(QWaylandWindow *window) {
-  qDebug() << __PRETTY_FUNCTION__ << isActive();
+  qDebug() << __PRETTY_FUNCTION__ << "active? " << isActive();
   if (!isActive())
     return nullptr;
   EmbeddedShellSurface::Anchor anchor = EmbeddedShellSurface::Anchor::Undefined;
-  /*
-      QuickEmbeddedShellWindow* qew =
-     qobject_cast<QuickEmbeddedShellWindow*>(window->window()); if(qew !=
-     nullptr) { anchor =
-     static_cast<embedded_shell_anchor_border>(qew->anchor());
-      }
-    */
   auto *surface =
       surface_create(window->wlSurface(), (embedded_shell_anchor_border)anchor);
   auto ess = new EmbeddedShellSurface(surface, window, anchor);
-  /*
-      if(qew != nullptr) {
-          connect(qew, &QuickEmbeddedShellWindow::anchorChanged, ess,
-                  [ess](auto anchor) {
-              qDebug()<<"sending anchor"<<anchor;
-              ess->sendAnchor(static_cast<embedded_shell_anchor_border>(anchor));
-          });
-      }
-    */
   m_windows.insert(window, ess);
   return ess->shellSurface();
 }
 
 bool EmbeddedShellIntegration::initialize(QWaylandDisplay *display) {
   QWaylandShellIntegration::initialize(display);
-  qDebug() << isActive();
+  qDebug() << __PRETTY_FUNCTION__ << "active" << isActive();
   return isActive();
 }
 

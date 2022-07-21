@@ -19,6 +19,8 @@ public:
     Center = 5
   };
   Q_ENUM(Anchor)
+
+  static EmbeddedShellSurface *shellSurfaceForWindow(QWindow *window);
 };
 
 #endif // EMBEDDEDPLATFORM_H

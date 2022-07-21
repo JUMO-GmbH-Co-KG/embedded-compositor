@@ -4,7 +4,7 @@ import EmbeddedShell 1.0
 Window {
     id: window
     width: menu.visible ? menu.width : bar.width
-    height: 700
+    height: 200
     visible: true
     title: qsTr("Hello from LeftCLient")
     anchor: Platform.Left

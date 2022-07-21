@@ -4,4 +4,5 @@ SUBDIRS = leftclient \
         rightclient \
 	topclient \
         bottomclient \
-        quickcenterclient
+        quickcenterclient \
+    widgetcenterclient

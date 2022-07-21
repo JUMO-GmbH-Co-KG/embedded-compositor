@@ -113,7 +113,23 @@ void EmbeddedShellSurface::embedded_shell_surface_set_anchor(Resource *resource,
 }
 
 void EmbeddedShellSurface::embedded_shell_surface_view_create(
-    Resource *resource, wl_resource *shell_surface, uint32_t id) {
-  qDebug() << __PRETTY_FUNCTION__;
-  emit createView();
+    Resource *resource, wl_resource *shell_surface, const QString &label,
+    uint32_t id) {
+  qDebug() << __PRETTY_FUNCTION__ << label << id;
+  auto view = new EmbeddedShellSurfaceView(label, resource->client(), id, 1);
+  emit createView(view);
+}
+
+void EmbeddedShellSurfaceView::setLabel(const QString &newLabel) {
+  if (m_label == newLabel)
+    return;
+  m_label = newLabel;
+  emit labelChanged();
+}
+
+void EmbeddedShellSurfaceView::surface_view_set_label(Resource *resource,
+                                                      const QString &text) {
+  qDebug() << __PRETTY_FUNCTION__ << text;
+  Q_UNUSED(resource);
+  setLabel(text);
 }

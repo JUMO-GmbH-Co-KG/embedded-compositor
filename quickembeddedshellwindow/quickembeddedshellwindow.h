@@ -29,12 +29,10 @@ public:
   void componentComplete() override;
 
 public slots:
-  void createView();
+  EmbeddedShellSurfaceView *createView(QString label);
 
 signals:
   void anchorChanged(Anchor anchor);
-  void viewSelected();
-  void viewCreated();
 
 private:
   Anchor m_anchor = Anchor::Undefined;
