@@ -3,7 +3,7 @@ export QT_SCREEN_SCALE_FACTORS=
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
 BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
-#BUILD_ROOT=../build-compositor-5_15_2-Debug
+#BUILD_ROOT=../build
 $BUILD_ROOT/compositor/compositor &
 sleep 1
 
@@ -22,7 +22,7 @@ $BUILD_ROOT/testclients/rightclient/rightclient &
 $BUILD_ROOT/testclients/topclient/topclient &
 $BUILD_ROOT/testclients/bottomclient/bottomclient &
 $BUILD_ROOT/testclients/quickcenterclient/quickcenterclient &
-$BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
+#$BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
 #gdb $BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient
 wait
 
