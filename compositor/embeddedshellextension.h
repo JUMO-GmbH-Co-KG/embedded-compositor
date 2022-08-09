@@ -26,7 +26,6 @@ public:
                                      struct ::wl_resource *surface, uint32_t id,
                                      uint32_t anchor) override;
 
-  //    const wl_interface *extensionInterface() const override;
   void initialize() override;
 signals:
   void surfaceAdded(EmbeddedShellSurface *surface);
@@ -80,7 +79,6 @@ public:
 
 public slots:
   void select() {
-    qDebug() << "send selected";
     surface_view::send_selected();
   }
 signals:
