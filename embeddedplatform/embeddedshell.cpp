@@ -3,16 +3,22 @@
 #include "qwayland-embedded-shell.h"
 
 EmbeddedShell::EmbeddedShell()
-    : QWaylandClientExtension(1), instance(new QtWayland::embedded_shell()) {}
+    : QWaylandClientExtension(/*version=*/1),
+      instance(new QtWayland::embedded_shell()) {
+  qDebug() << __PRETTY_FUNCTION__ << isActive();
+}
 
 EmbeddedShellSurface *
 EmbeddedShell::createSurface(QtWaylandClient::QWaylandWindow *window,
-                             EmbeddedShellSurface::Anchor anchor) {
+                             EmbeddedShellSurface::Anchor anchor,
+                             uint32_t margin) {
+  qDebug() << __PRETTY_FUNCTION__ << isActive() << anchor << margin;
   if (!isActive())
     return nullptr;
-  auto surface = instance->surface_create(window->wlSurface(),
-                                          (embedded_shell_anchor_border)anchor);
-  auto ess = new EmbeddedShellSurface(surface, window, anchor);
+  auto surface = instance->surface_create(
+      window->wlSurface(), static_cast<embedded_shell_anchor_border>(anchor),
+      margin);
+  auto ess = new EmbeddedShellSurface(surface, window, anchor, margin);
   return ess;
 }
 

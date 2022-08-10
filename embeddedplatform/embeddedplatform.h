@@ -22,5 +22,6 @@ public:
 
   static EmbeddedShellSurface *shellSurfaceForWindow(QWindow *window);
 };
+Q_DECLARE_METATYPE(EmbeddedPlatform::Anchor)
 
 #endif // EMBEDDEDPLATFORM_H

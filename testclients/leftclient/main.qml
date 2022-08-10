@@ -9,6 +9,7 @@ Window {
     title: qsTr("Hello from LeftCLient")
     anchor: Platform.Left
     color: "transparent"
+    margin: 64
     Rectangle {
         id: menu
         color: "#d02020ff"

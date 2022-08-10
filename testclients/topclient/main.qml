@@ -9,6 +9,7 @@ Window {
     title: qsTr("Hello World")
     color: "transparent"
     anchor: Window.Anchor.Top
+    margin: bar.height
 
     Rectangle {
         id: menu

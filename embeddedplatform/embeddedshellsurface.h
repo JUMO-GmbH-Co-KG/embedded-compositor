@@ -26,7 +26,8 @@ public:
   using Anchor = EmbeddedPlatform::Anchor;
 
   EmbeddedShellSurface(struct ::embedded_shell_surface *shell_surface,
-                       QtWaylandClient::QWaylandWindow *window, Anchor anchor);
+                       QtWaylandClient::QWaylandWindow *window, Anchor anchor,
+                       uint32_t margin);
   ~EmbeddedShellSurface() override;
 
   Anchor getAnchor() const;
@@ -37,6 +38,7 @@ signals:
 
 public slots:
   void sendAnchor(Anchor anchor);
+  void sendMargin(int margin);
 };
 
 class EmbeddedShellSurfaceView : public QObject {

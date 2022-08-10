@@ -21,7 +21,7 @@ WaylandCompositor {
                 anchors.right: rightArea.left
                 anchors.bottom: bottomArea.top
                 border {
-                    width:4
+                    width: 1
                     color:"red"
                 }
                 property Item surfaceItem
@@ -34,54 +34,54 @@ WaylandCompositor {
             }
             Rectangle {
                 id:leftArea
-                width: surfaceItem ? surfaceItem.initialWidth :window.initialSize
+                width: surfaceItem ? surfaceItem.margin:window.initialSize
                 anchors.bottom: bottomArea.top
                 anchors.left: parent.left
                 anchors.top: topArea.bottom
                 border {
                     width:1
-                    color:"green"
+                    color:"lime"
                 }
-                color: "darkgreen"
+                color: "transparent"
                 property Item surfaceItem
             }
             Rectangle {
                 id:rightArea
-                width: surfaceItem ? surfaceItem.initialWidth :window.initialSize
+                width: surfaceItem ? surfaceItem.margin :window.initialSize
                 anchors.bottom:bottomArea.top
                 anchors.right: parent.right
                 anchors.top: topArea.bottom
                 border {
                     width:1
-                    color:"green"
+                    color:"lime"
                 }
-                color: "darkgreen"
+                color: "transparent"
                 property Item surfaceItem
             }
             Rectangle {
                 id: topArea
-                height: surfaceItem ? surfaceItem.initialHeight : window.initialSize
+                height: surfaceItem ? surfaceItem.margin : window.initialSize
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
                 border {
                     width: 1
-                    color:"green"
+                    color:"lime"
                 }
-                color: "darkgreen"
+                color: "transparent"
                 property Item surfaceItem
             }
             Rectangle {
                 id: bottomArea
-                height: surfaceItem ? surfaceItem.initialHeight : window.initialSize
+                height: surfaceItem ? surfaceItem.margin : window.initialSize
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
                 border {
                     width:1
-                    color:"green"
+                    color:"lime"
                 }
-                color: "darkgreen"
+                color: "transparent"
                 property Item surfaceItem
             }
         }
@@ -92,6 +92,7 @@ WaylandCompositor {
         ShellSurfaceItem {
             id: shellSurfaceItem
 
+            opacity: 0.5
             onSurfaceDestroyed: {
                 destroy()
             }
@@ -101,8 +102,20 @@ WaylandCompositor {
 
             onWidthChanged: handleResized()
             onHeightChanged: handleResized()
-            property int initialHeight: -1
-            property int initialWidth: -1
+            property int margin: shellSurface.margin
+            /*{
+                if(shellSurface.margin >= 0){
+                    return shellSurface.margin;
+                } else {
+                    console.log(shellSurface.width ,shellSurface.height);
+                    if(shellSurface.anchor == 1 || shellSurface.anchor == 2) {
+                        return height
+                    } else if(shellSurface.anchor == 3 || shellSurface.anchor == 4) {
+                        return width
+                    }
+                }
+                return 0
+            }*/
 
             function reanchor(anchor) {
                 console.log("reanchor!! " + shellSurface.anchor);
@@ -129,22 +142,26 @@ WaylandCompositor {
 
             onShellSurfaceChanged: {
                 console.log(shellSurface)
-                shellSurface.anchorChanged.connect(reanchor)
-                shellSurface.createView.connect(createView)
+                shellSurface.anchorChanged.connect(reanchor);
+                shellSurface.createView.connect(createView);
             }
 
             function handleResized() {
-                console.log(shellSurface.anchor+": "+width+"x"+height);
+                console.log("handleResize anchor:"+shellSurface.anchor+" size "+width+"x"+height);
                 if(width < 0 || height <0) return;
-                if(initialWidth < 0) initialWidth = width;
-                if(initialHeight < 0) initialHeight = height;
                 shellSurface.sendConfigure(Qt.size(width, height));
+            }
+            Text {
+                text: "m:"+shellSurface.margin
+                z:1000
+                color:"yellow"
             }
         }
     }
     Component {
         id: viewComponent
         Rectangle {
+            z:100
             width:100
             height: 100
             id: viewChrome

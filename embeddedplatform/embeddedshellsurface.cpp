@@ -8,8 +8,9 @@ using namespace QtWaylandClient;
 
 EmbeddedShellSurface::EmbeddedShellSurface(
     struct ::embedded_shell_surface *shell_surface, QWaylandWindow *window,
-    Anchor anchor)
-    : d_ptr(new EmbeddedShellSurfacePrivate(shell_surface, window, anchor)) {
+    Anchor anchor, uint32_t margin)
+    : d_ptr(new EmbeddedShellSurfacePrivate(shell_surface, window, anchor,
+                                            margin)) {
   qDebug() << __PRETTY_FUNCTION__ << anchor;
 }
 
@@ -17,11 +18,11 @@ EmbeddedShellSurface::~EmbeddedShellSurface() {}
 
 EmbeddedShellSurfacePrivate::EmbeddedShellSurfacePrivate(
     struct ::embedded_shell_surface *shell_surface,
-    QtWaylandClient::QWaylandWindow *window, Anchor anchor)
+    QtWaylandClient::QWaylandWindow *window, Anchor anchor, uint32_t margin)
     : QWaylandShellSurface(window), QtWayland::embedded_shell_surface(
                                         shell_surface),
-      m_anchor(anchor) {
-  qDebug() << __PRETTY_FUNCTION__ << anchor;
+      m_anchor(anchor), m_margin(margin) {
+  qDebug() << __PRETTY_FUNCTION__ << anchor << margin;
 }
 
 EmbeddedShellSurfacePrivate::~EmbeddedShellSurfacePrivate() {}
@@ -59,6 +60,12 @@ void EmbeddedShellSurface::sendAnchor(Anchor anchor) {
   qDebug() << __PRETTY_FUNCTION__ << anchor;
   Q_D(EmbeddedShellSurface);
   d->set_anchor(static_cast<embedded_shell_anchor_border>(anchor));
+}
+
+void EmbeddedShellSurface::sendMargin(int margin) {
+  qDebug() << __PRETTY_FUNCTION__ << margin;
+  Q_D(EmbeddedShellSurface);
+  d->set_margin(margin);
 }
 
 EmbeddedShellSurfaceViewPrivate::EmbeddedShellSurfaceViewPrivate(

@@ -6,12 +6,29 @@
 bool EmbeddedShellIntegration::isActive() const { return m_shell->isActive(); }
 
 EmbeddedShellIntegration::EmbeddedShellIntegration()
-    : m_shell(new EmbeddedShell()) {}
+    : m_shell(new EmbeddedShell()) {
+  qDebug() << __PRETTY_FUNCTION__;
+}
 
 QWaylandShellSurface *
 EmbeddedShellIntegration::createShellSurface(QWaylandWindow *window) {
+
   EmbeddedShellSurface::Anchor anchor = EmbeddedShellSurface::Anchor::Undefined;
-  auto ess = m_shell->createSurface(window, anchor);
+
+  auto prop = window->window()->property("anchor");
+  if (prop.isValid())
+    anchor = prop.value<EmbeddedShellSurface::Anchor>();
+
+  uint32_t margin = 0;
+
+  prop = window->window()->property("margin");
+  if (prop.isValid())
+    margin = prop.toInt();
+
+  qDebug() << __PRETTY_FUNCTION__ << "PROPERTIES" << window->properties()
+           << "margin" << margin << "anchor" << anchor;
+
+  auto ess = m_shell->createSurface(window, anchor, margin);
   if (ess == nullptr)
     return nullptr;
   m_windows.insert(window, ess);
@@ -36,6 +53,7 @@ EmbeddedShellIntegration::nativeResourceForWindow(const QByteArray &resource,
       qDebug() << "found";
       return found.value();
     }
+    qDebug() << "NOT FOUND";
     return nullptr;
   }
   return QWaylandShellIntegration::nativeResourceForWindow(resource, window);

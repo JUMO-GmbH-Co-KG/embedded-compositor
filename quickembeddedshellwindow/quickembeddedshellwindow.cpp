@@ -42,6 +42,20 @@ void QuickEmbeddedShellWindow::componentComplete() {
 
   if (m_surface != nullptr) {
     m_surface->sendAnchor(m_anchor);
+    m_surface->sendMargin(m_margin);
   }
   qDebug() << __PRETTY_FUNCTION__ << m_surface;
+}
+
+int QuickEmbeddedShellWindow::margin() const {
+  qDebug() << __PRETTY_FUNCTION__ << m_margin;
+  return m_margin;
+}
+
+void QuickEmbeddedShellWindow::setMargin(int newMargin) {
+  qDebug() << __PRETTY_FUNCTION__ << newMargin;
+  if (m_margin == newMargin)
+    return;
+  m_margin = newMargin;
+  emit marginChanged();
 }

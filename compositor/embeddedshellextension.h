@@ -24,7 +24,7 @@ public:
   explicit EmbeddedShellExtension();
   void embedded_shell_surface_create(Resource *resource,
                                      struct ::wl_resource *surface, uint32_t id,
-                                     uint32_t anchor) override;
+                                     uint32_t anchor, uint32_t margin) override;
 
   void initialize() override;
 signals:
@@ -38,23 +38,31 @@ class EmbeddedShellSurface
 public:
   EmbeddedShellSurface(EmbeddedShellExtension *ext, QWaylandSurface *surface,
                        const QWaylandResource &resource,
-                       embedded_shell_anchor_border anchor);
+                       embedded_shell_anchor_border anchor, uint32_t margin);
   QWaylandQuickShellIntegration *
   createIntegration(QWaylandQuickShellSurfaceItem *item) override;
+
   QWaylandSurface *surface() const { return m_surface; }
+
   embedded_shell_anchor_border getAnchor() { return m_anchor; }
+  int getMargin() { return m_margin; }
   Q_PROPERTY(uint anchor READ getAnchor NOTIFY anchorChanged)
+  Q_PROPERTY(int margin READ getMargin NOTIFY marginChanged)
+
   void setAnchor(embedded_shell_anchor_border newAnchor);
+  void setMargin(int newMargin);
   Q_INVOKABLE void sendConfigure(const QSize size);
 
 signals:
   void anchorChanged(embedded_shell_anchor_border anchor);
+  void marginChanged(int margin);
   void createView(EmbeddedShellSurfaceView *view);
 
 private:
   QWaylandSurface *m_surface;
   embedded_shell_anchor_border m_anchor =
       embedded_shell_anchor_border::EMBEDDED_SHELL_ANCHOR_BORDER_UNDEFINED;
+  uint32_t m_margin = 0;
 
   // embedded_shell_surface interface
 protected:
@@ -64,6 +72,8 @@ protected:
                                           wl_resource *shell_surface,
                                           const QString &label,
                                           uint32_t id) override;
+  void embedded_shell_surface_set_margin(Resource *resource,
+                                         int32_t margin) override;
 };
 
 class EmbeddedShellSurfaceView : public QObject,
@@ -78,9 +88,7 @@ public:
   void setLabel(const QString &newLabel);
 
 public slots:
-  void select() {
-    surface_view::send_selected();
-  }
+  void select() { surface_view::send_selected(); }
 signals:
   void labelChanged();
 
@@ -98,8 +106,10 @@ public:
   ~QuickEmbeddedShellIntegration() override;
 
   Q_PROPERTY(uint anchor READ getAnchor)
+  Q_PROPERTY(int margin READ getMargin)
 
   uint getAnchor() { return m_shellSurface->getAnchor(); }
+  int getMargin() { return m_shellSurface->getMargin(); }
   void sendConfigure(const QSize size);
 
 private slots:

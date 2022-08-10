@@ -9,7 +9,11 @@
 		<request name="set_anchor">
 			<arg name="anchor" type="uint" />
 		</request>
-		<event name="configure">
+                <request name="set_margin">
+                        <arg name="margin" type="int" />
+                </request>
+
+                <event name="configure">
 			<description summary="suggest resize">
 	    The configure event asks the client to resize its surface.
 		The width and height arguments specify the size of the window
@@ -22,15 +26,16 @@
 		<request name="view_create">
                         <arg name="shell_surface" type="object" interface="embedded_shell_surface"/>
                         <arg name="label" type="string" />
-                        <arg name="id" type="new_id" interface="surface_view" />
+						<arg name="new_view_id" type="new_id" interface="surface_view" />
 		</request>
 	</interface>
 
 	<interface name="embedded_shell" version="1">
 		<request name="surface_create">
 			<arg name="surface" type="object" interface="wl_surface" />
-			<arg name="id" type="new_id" interface="embedded_shell_surface" />
+			<arg name="new_shellsurface_id" type="new_id" interface="embedded_shell_surface" />
 			<arg name="anchor" type="uint" />
+			<arg name="margin" type="uint" />
 		</request>
 
 		<enum name="error">

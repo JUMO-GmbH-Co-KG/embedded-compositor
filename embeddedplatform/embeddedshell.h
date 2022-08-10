@@ -21,7 +21,7 @@ public:
   bool isActive() { return QWaylandClientExtension::isActive(); }
   EmbeddedShell();
   EmbeddedShellSurface *createSurface(QtWaylandClient::QWaylandWindow *window,
-                                      EmbeddedShellSurface::Anchor anchor);
+                                      EmbeddedShellSurface::Anchor anchor, uint32_t margin);
   const struct wl_interface *extensionInterface() const override;
   void bind(struct ::wl_registry *registry, int id, int ver) override;
 };

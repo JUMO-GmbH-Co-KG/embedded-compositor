@@ -21,6 +21,8 @@ public:
   ~QuickEmbeddedShellWindow() override;
   Q_PROPERTY(EmbeddedPlatform::Anchor anchor READ anchor WRITE setAnchor NOTIFY
                  anchorChanged)
+  Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
+
   Anchor anchor() const;
   void setAnchor(Anchor newAnchor);
 
@@ -28,15 +30,21 @@ public:
   void classBegin() override;
   void componentComplete() override;
 
+  int margin() const;
+  void setMargin(int newMargin);
+
 public slots:
   EmbeddedShellSurfaceView *createView(QString label);
 
 signals:
   void anchorChanged(Anchor anchor);
 
+  void marginChanged();
+
 private:
   Anchor m_anchor = Anchor::Undefined;
   EmbeddedShellSurface *m_surface = nullptr;
+  int m_margin = -1;
 };
 
 #endif // QUICKEMBEDDEDSHELLWINDOW_H

@@ -30,8 +30,10 @@ void EmbeddedShellExtension::initialize() {
 }
 
 void EmbeddedShellExtension::embedded_shell_surface_create(
-    Resource *resource, wl_resource *wl_surface, uint32_t id, uint32_t anchor) {
-  qDebug() << __PRETTY_FUNCTION__ << id << anchor;
+    Resource *resource, wl_resource *wl_surface, uint32_t id, uint32_t anchor,
+    uint32_t margin) {
+  qDebug() << __PRETTY_FUNCTION__ << id << "anchor" << anchor << "margin"
+           << margin;
   Q_UNUSED(resource)
 
   QWaylandSurface *surface = QWaylandSurface::fromResource(wl_surface);
@@ -46,7 +48,7 @@ void EmbeddedShellExtension::embedded_shell_surface_create(
     qDebug() << "server received new surface" << surface << anchor;
     embeddedShellSurface = new EmbeddedShellSurface(
         this, surface, embeddedShellSurfaceResource,
-        static_cast<embedded_shell_anchor_border>(anchor));
+        static_cast<embedded_shell_anchor_border>(anchor), margin);
   } else {
     qDebug() << "server received already known surface" << surface
              << embeddedShellSurface;
@@ -58,9 +60,11 @@ void EmbeddedShellExtension::embedded_shell_surface_create(
 EmbeddedShellSurface::EmbeddedShellSurface(EmbeddedShellExtension *ext,
                                            QWaylandSurface *surface,
                                            const QWaylandResource &resource,
-                                           embedded_shell_anchor_border anchor)
+                                           embedded_shell_anchor_border anchor,
+                                           uint32_t margin)
     : QWaylandShellSurfaceTemplate<EmbeddedShellSurface>(this),
-      m_surface(surface), m_anchor(anchor) {
+      m_surface(surface), m_anchor(anchor), m_margin(margin) {
+  Q_UNUSED(ext)
   qDebug() << __PRETTY_FUNCTION__ << anchor;
   init(resource.resource());
   setExtensionContainer(surface);
@@ -71,6 +75,12 @@ QWaylandQuickShellIntegration *
 EmbeddedShellSurface::createIntegration(QWaylandQuickShellSurfaceItem *item) {
   qDebug() << __PRETTY_FUNCTION__;
   return new QuickEmbeddedShellIntegration(item);
+}
+
+void EmbeddedShellSurface::setMargin(int newMargin) {
+  qDebug() << __PRETTY_FUNCTION__ << newMargin;
+  m_margin = newMargin;
+  emit marginChanged(newMargin);
 }
 
 void EmbeddedShellSurface::sendConfigure(const QSize size) {
@@ -115,7 +125,7 @@ void EmbeddedShellSurface::embedded_shell_surface_set_anchor(Resource *resource,
 void EmbeddedShellSurface::embedded_shell_surface_view_create(
     Resource *resource, wl_resource *shell_surface, const QString &label,
     uint32_t id) {
-    Q_UNUSED(shell_surface)
+  Q_UNUSED(shell_surface)
   qDebug() << __PRETTY_FUNCTION__ << label << id;
   auto view = new EmbeddedShellSurfaceView(label, resource->client(), id, 1);
   emit createView(view);
@@ -133,4 +143,11 @@ void EmbeddedShellSurfaceView::surface_view_set_label(Resource *resource,
   qDebug() << __PRETTY_FUNCTION__ << text;
   Q_UNUSED(resource)
   setLabel(text);
+}
+
+void EmbeddedShellSurface::embedded_shell_surface_set_margin(Resource *resource,
+                                                             int32_t margin) {
+  qDebug() << __PRETTY_FUNCTION__ << margin;
+  Q_UNUSED(resource)
+  setMargin(margin);
 }
