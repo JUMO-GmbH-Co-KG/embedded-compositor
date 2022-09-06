@@ -2,8 +2,8 @@
 Description=Embedded Compositor
 
 # Make sure we are started after logins are permitted.
-Requires=systemd-user-sessions.service
-After=systemd-user-sessions.service
+#Requires=systemd-user-sessions.service
+#After=systemd-user-sessions.service
 
 # If Plymouth is used, we want to start when it is on its way out.
 After=plymouth-quit-wait.service
@@ -11,7 +11,7 @@ Before=graphical.target
 
 [Service]
 Type=simple
-EnvironmentFile=/etc/default/env-compositor
+EnvironmentFile=/etc/default/compositor/env-compositor
 ExecStart=/usr/bin/compositor
 
 # Optional watchdog setup
@@ -21,7 +21,7 @@ ExecStart=/usr/bin/compositor
 # The user to run the compositor as.
 User=root
 Group=root
-WorkingDirectory=/root
+WorkingDirectory=/home/root
 
 # A virtual terminal is needed.
 TTYPath=/dev/tty7
