@@ -21,6 +21,18 @@ public:
   Q_ENUM(Anchor)
 
   static EmbeddedShellSurface *shellSurfaceForWindow(QWindow *window);
+
+  static EmbeddedPlatform *s_instance;
+
+  static EmbeddedPlatform *instance() {
+    if (s_instance == nullptr) {
+      s_instance = new EmbeddedPlatform();
+    }
+    return s_instance;
+  }
+
+signals:
+  void shellSurfaceCreated(EmbeddedShellSurface *, QWindow *);
 };
 Q_DECLARE_METATYPE(EmbeddedPlatform::Anchor)
 

@@ -5,21 +5,29 @@
 #include <QEvent>
 #include <QLabel>
 #include <QTimer>
+#include <QWindow>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
   qDebug() << __PRETTY_FUNCTION__;
   m_label = new QLabel("initial state", this);
   this->setCentralWidget(m_label);
-//  initShell();
+
+  connect(EmbeddedPlatform::instance(), &EmbeddedPlatform::shellSurfaceCreated,
+          this, &MainWindow::initShell);
+
+  //  windowHandle()->setProperty(
+  //      "anchor", QVariant::fromValue(EmbeddedPlatform::Anchor::Center));
 }
 
 MainWindow::~MainWindow() {}
 
-void MainWindow::initShell() {
+void MainWindow::initShell(EmbeddedShellSurface *shellSurface,
+                           QWindow *window) {
   qDebug() << __PRETTY_FUNCTION__;
-  Q_ASSERT(this->windowHandle() != nullptr);
-  auto shellSurface =
-      EmbeddedPlatform::shellSurfaceForWindow(this->windowHandle());
+  if (this->windowHandle() != window) {
+    qDebug() << "wrong window" << window;
+    return;
+  }
   qDebug() << "shellSurface" << shellSurface;
   if (shellSurface == nullptr) {
     qWarning() << "NO SHELL SURFACE!";
@@ -35,13 +43,4 @@ void MainWindow::initShell() {
           [=] { m_label->setText(v2->label()); });
   connect(v3, &EmbeddedShellSurfaceView::selected, this,
           [=] { m_label->setText(v3->label()); });
-}
-
-bool MainWindow::event(QEvent *event) {
-    qDebug()<<"EVENT"<<event->type()<<windowHandle() << EmbeddedPlatform::shellSurfaceForWindow(this->windowHandle());
-  // FIXME HACK what is the right way to handle shell surface creation?
-  // found this event happens just after shell surface creation
-  if (event->type() == QEvent::ShowToParent)
-    initShell();
-  return QMainWindow::event(event);
 }

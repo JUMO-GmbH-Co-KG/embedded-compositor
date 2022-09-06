@@ -7,9 +7,13 @@ if [ $(arch) = "armv7l" ]; then
 	export XDG_RUNTIME_DIR=/run/user/0
 	BUILD_ROOT=../build-jupiter
 else
-    BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
+    echo "running on dev host"
+	BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
 	export QT_SCREEN_SCALE_FACTORS=
 	export QT_AUTO_SCREEN_SCALE_FACTOR=0
+	mkdir -p $BUILD_ROOT/plugins/wayland-shell-integration
+	ln -s $BUILD_ROOT/shellintegration/libshellintegration.so $BUILD_ROOT/plugins/wayland-shell-integration
+	export QT_PLUGIN_PATH=$BUILD_ROOT/plugins
 fi
 
 $BUILD_ROOT/compositor/compositor &
@@ -17,7 +21,7 @@ sleep 1
 
 export QT_QPA_PLATFORM=wayland
 export QT_WAYLAND_SHELL_INTEGRATION=embedded-shell
-export QT_PLUGIN_PATH=$BUILD_ROOT/plugins
+#export QT_PLUGIN_PATH=$BUILD_ROOT/plugins
 export QML2_IMPORT_PATH=$BUILD_ROOT/quickembeddedshellwindow
 #export QML_IMPORT_TRACE=1
 #export QT_DEBUG_PLUGINS=1

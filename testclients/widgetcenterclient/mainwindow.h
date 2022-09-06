@@ -4,15 +4,16 @@
 #include <QMainWindow>
 
 class QLabel;
+class EmbeddedShellSurface;
+
 class MainWindow : public QMainWindow {
   Q_OBJECT
   QLabel *m_label = nullptr;
 
 public:
   MainWindow(QWidget *parent = nullptr);
-  ~MainWindow();
-  bool event(QEvent *event) override;
+  ~MainWindow() override;
 private slots:
-  void initShell();
+  void initShell(EmbeddedShellSurface *, QWindow *);
 };
 #endif // MAINWINDOW_H

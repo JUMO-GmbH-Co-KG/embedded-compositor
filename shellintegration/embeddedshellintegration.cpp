@@ -29,9 +29,13 @@ EmbeddedShellIntegration::createShellSurface(QWaylandWindow *window) {
            << "margin" << margin << "anchor" << anchor;
 
   auto ess = m_shell->createSurface(window, anchor, margin);
-  if (ess == nullptr)
+  qDebug() << "shell surface:" << ess;
+
+  if (ess == nullptr) {
     return nullptr;
+  }
   m_windows.insert(window, ess);
+  emit EmbeddedPlatform::instance()->shellSurfaceCreated(ess, window->window());
   return ess->shellSurface();
 }
 
