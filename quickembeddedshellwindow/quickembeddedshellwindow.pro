@@ -15,12 +15,10 @@ HEADERS += \
     quickembeddedshellwindow.h
 OTHER_FILES = qmldir
 
-TARGET = $$qtLibraryTarget($$TARGET)
+target = $$qtLibraryTarget($$TARGET)
 
 uri = EmbeddedShell
 DESTDIR = $$uri
-
-
 
 DISTFILES += qmldir
 
@@ -35,11 +33,8 @@ DISTFILES += qmldir
 
 #Copies the qmldir file and the built plugin .so to the QT_INSTALL_QML directory
 qmldir.files = qmldir
-installPath = $$[QT_INSTALL_QML]/$$replace(uri, \\., /)
+installPath = /usr/lib/qml/$$replace(uri, \\., /)
 qmldir.path = $$installPath
 target.path = $$installPath
 INSTALLS += target qmldir
-
-unix:!macx: LIBS += -L$$OUT_PWD/../embeddedplatform/ -lembeddedplatform
-INCLUDEPATH += $$PWD/../embeddedplatform
-DEPENDPATH += $$PWD/../embeddedplatform
+include($$top_srcdir/embeddedplatform/embeddedplatform.pri)

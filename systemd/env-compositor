@@ -1,0 +1,3 @@
+QT_WAYLAND_CLIENT_BUFFER_INTEGRATION=linux-dmabuf-unstable-v1
+QT_QPA_PLATFORM=eglfs
+XDG_RUNTIME_DIR=/run/user/0

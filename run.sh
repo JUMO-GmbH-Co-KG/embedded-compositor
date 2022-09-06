@@ -1,9 +1,17 @@
 #!/bin/bash
-export QT_SCREEN_SCALE_FACTORS=
-export QT_AUTO_SCREEN_SCALE_FACTOR=0
 
-BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
-#BUILD_ROOT=../build
+if [ $(arch) = "armv7l" ]; then
+    echo "running on device"
+	export QT_WAYLAND_CLIENT_BUFFER_INTEGRATION=linux-dmabuf-unstable-v1
+	export QT_QPA_PLATFORM=eglfs
+	export XDG_RUNTIME_DIR=/run/user/0
+	BUILD_ROOT=../build-jupiter
+else
+    BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
+	export QT_SCREEN_SCALE_FACTORS=
+	export QT_AUTO_SCREEN_SCALE_FACTOR=0
+fi
+
 $BUILD_ROOT/compositor/compositor &
 sleep 1
 

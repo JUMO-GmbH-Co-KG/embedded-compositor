@@ -2,7 +2,9 @@ QT       += core gui
 TEMPLATE = subdirs
 SUBDIRS = leftclient \
         rightclient \
-	topclient \
-        bottomclient \
+		topclient \
+		bottomclient \
         quickcenterclient \
-    widgetcenterclient
+		widgetcenterclient
+
+OTHER_FILES = common.pri

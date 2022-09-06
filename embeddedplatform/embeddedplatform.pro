@@ -17,8 +17,8 @@ HEADERS += \
 QMAKE_USE += wayland-client
 WAYLANDCLIENTSOURCES += ../protocol/embedded-shell.xml
 
-# Default rules for deployment.
-unix {
-    target.path = /usr/lib
-}
-!isEmpty(target.path): INSTALLS += target
+target.path = /usr/lib
+INSTALLS += target
+
+DISTFILES += \
+    embeddedplatform.pri

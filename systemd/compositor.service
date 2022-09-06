@@ -1,0 +1,39 @@
+[Unit]
+Description=Embedded Compositor
+
+# Make sure we are started after logins are permitted.
+Requires=systemd-user-sessions.service
+After=systemd-user-sessions.service
+
+# If Plymouth is used, we want to start when it is on its way out.
+After=plymouth-quit-wait.service
+Before=graphical.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/default/env-compositor
+ExecStart=/usr/bin/compositor
+
+# Optional watchdog setup
+#TimeoutStartSec=60
+#WatchdogSec=20
+
+# The user to run the compositor as.
+User=root
+Group=root
+WorkingDirectory=/root
+
+# A virtual terminal is needed.
+TTYPath=/dev/tty7
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+
+# Fail to start if not controlling the tty.
+StandardInput=tty-fail
+StandardOutput=journal
+StandardError=journal
+
+
+[Install]
+WantedBy=graphical.target

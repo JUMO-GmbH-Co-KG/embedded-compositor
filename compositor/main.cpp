@@ -13,6 +13,6 @@ int main(int argc, char *argv[]) {
                                                         "EmbeddedShell");
   qmlRegisterUncreatableType<EmbeddedShellSurfaceView>(uri, 1, 0, "SurfaceView",
                                                        "managed by wayland");
-  QQmlApplicationEngine appEngine(QUrl("compositor/main.qml"));
+  QQmlApplicationEngine appEngine(QUrl("qrc:///main.qml"));
   return app.exec();
 }

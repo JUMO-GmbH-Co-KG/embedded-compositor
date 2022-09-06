@@ -1,5 +1,5 @@
 QT += gui-private waylandclient-private quick
-CONFIG += c++17
+CONFIG += c++17 plugin relative_qt_rpath
 TEMPLATE = lib
 DEFINES += EMBEDDEDSHELLINTEGRATION_LIBRARY
 
@@ -16,14 +16,11 @@ SOURCES += \
 OTHER_FILES += \
     embedded-shell.json
 
-TARGET = $$qtLibraryTarget($$TARGET)
+target = $$qtLibraryTarget($$TARGET)
+target.path=/usr/lib/plugins/wayland-shell-integration
 
 PLUGIN_TYPE = wayland-shell-integration
 PLUGIN_CLASS_NAME = EmbeddedShellIntegrationPlugin
-load(qt_plugin)
+include($$top_srcdir/embeddedplatform/embeddedplatform.pri)
 
-unix:!macx: LIBS += -L$$OUT_PWD/../embeddedplatform/ -lembeddedplatform
-
-INCLUDEPATH += $$PWD/../embeddedplatform
-DEPENDPATH += $$PWD/../embeddedplatform
-
+INSTALLS += target

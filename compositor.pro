@@ -3,12 +3,11 @@ TEMPLATE = subdirs
 SUBDIRS = shellintegration \
         compositor \
         embeddedplatform \
-	quickembeddedshellwindow \
+        quickembeddedshellwindow \
         testclients \
+        systemd
 
-QT_FOR_CONFIG += waylandclient-private
-
-OTHER_FILES = run.sh protocol/*.xml
+OTHER_FILES = run.sh protocol/*.xml .qmake.conf
 
 shellintegration.depends += embeddedplatform
 quickembeddedshellwindow.depends += embeddedplatform
