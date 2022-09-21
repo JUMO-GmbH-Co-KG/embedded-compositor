@@ -1,18 +1,34 @@
+#include "dbusinterface.h"
 #include "embeddedshellextension.h"
+#include <QTimer>
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
+#include <QtQml/QQmlContext>
 
 int main(int argc, char *argv[]) {
   qputenv("QT_SCREEN_SCALE_FACTORS", "");
   qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
+
   QGuiApplication app(argc, argv);
-  const char *uri = "com.embeddedcompositor.embeddedshell";
-  qmlRegisterType<EmbeddedShellExtensionQuickExtension>(uri, 1, 0,
-                                                        "EmbeddedShell");
-  qmlRegisterUncreatableType<EmbeddedShellSurfaceView>(uri, 1, 0, "SurfaceView",
-                                                       "managed by wayland");
+
+  qmlRegisterType<EmbeddedShellExtensionQuickExtension>(
+      "com.embeddedcompositor.embeddedshell", 1, 0, "EmbeddedShell");
+  qmlRegisterUncreatableType<EmbeddedShellSurfaceView>(
+      "com.embeddedcompositor.embeddedshell", 1, 0, "SurfaceView",
+      "managed by wayland");
+  qmlRegisterType<TaskSwitcherInterface>("com.embeddedcompositor.dbus", 1, 0,
+                                         "TaskSwitcherInterface");
+
+  qmlRegisterUncreatableMetaObject(EmbeddedShellTypes::staticMetaObject,
+                                   "com.embeddedcompositor.embeddedshell", 1, 0,
+                                   "EmbeddedShellTypes", "Not Instantiable!");
+
+  if (!InitDbusConnection("com.basyskom.embeddedcompositor")) {
+    qDebug() << "failed to init dbus";
+    return 1;
+  }
   QQmlApplicationEngine appEngine(QUrl("qrc:///main.qml"));
   return app.exec();
 }

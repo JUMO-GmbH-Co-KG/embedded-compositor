@@ -9,12 +9,12 @@ QuickEmbeddedShellWindow::QuickEmbeddedShellWindow(QWindow *parent)
 
 QuickEmbeddedShellWindow::~QuickEmbeddedShellWindow() {}
 
-QuickEmbeddedShellWindow::Anchor QuickEmbeddedShellWindow::anchor() const {
+EmbeddedShellTypes::Anchor QuickEmbeddedShellWindow::anchor() const {
   qDebug() << __PRETTY_FUNCTION__ << m_anchor;
   return m_anchor;
 }
 
-void QuickEmbeddedShellWindow::setAnchor(Anchor newAnchor) {
+void QuickEmbeddedShellWindow::setAnchor(EmbeddedShellTypes::Anchor newAnchor) {
   qDebug() << __PRETTY_FUNCTION__ << m_anchor << "->" << newAnchor;
   if (m_anchor == newAnchor)
     return;
@@ -33,6 +33,9 @@ void QuickEmbeddedShell::registerTypes(const char *uri) {
   qmlRegisterType<EmbeddedPlatform>(uri, 1, 0, "Platform");
   qmlRegisterUncreatableType<EmbeddedShellSurfaceView>(
       uri, 1, 0, "SurfaceView", "created by wayland request only");
+  qmlRegisterUncreatableMetaObject(EmbeddedShellTypes::staticMetaObject, uri, 1,
+                                   0, "EmbeddedShellTypes",
+                                   "uncreatable enums namespace");
 }
 
 void QuickEmbeddedShellWindow::classBegin() { qDebug() << __PRETTY_FUNCTION__; }

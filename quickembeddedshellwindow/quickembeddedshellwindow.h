@@ -12,19 +12,18 @@ class EMBEDDEDSHELLWINDOW_EXPORT QuickEmbeddedShellWindow
     : public QQuickWindow,
       public QQmlParserStatus {
   Q_OBJECT
-  using Anchor = EmbeddedPlatform::Anchor;
 
 public:
   Q_INTERFACES(QQmlParserStatus)
 
   QuickEmbeddedShellWindow(QWindow *parent = nullptr);
   ~QuickEmbeddedShellWindow() override;
-  Q_PROPERTY(EmbeddedPlatform::Anchor anchor READ anchor WRITE setAnchor NOTIFY
-                 anchorChanged)
+  Q_PROPERTY(EmbeddedShellTypes::Anchor anchor READ anchor WRITE setAnchor
+                 NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
 
-  Anchor anchor() const;
-  void setAnchor(Anchor newAnchor);
+  EmbeddedShellTypes::Anchor anchor() const;
+  void setAnchor(EmbeddedShellTypes::Anchor newAnchor);
 
   // QQmlParserStatus interface
   void classBegin() override;
@@ -37,12 +36,12 @@ public slots:
   EmbeddedShellSurfaceView *createView(QString label);
 
 signals:
-  void anchorChanged(Anchor anchor);
+  void anchorChanged(EmbeddedShellTypes::Anchor anchor);
 
   void marginChanged();
 
 private:
-  Anchor m_anchor = Anchor::Undefined;
+  EmbeddedShellTypes::Anchor m_anchor = EmbeddedShellTypes::Anchor::Undefined;
   EmbeddedShellSurface *m_surface = nullptr;
   int m_margin = -1;
 };

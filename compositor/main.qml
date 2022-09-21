@@ -3,6 +3,7 @@ import QtWayland.Compositor 1.0
 import QtQuick.Window 2.2
 import QtQml.Models 2.1
 
+import com.embeddedcompositor.dbus 1.0
 import com.embeddedcompositor.embeddedshell 1.0
 
 WaylandCompositor {
@@ -10,10 +11,52 @@ WaylandCompositor {
         sizeFollowsWindow: true
         window: Window {
             id: window
-            width: 800
-            height: 480
+            width: 1280
+            height: 800
             visible: true
-            property real initialSize: 0
+            property real initialSize: 100
+
+            Item {
+                Keys.onPressed:
+                    (event)=> {
+                        if (event.key == Qt.Key_Super_L || event.key == Qt.Key_Super_R) {
+                            if(taskSwitcher.state == "open") taskSwitcher.close();
+                            else taskSwitcher.open();
+                        }
+                }
+                focus: true
+            }
+
+/*
+            Rectangle {
+                id: spinner
+                width: 10
+                height: 10
+                color: "lime"
+                anchors.centerIn: parent
+                z:1000
+
+                RotationAnimation {
+                    target: spinner
+                    property: "rotation"
+                    from: 0; to: 360
+                    loops: Animation.Infinite
+                    running: true;
+                    duration: 4000
+                }
+            }
+
+            MouseArea {
+                z:1000
+                anchors.centerIn: parent
+                width:100
+                height:100
+                onClicked: {
+                    dbusInterface.onBar.connect( function(){ console.log("back in qml") }  )
+                    dbusInterface.onFoo();
+                }
+            }
+*/
             Rectangle {
                 id: centerArea
                 anchors.top: topArea.bottom
@@ -25,12 +68,6 @@ WaylandCompositor {
                     color:"red"
                 }
                 property Item surfaceItem
-                Row {
-                    z:1000
-                    id: viewsContainer
-                    height:100
-                    anchors.bottom: parent.bottom
-                }
             }
             Rectangle {
                 id:leftArea
@@ -84,6 +121,75 @@ WaylandCompositor {
                 color: "transparent"
                 property Item surfaceItem
             }
+
+
+            Rectangle {
+                id: taskSwitcher
+                color: Qt.rgba(0.0,0.0,0.0,0.8)
+                anchors.fill: parent
+
+                function open()
+                {
+                    state = "open"
+                }
+
+                function close()
+                {
+                    state = "closed"
+                }
+
+                state: "closed"
+                states: [
+                State {
+                        name: "open"
+                        PropertyChanges {
+                            target: taskSwitcher
+                            visible: true
+                            opacity: 1
+                        }
+                    },
+                    State {
+                        name: "closed"
+                        PropertyChanges {
+                            target: taskSwitcher
+                            visible: false
+                            opacity: 0
+                        }
+                    }
+
+                ]
+
+                transitions: [
+                    Transition {
+                        from:"closed"
+                        to:"open"
+                        reversible: true
+
+                        SequentialAnimation {
+                            PropertyAction { property: "visible" }
+                            PropertyAnimation {
+                                property: "opacity"
+                                duration: 200
+                            }
+                        }
+                    }
+                ]
+
+                Flickable {
+                    id: taskSwitcherFlick
+                    anchors.centerIn: parent
+                    width: contentWidth < parent.width ? contentWidth : parent.width
+                    height: contentHeight
+                    flickableDirection: Flickable.HorizontalFlick
+                    contentHeight: taskSwitchContainer.height
+                    contentWidth: taskSwitchContainer.width
+                    Row {
+                        id: taskSwitchContainer
+                        height: 400
+                        spacing: 10
+                    }
+                }
+            }
         }
     }
 
@@ -92,7 +198,9 @@ WaylandCompositor {
         ShellSurfaceItem {
             id: shellSurfaceItem
 
-            opacity: 0.5
+            opacity: 0.2
+//            visible: false
+
             onSurfaceDestroyed: {
                 destroy()
             }
@@ -103,28 +211,31 @@ WaylandCompositor {
             onWidthChanged: handleResized()
             onHeightChanged: handleResized()
             property int margin: shellSurface.margin
-            /*{
-                if(shellSurface.margin >= 0){
-                    return shellSurface.margin;
-                } else {
-                    console.log(shellSurface.width ,shellSurface.height);
-                    if(shellSurface.anchor == 1 || shellSurface.anchor == 2) {
-                        return height
-                    } else if(shellSurface.anchor == 3 || shellSurface.anchor == 4) {
-                        return width
-                    }
-                }
-                return 0
-            }*/
 
             function reanchor(anchor) {
-                console.log("reanchor!! " + shellSurface.anchor);
                 var targetArea = centerArea;
-                if(shellSurface.anchor === 1) targetArea = topArea;
-                if(shellSurface.anchor === 2) targetArea = bottomArea;
-                if(shellSurface.anchor === 3) targetArea = leftArea;
-                if(shellSurface.anchor === 4) targetArea = rightArea;
-                if(shellSurface.anchor === 5) targetArea = centerArea;
+                switch(shellSurface.anchor){
+
+                case EmbeddedShellTypes.Top:
+                    targetArea = topArea;
+                    break;
+
+                case EmbeddedShellTypes.Bottom:
+                    targetArea = bottomArea;
+                    break;
+                case EmbeddedShellTypes.Left:
+                    targetArea = leftArea;
+                    break;
+                case EmbeddedShellTypes.Right:
+                    targetArea = rightArea;
+                    break;
+                case EmbeddedShellTypes.Center:
+                    targetArea = centerArea;
+                    var taskSwitchItem = taskSwitchComponent.createObject(taskSwitchContainer, {"shellSurface": shellSurface});
+                    break;
+                default:
+
+                }
 
                 shellSurfaceItem.parent = targetArea;
                 shellSurfaceItem.anchors.left = targetArea != rightArea ? targetArea.left : undefined;
@@ -137,7 +248,7 @@ WaylandCompositor {
             function createView(view)
             {
                 console.log("compositor: create view! ", view);
-                var viewItem = viewComponent.createObject(viewsContainer, {view: view});
+                var viewItem = viewComponent.createObject(taskSwitchContainer, {view: view, surface: shellSurface});
             }
 
             onShellSurfaceChanged: {
@@ -151,22 +262,45 @@ WaylandCompositor {
                 if(width < 0 || height <0) return;
                 shellSurface.sendConfigure(Qt.size(width, height));
             }
-            Text {
-                text: "m:"+shellSurface.margin
-                z:1000
-                color:"yellow"
+        }
+    }
+
+    Component {
+        id: taskSwitchComponent
+        Rectangle {
+            id: taskSwitchComponentRoot
+            color: "lime"
+            property alias shellSurface: sItem.shellSurface
+            width: 1280 / 4
+            height: 800 / 4
+            ShellSurfaceItem {
+                anchors.centerIn: parent
+                scale: parent.width / sItem.width
+                id: sItem
+                onSurfaceDestroyed: {
+                    taskSwitchComponentRoot.destroy()
+                }
+                visible: false
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    console.log("switch task");
+                    taskSwitcher.close()
+                }
             }
         }
     }
+
     Component {
         id: viewComponent
         Rectangle {
-            z:100
-            width:100
-            height: 100
+            property var surface
+            width: 1280/4
+            height: 800/4
             id: viewChrome
             property SurfaceView view
-            color:Qt.rgba(0,0.5,0,0.5);
+            color:"gray"
             border {
                 width:1
                 color: "white"
@@ -182,6 +316,7 @@ WaylandCompositor {
                 onClicked: {
                     console.log("selecting");
                     view.select();
+                    taskSwitcher.close();
                 }
             }
         }
@@ -191,10 +326,14 @@ WaylandCompositor {
         Component.onCompleted: console.log("INITIALIZED!");
         onSurfaceAdded: {
             console.log("QML: shell surface created: "+surface+" "+surface.anchor);
+            var item = chromeComponent.createObject(centerArea, { "shellSurface": surface } );
+            item.handleResized();
 
-                var item = chromeComponent.createObject(centerArea, { "shellSurface": surface } );
-                item.handleResized();
 
         }
+    }
+    TaskSwitcherInterface {
+        onOpenRequested: taskSwitcher.open();
+        onCloseRequested: taskSwitcher.close();
     }
 }

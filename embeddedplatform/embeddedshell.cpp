@@ -10,7 +10,7 @@ EmbeddedShell::EmbeddedShell()
 
 EmbeddedShellSurface *
 EmbeddedShell::createSurface(QtWaylandClient::QWaylandWindow *window,
-                             EmbeddedShellSurface::Anchor anchor,
+                             EmbeddedShellTypes::Anchor anchor,
                              uint32_t margin) {
   qDebug() << __PRETTY_FUNCTION__ << isActive() << anchor << margin;
   if (!isActive())

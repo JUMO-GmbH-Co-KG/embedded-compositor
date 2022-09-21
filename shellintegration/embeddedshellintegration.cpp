@@ -13,11 +13,11 @@ EmbeddedShellIntegration::EmbeddedShellIntegration()
 QWaylandShellSurface *
 EmbeddedShellIntegration::createShellSurface(QWaylandWindow *window) {
 
-  EmbeddedShellSurface::Anchor anchor = EmbeddedShellSurface::Anchor::Undefined;
+  EmbeddedShellTypes::Anchor anchor = EmbeddedShellTypes::Anchor::Undefined;
 
   auto prop = window->window()->property("anchor");
   if (prop.isValid())
-    anchor = prop.value<EmbeddedShellSurface::Anchor>();
+    anchor = prop.value<EmbeddedShellTypes::Anchor>();
 
   uint32_t margin = 0;
 

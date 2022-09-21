@@ -11,6 +11,7 @@ SOURCES += \
 HEADERS += \
     embeddedplatform.h \
     embeddedshell.h \
+    embeddedshellanchor.h \
     embeddedshellsurface.h \
     embeddedshellsurface_p.h
 

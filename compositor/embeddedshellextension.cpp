@@ -48,7 +48,7 @@ void EmbeddedShellExtension::embedded_shell_surface_create(
     qDebug() << "server received new surface" << surface << anchor;
     embeddedShellSurface = new EmbeddedShellSurface(
         this, surface, embeddedShellSurfaceResource,
-        static_cast<embedded_shell_anchor_border>(anchor), margin);
+        static_cast<EmbeddedShellTypes::Anchor>(anchor), margin);
   } else {
     qDebug() << "server received already known surface" << surface
              << embeddedShellSurface;
@@ -60,7 +60,7 @@ void EmbeddedShellExtension::embedded_shell_surface_create(
 EmbeddedShellSurface::EmbeddedShellSurface(EmbeddedShellExtension *ext,
                                            QWaylandSurface *surface,
                                            const QWaylandResource &resource,
-                                           embedded_shell_anchor_border anchor,
+                                           EmbeddedShellTypes::Anchor anchor,
                                            uint32_t margin)
     : QWaylandShellSurfaceTemplate<EmbeddedShellSurface>(this),
       m_surface(surface), m_anchor(anchor), m_margin(margin) {
@@ -117,7 +117,7 @@ void EmbeddedShellSurface::embedded_shell_surface_set_anchor(Resource *resource,
                                                              uint32_t anchor) {
   Q_UNUSED(resource)
   qDebug() << __PRETTY_FUNCTION__ << m_anchor << "->" << anchor;
-  m_anchor = static_cast<embedded_shell_anchor_border>(anchor);
+  m_anchor = static_cast<EmbeddedShellTypes::Anchor>(anchor);
   qDebug() << "emitting" << m_anchor;
   emit anchorChanged(m_anchor);
 }

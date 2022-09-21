@@ -11,19 +11,18 @@ class EmbeddedShellSurfacePrivate
   Q_DECLARE_PUBLIC(EmbeddedShellSurface)
   Q_OBJECT
 public:
-  using Anchor = EmbeddedShellSurface::Anchor;
   EmbeddedShellSurfacePrivate(struct ::embedded_shell_surface *shell_surface,
                               QtWaylandClient::QWaylandWindow *window,
-                              Anchor anchor,
+                              EmbeddedShellTypes::Anchor anchor,
                               uint32_t margin);
   ~EmbeddedShellSurfacePrivate() override;
-  Anchor getAnchor() const { return m_anchor; }
+  EmbeddedShellTypes::Anchor getAnchor() const { return m_anchor; }
   uint32_t getMargin() const { return m_margin; }
 
   void applyConfigure() override;
 
 private:
-  EmbeddedShellSurface::Anchor m_anchor;
+  EmbeddedShellTypes::Anchor m_anchor;
   uint32_t m_margin = 0;
   QSize m_pendingSize = {0, 0};
   EmbeddedShellSurface *q_ptr = nullptr;

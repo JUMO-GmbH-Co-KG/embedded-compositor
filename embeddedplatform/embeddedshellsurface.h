@@ -23,21 +23,19 @@ class Q_DECL_EXPORT EmbeddedShellSurface : public QObject {
   QScopedPointer<EmbeddedShellSurfacePrivate> d_ptr;
 
 public:
-  using Anchor = EmbeddedPlatform::Anchor;
-
   EmbeddedShellSurface(struct ::embedded_shell_surface *shell_surface,
-                       QtWaylandClient::QWaylandWindow *window, Anchor anchor,
-                       uint32_t margin);
+                       QtWaylandClient::QWaylandWindow *window,
+                       EmbeddedShellTypes::Anchor anchor, uint32_t margin);
   ~EmbeddedShellSurface() override;
 
-  Anchor getAnchor() const;
+  EmbeddedShellTypes::Anchor getAnchor() const;
   EmbeddedShellSurfaceView *createView(const QString &label);
 
   QtWaylandClient::QWaylandShellSurface *shellSurface();
 signals:
 
 public slots:
-  void sendAnchor(Anchor anchor);
+  void sendAnchor(EmbeddedShellTypes::Anchor anchor);
   void sendMargin(int margin);
 };
 

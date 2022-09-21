@@ -15,6 +15,12 @@
 class EmbeddedShellSurface;
 class EmbeddedShellSurfaceView;
 
+namespace EmbeddedShellTypes {
+Q_NAMESPACE
+#include "embeddedshellanchor.h"
+Q_ENUM_NS(Anchor)
+} // namespace EmbeddedShellTypes
+
 class EmbeddedShellExtension
     : public QWaylandShellTemplate<EmbeddedShellExtension>,
       public QtWaylandServer::embedded_shell {
@@ -38,15 +44,16 @@ class EmbeddedShellSurface
 public:
   EmbeddedShellSurface(EmbeddedShellExtension *ext, QWaylandSurface *surface,
                        const QWaylandResource &resource,
-                       embedded_shell_anchor_border anchor, uint32_t margin);
+                       EmbeddedShellTypes::Anchor anchor, uint32_t margin);
   QWaylandQuickShellIntegration *
   createIntegration(QWaylandQuickShellSurfaceItem *item) override;
 
   QWaylandSurface *surface() const { return m_surface; }
 
-  embedded_shell_anchor_border getAnchor() { return m_anchor; }
+  EmbeddedShellTypes::Anchor getAnchor() { return m_anchor; }
   int getMargin() { return m_margin; }
-  Q_PROPERTY(uint anchor READ getAnchor NOTIFY anchorChanged)
+  Q_PROPERTY(
+      EmbeddedShellTypes::Anchor anchor READ getAnchor NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ getMargin NOTIFY marginChanged)
 
   void setAnchor(embedded_shell_anchor_border newAnchor);
@@ -54,14 +61,13 @@ public:
   Q_INVOKABLE void sendConfigure(const QSize size);
 
 signals:
-  void anchorChanged(embedded_shell_anchor_border anchor);
+  void anchorChanged(EmbeddedShellTypes::Anchor anchor);
   void marginChanged(int margin);
   void createView(EmbeddedShellSurfaceView *view);
 
 private:
   QWaylandSurface *m_surface;
-  embedded_shell_anchor_border m_anchor =
-      embedded_shell_anchor_border::EMBEDDED_SHELL_ANCHOR_BORDER_UNDEFINED;
+  EmbeddedShellTypes::Anchor m_anchor = EmbeddedShellTypes::Anchor::Undefined;
   uint32_t m_margin = 0;
 
   // embedded_shell_surface interface
@@ -105,10 +111,10 @@ public:
   QuickEmbeddedShellIntegration(QWaylandQuickShellSurfaceItem *item);
   ~QuickEmbeddedShellIntegration() override;
 
-  Q_PROPERTY(uint anchor READ getAnchor)
+  Q_PROPERTY(EmbeddedShellTypes::Anchor anchor READ getAnchor)
   Q_PROPERTY(int margin READ getMargin)
 
-  uint getAnchor() { return m_shellSurface->getAnchor(); }
+  EmbeddedShellTypes::Anchor getAnchor() { return m_shellSurface->getAnchor(); }
   int getMargin() { return m_shellSurface->getMargin(); }
   void sendConfigure(const QSize size);
 
