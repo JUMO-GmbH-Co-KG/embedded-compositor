@@ -17,7 +17,13 @@ else
 fi
 
 $BUILD_ROOT/compositor/compositor &
+compositor_pid=$!
+
 sleep 1
+if [ ! -d /proc/${compositor_pid} ]; then
+    echo "compositor died, exiting script"
+	exit $!
+fi
 
 export QT_QPA_PLATFORM=wayland
 export QT_WAYLAND_SHELL_INTEGRATION=embedded-shell
@@ -35,7 +41,6 @@ $BUILD_ROOT/testclients/topclient/topclient &
 $BUILD_ROOT/testclients/bottomclient/bottomclient &
 #$BUILD_ROOT/testclients/quickcenterclient/quickcenterclient &
 $BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
-#gdb $BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient
-wait
-
+wait $compositor_pid
+pkill -P $$
 

@@ -29,6 +29,17 @@ int main(int argc, char *argv[]) {
     qDebug() << "failed to init dbus";
     return 1;
   }
-  QQmlApplicationEngine appEngine(QUrl("qrc:///main.qml"));
+  QQmlApplicationEngine appEngine;
+
+  QObject::connect(&appEngine, &QQmlApplicationEngine::warnings,
+                   [](auto &warnings) {
+                     foreach (auto &error, warnings) {
+                       qWarning() << "warning: " << error.toString();
+                     }
+                     qDebug() << "exiting due to qml warning.";
+                     exit(1);
+                   });
+
+  appEngine.load(QUrl("qrc:///qml/main.qml"));
   return app.exec();
 }

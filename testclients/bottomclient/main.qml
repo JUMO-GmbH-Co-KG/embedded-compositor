@@ -3,56 +3,34 @@ import EmbeddedShell 1.0
 
 Window {
     id: window
-    height: menu.visible ? menu.height: bar.height
+    height: 48
     width: 100
     visible: true
     title: qsTr("Hello World")
-    color: "transparent"
+    color: "grey"
     anchor: Window.Anchor.Bottom
-    margin: bar.height
-
+    margin: 48
     Rectangle {
-        id: menu
-        property bool open: false
-        color: "#d02020ef"
-        height: 200
-        width: parent.width
-        visible: y != height
-        y: open ? 0 : height
-        Behavior on y { PropertyAnimation {  }}
-
-        MouseArea {
-            anchors.bottom: parent.bottom
-            width:32
-            height:32
-            onClicked: Qt.quit()
-            Rectangle {
-                anchors.fill: parent
-            }
-
-            Text {
-                text: "quit"
-                anchors.centerIn: parent
-            }
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            left: parent.left
+            margins: 4
         }
-    }
 
-    Rectangle {
-        id: bar
-        color: menu.open ? "#1818ff" : "#181871"
-        width: parent.width
-        height: 32
-        anchors.bottom: parent.bottom
+        width: 100
+        color: "plum"
         MouseArea {
-            anchors.fill: parent
+            anchors.fill:parent
             onClicked: {
-                menu.open= !menu.open
+                dbusClient.openTaskSwitcher();
             }
         }
-
-        border {
-            width:1
-            color:"white"
+        Text {
+            anchors.centerIn: parent
+            text: "⊞"
+            font.pixelSize: 48
         }
     }
+
 }

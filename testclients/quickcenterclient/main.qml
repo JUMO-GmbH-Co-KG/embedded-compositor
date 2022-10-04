@@ -33,12 +33,17 @@ Window {
 
             onClicked: {
                 var names = ["List view", "Tree view", "FPS test view" ];
-                var view = window.createView(names[idx++]);
+                var colors = ["plum","tomato","olive"]
+                var view = window.createView(names[idx]);
+                var color = colors[idx];
                 console.log("client: view", view);
                 view.selected.connect(function(){
                     console.log("view "+ view.label +" was selected");
                     viewLabel.text = view.label;
+                    window.color = color;
                 })
+                idx++;
+                if(idx == names.length) visible = false;
             }
             Rectangle {
                 anchors.fill: parent
@@ -54,6 +59,8 @@ Window {
         id: viewLabel
         anchors.centerIn: parent
         text: "view?"
+        font.pixelSize: 48
+        z:10
     }
 
     Rectangle {
