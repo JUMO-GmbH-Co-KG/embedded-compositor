@@ -82,6 +82,30 @@ Rectangle {
                     }
                 }
             }
+            MouseArea {
+                visible: notification.actions.length === 0
+                property var action: notification.actions[model.index];
+                width:200
+                height:parent.height
+                onPressed: {
+                    notification.dismiss("")
+                }
+
+                Rectangle {
+                    anchors.fill: parent
+                    color: parent.pressed ? "lightsteelblue" : "white"
+                }
+
+                Text {
+                    anchors {
+                        baseline: parent.verticalCenter
+                        baselineOffset: font.pixelSize/2
+                        horizontalCenter: parent.horizontalCenter
+                    }
+                    text: "Ok"
+                    font.pixelSize:32
+                }
+            }
         }
     }
     state: "shade"

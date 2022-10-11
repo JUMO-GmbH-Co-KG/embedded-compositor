@@ -9,7 +9,11 @@ HEADERS +=  embeddedshellextension.h \
             notificationmodel.h
 
 OTHER_FILES += \
-    qml/main.qml
+    qml/main.qml \
+    qml/DefaultTaskSwitcher/TaskSwitcher.qml \
+    qml/Notifications/Notifications.qml \
+    qml/Notifications/Notification.qml
+
 RESOURCES += qml.qrc
 
 target.path = /usr/bin
@@ -17,7 +21,3 @@ INSTALLS += target
 
 WAYLANDSERVERSOURCES += ../protocol/embedded-shell.xml
 INCLUDEPATH += $$top_srcdir/embeddedplatform
-
-DISTFILES += \
-    qml/DefaultTaskSwitcher/TaskSwitcher.qml \
-    qml/Notifications/Notifications.qml

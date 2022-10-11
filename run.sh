@@ -50,7 +50,12 @@ $BUILD_ROOT/testclients/bottomclient/bottomclient &
 #sleep 1
 #$BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
 
-notify-send 'title' 'message'
+notify-send 'test' 'test message'
+notify-send 'Attention' 'your fridge is running'
+notify-send 'Attention' 'your fridge is running'
+notify-send 'Attention' 'your fridge is running'
+notify-send 'Attention' 'your fridge is running'
+notify-send 'Attention' 'your fridge is running'
 
 #dbus-monitor&
 
