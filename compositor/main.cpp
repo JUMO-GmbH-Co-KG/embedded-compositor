@@ -1,5 +1,6 @@
 #include "dbusinterface.h"
 #include "embeddedshellextension.h"
+#include "notificationmodel.h"
 #include <QTimer>
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
@@ -21,6 +22,9 @@ int main(int argc, char *argv[]) {
   qmlRegisterType<TaskSwitcherInterface>("com.embeddedcompositor.dbus", 1, 0,
                                          "TaskSwitcherInterface");
 
+  qmlRegisterType<NotificationModel>("com.embeddedcompositor.dbus", 1, 0,
+                                     "NotificationModel");
+
   qmlRegisterUncreatableMetaObject(EmbeddedShellTypes::staticMetaObject,
                                    "com.embeddedcompositor.embeddedshell", 1, 0,
                                    "EmbeddedShellTypes", "Not Instantiable!");
@@ -29,6 +33,11 @@ int main(int argc, char *argv[]) {
     qDebug() << "failed to init dbus";
     return 1;
   }
+
+  qmlRegisterUncreatableType<NotificationData>("com.embeddedcompositor.dbus", 1,
+                                               0, "NotificationData",
+                                               "created from dbus data");
+
   QQmlApplicationEngine appEngine;
 
   QObject::connect(&appEngine, &QQmlApplicationEngine::warnings,

@@ -14,10 +14,17 @@ else
 	mkdir -p $BUILD_ROOT/plugins/wayland-shell-integration
 	ln -sf $BUILD_ROOT/shellintegration/libshellintegration.so $BUILD_ROOT/plugins/wayland-shell-integration
 	export QT_PLUGIN_PATH=$BUILD_ROOT/plugins
+
+  export $(dbus-launch)
+  set | grep DBUS
 fi
 
+#qdbusviewer &
+
+#export QDBUS_DEBUG=1
 $BUILD_ROOT/compositor/compositor &
 compositor_pid=$!
+
 
 sleep 1
 if [ ! -d /proc/${compositor_pid} ]; then
@@ -35,12 +42,18 @@ export QML2_IMPORT_PATH=$BUILD_ROOT/quickembeddedshellwindow
 export LD_LIBRARY_PATH=$BUILD_ROOT/quickembeddedshellwindow/EmbeddedShell:$BUILD_ROOT/embeddedplatform
 
 echo "======\nLaunching Clients...\n======"
-$BUILD_ROOT/testclients/leftclient/leftclient &
-$BUILD_ROOT/testclients/rightclient/rightclient &
-$BUILD_ROOT/testclients/topclient/topclient &
+#$BUILD_ROOT/testclients/leftclient/leftclient &
+#$BUILD_ROOT/testclients/rightclient/rightclient &
+#$BUILD_ROOT/testclients/topclient/topclient &
 $BUILD_ROOT/testclients/bottomclient/bottomclient &
 #$BUILD_ROOT/testclients/quickcenterclient/quickcenterclient &
-$BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
-wait $compositor_pid
-pkill -P $$
+#sleep 1
+#$BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
 
+notify-send 'title' 'message'
+
+#dbus-monitor&
+
+trap "echo signal handler; trap - TERM; kill $DBUS_SESSION_BUS_PID; pkill -P $$" INT TERM EXIT QUIT HUP PIPE
+wait $compositor_pid
+echo "compositor process exited."

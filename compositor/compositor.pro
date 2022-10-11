@@ -2,9 +2,11 @@ QT += core gui waylandcompositor waylandcompositor-private core-private gui-priv
 CONFIG += c++17 wayland-scanner
 SOURCES +=  main.cpp \
             dbusinterface.cpp \
-            embeddedshellextension.cpp
+            embeddedshellextension.cpp \
+            notificationmodel.cpp
 HEADERS +=  embeddedshellextension.h \
-            dbusinterface.h
+            dbusinterface.h \
+            notificationmodel.h
 
 OTHER_FILES += \
     qml/main.qml
@@ -17,4 +19,5 @@ WAYLANDSERVERSOURCES += ../protocol/embedded-shell.xml
 INCLUDEPATH += $$top_srcdir/embeddedplatform
 
 DISTFILES += \
-    qml/DefaultTaskSwitcher/TaskSwitcher.qml
+    qml/DefaultTaskSwitcher/TaskSwitcher.qml \
+    qml/Notifications/Notifications.qml

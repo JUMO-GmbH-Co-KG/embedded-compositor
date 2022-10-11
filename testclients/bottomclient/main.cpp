@@ -20,7 +20,8 @@ int main(int argc, char *argv[]) {
 
   DBusClient dbusClient;
 
-  QQmlApplicationEngine appEngine(QUrl("qrc:///main.qml"));
+  QQmlApplicationEngine appEngine;
   appEngine.rootContext()->setContextProperty("dbusClient", &dbusClient);
+  appEngine.load(QUrl("qrc:///main.qml"));
   return app.exec();
 }

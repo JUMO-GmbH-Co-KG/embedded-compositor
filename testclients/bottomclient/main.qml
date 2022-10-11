@@ -33,4 +33,47 @@ Window {
         }
     }
 
+    Rectangle {
+        id: notificationTestButton
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            right: parent.right
+            margins: 4
+        }
+
+        width: 100
+        color: "tomato"
+        property int dialogId: -1
+        MouseArea {
+            anchors.fill:parent
+            onClicked: {
+                parent.dialogId = dbusClient.notify("Choose color", "Please choose the color for the bottom window", ["grey", "plum", "lime"])
+            }
+        }
+        Text {
+            anchors.centerIn: parent
+            text: "⊞" + (parent.dialogId !== -1 ? (" "+parent.dialogId): "")
+            font.pixelSize: 48
+        }
+    }
+    Text {
+        id: responseLog
+        anchors.right: notificationTestButton.left
+        anchors.rightMargin: 10
+        text:"..."
+        Component.onCompleted: {
+            dbusClient.notificationActionInvoked.connect(notificationActionInvoked )
+        }
+
+        function notificationActionInvoked (id, action) {
+            text = id + "->" +action + "\n"+text
+            if(id === notificationTestButton.dialogId) {
+                window.color = action;
+                dbusClient.notify("color change complete.", "thank you.", ["OK"])
+            }
+        }
+
+    }
+
 }

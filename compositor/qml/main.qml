@@ -6,6 +6,7 @@ import QtQml.Models 2.1
 import com.embeddedcompositor.dbus 1.0
 import com.embeddedcompositor.embeddedshell 1.0
 import "DefaultTaskSwitcher"
+import "Notifications"
 
 WaylandCompositor {
     WaylandOutput {
@@ -92,6 +93,10 @@ WaylandCompositor {
                     if(view != null) view.select();
                     centerArea.selectSurface(shellSurface, view);
                 }
+            }
+
+            Notifications {
+                anchors.fill: parent
             }
         }
     }
