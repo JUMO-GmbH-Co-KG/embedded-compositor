@@ -1,3 +1,4 @@
 QT_WAYLAND_CLIENT_BUFFER_INTEGRATION=linux-dmabuf-unstable-v1
 QT_QPA_PLATFORM=eglfs
 XDG_RUNTIME_DIR=/run/user/0
+DBUS_SESSION_BUS_ADDRESS=unix:path=/var/run/dbus/system_bus_socket

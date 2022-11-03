@@ -42,20 +42,20 @@ export QML2_IMPORT_PATH=$BUILD_ROOT/quickembeddedshellwindow
 export LD_LIBRARY_PATH=$BUILD_ROOT/quickembeddedshellwindow/EmbeddedShell:$BUILD_ROOT/embeddedplatform
 
 echo "======\nLaunching Clients...\n======"
-#$BUILD_ROOT/testclients/leftclient/leftclient &
-#$BUILD_ROOT/testclients/rightclient/rightclient &
-#$BUILD_ROOT/testclients/topclient/topclient &
+$BUILD_ROOT/testclients/leftclient/leftclient &
+$BUILD_ROOT/testclients/rightclient/rightclient &
+$BUILD_ROOT/testclients/topclient/topclient &
 $BUILD_ROOT/testclients/bottomclient/bottomclient &
-#$BUILD_ROOT/testclients/quickcenterclient/quickcenterclient &
+$BUILD_ROOT/testclients/quickcenterclient/quickcenterclient &
 #sleep 1
 #$BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
 
-notify-send 'test' 'test message'
-notify-send 'Attention' 'your fridge is running'
-notify-send 'Attention' 'your fridge is running'
-notify-send 'Attention' 'your fridge is running'
-notify-send 'Attention' 'your fridge is running'
-notify-send 'Attention' 'your fridge is running'
+#notify-send 'test' 'test message'
+#notify-send 'Attention 5' 'your fridge is running'
+#notify-send 'Attention 3' 'your fridge is running'
+#notify-send 'Attention 2' 'your fridge is running'
+#notify-send 'Attention 6' 'your fridge is running'
+#notify-send 'Attention 1' 'your fridge is running'
 
 #dbus-monitor&
 

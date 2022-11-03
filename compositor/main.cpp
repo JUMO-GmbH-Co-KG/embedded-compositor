@@ -7,6 +7,7 @@
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
+#include <sortfilterproxymodel.h>
 
 int main(int argc, char *argv[]) {
   qputenv("QT_SCREEN_SCALE_FACTORS", "");
@@ -37,6 +38,9 @@ int main(int argc, char *argv[]) {
   qmlRegisterUncreatableType<NotificationData>("com.embeddedcompositor.dbus", 1,
                                                0, "NotificationData",
                                                "created from dbus data");
+
+  qmlRegisterType<SortFilterProxyModel>("com.embeddedcompositor.utility", 1, 0,
+                                        "SortFilterProxyModel");
 
   QQmlApplicationEngine appEngine;
 

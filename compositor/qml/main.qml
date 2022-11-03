@@ -138,7 +138,10 @@ WaylandCompositor {
                     shellSurfaceItem.anchors.right = targetArea !== leftArea ? targetArea.right : undefined;
                     shellSurfaceItem.anchors.top = targetArea !== bottomArea ? targetArea.top : undefined;
                     shellSurfaceItem.anchors.bottom = targetArea !== topArea ? targetArea.bottom : undefined;
-                    targetArea.surfaceItem = shellSurfaceItem;
+
+                    if(shellSurface.anchor !== EmbeddedShellTypes.Undefined) {
+                        targetArea.surfaceItem = shellSurfaceItem;
+                    }
                 }
 
                 function onCreateView(view){

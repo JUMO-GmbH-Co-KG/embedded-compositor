@@ -3,10 +3,13 @@ CONFIG += c++17 wayland-scanner
 SOURCES +=  main.cpp \
             dbusinterface.cpp \
             embeddedshellextension.cpp \
-            notificationmodel.cpp
+            notificationmodel.cpp \
+            sortfilterproxymodel.cpp
 HEADERS +=  embeddedshellextension.h \
+            dbus-selector.h \
             dbusinterface.h \
-            notificationmodel.h
+            notificationmodel.h \
+            sortfilterproxymodel.h
 
 OTHER_FILES += \
     qml/main.qml \

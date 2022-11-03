@@ -31,7 +31,7 @@ void EmbeddedShellExtension::initialize() {
 
 void EmbeddedShellExtension::embedded_shell_surface_create(
     Resource *resource, wl_resource *wl_surface, uint32_t id, uint32_t anchor,
-    uint32_t margin) {
+    uint32_t margin, int sort_index) {
   qDebug() << __PRETTY_FUNCTION__ << id << "anchor" << anchor << "margin"
            << margin;
   Q_UNUSED(resource)
@@ -48,7 +48,7 @@ void EmbeddedShellExtension::embedded_shell_surface_create(
     qDebug() << "server received new surface" << surface << anchor;
     embeddedShellSurface = new EmbeddedShellSurface(
         this, surface, embeddedShellSurfaceResource,
-        static_cast<EmbeddedShellTypes::Anchor>(anchor), margin);
+        static_cast<EmbeddedShellTypes::Anchor>(anchor), margin, sort_index);
   } else {
     qDebug() << "server received already known surface" << surface
              << embeddedShellSurface;
@@ -61,9 +61,10 @@ EmbeddedShellSurface::EmbeddedShellSurface(EmbeddedShellExtension *ext,
                                            QWaylandSurface *surface,
                                            const QWaylandResource &resource,
                                            EmbeddedShellTypes::Anchor anchor,
-                                           uint32_t margin)
+                                           uint32_t margin, int32_t sort_index)
     : QWaylandShellSurfaceTemplate<EmbeddedShellSurface>(this),
-      m_surface(surface), m_anchor(anchor), m_margin(margin) {
+      m_surface(surface), m_anchor(anchor), m_margin(margin),
+      m_sort_index(sort_index) {
   Q_UNUSED(ext)
   qDebug() << __PRETTY_FUNCTION__ << anchor;
   init(resource.resource());
@@ -81,6 +82,11 @@ void EmbeddedShellSurface::setMargin(int newMargin) {
   qDebug() << __PRETTY_FUNCTION__ << newMargin;
   m_margin = newMargin;
   emit marginChanged(newMargin);
+}
+
+void EmbeddedShellSurface::setSortIndex(int sort_index) {
+  m_sort_index = sort_index;
+  emit sortIndexChanged(sort_index);
 }
 
 void EmbeddedShellSurface::sendConfigure(const QSize size) {
@@ -124,10 +130,11 @@ void EmbeddedShellSurface::embedded_shell_surface_set_anchor(Resource *resource,
 
 void EmbeddedShellSurface::embedded_shell_surface_view_create(
     Resource *resource, wl_resource *shell_surface, const QString &label,
-    uint32_t id) {
+    int32_t sort_index, uint32_t id) {
   Q_UNUSED(shell_surface)
   qDebug() << __PRETTY_FUNCTION__ << label << id;
-  auto view = new EmbeddedShellSurfaceView(label, resource->client(), id, 1);
+  auto view = new EmbeddedShellSurfaceView(label, sort_index,
+                                           resource->client(), id, 1);
   emit createView(view);
 }
 
@@ -150,4 +157,26 @@ void EmbeddedShellSurface::embedded_shell_surface_set_margin(Resource *resource,
   qDebug() << __PRETTY_FUNCTION__ << margin;
   Q_UNUSED(resource)
   setMargin(margin);
+}
+
+void EmbeddedShellSurface::embedded_shell_surface_set_sort_index(
+    Resource *resource, int32_t sort_index) {
+  qDebug() << __PRETTY_FUNCTION__ << sort_index;
+  Q_UNUSED(resource)
+  setSortIndex(sort_index);
+}
+
+int EmbeddedShellSurfaceView::sortIndex() const { return m_sortIndex; }
+
+void EmbeddedShellSurfaceView::setSortIndex(int newSortIndex) {
+  if (m_sortIndex == newSortIndex)
+    return;
+  m_sortIndex = newSortIndex;
+  emit sortIndexChanged(m_sortIndex);
+}
+
+void EmbeddedShellSurfaceView::surface_view_set_sort_index(Resource *resource,
+                                                           int32_t sort_index) {
+  Q_UNUSED(resource)
+  setSortIndex(sort_index);
 }

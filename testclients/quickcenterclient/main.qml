@@ -5,7 +5,7 @@ Window {
     id: window
     visible: true
     title: qsTr("Hello from CenterCLient")
-    anchor: EmbeddedShellTypes.Center
+    anchor: Window.Anchor.Center
     color: "darkgray"
     width: 200
     height:200
@@ -34,7 +34,7 @@ Window {
             onClicked: {
                 var names = ["List view", "Tree view", "FPS test view" ];
                 var colors = ["plum","tomato","olive"]
-                var view = window.createView(names[idx]);
+                var view = window.createView(names[idx], 10 - idx);
                 var color = colors[idx];
                 console.log("client: view", view);
                 view.selected.connect(function(){
@@ -79,7 +79,7 @@ Window {
             duration: 4000
         }
     }
-
+/*
     property int frameCounter: 0
     onFrameSwapped: frameCounter++
     Timer {
@@ -91,7 +91,7 @@ Window {
             window.frameCounter = 0;
         }
     }
-
+*/
 
 
 }

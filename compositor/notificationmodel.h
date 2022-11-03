@@ -7,6 +7,7 @@
 #include <QDBusError>
 #include <QDebug>
 #include <QQmlParserStatus>
+
 class NotificationModel;
 
 class NotificationDbusInterface : public QObject {

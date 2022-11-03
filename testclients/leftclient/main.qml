@@ -7,7 +7,7 @@ Window {
     height: 200
     visible: true
     title: qsTr("Hello from LeftCLient")
-    anchor: Platform.Left
+    anchor: Window.Anchor.Left
     color: "transparent"
     margin: 64
     Rectangle {

@@ -1,4 +1,5 @@
 #include "notificationmodel.h"
+#include "dbus-selector.h"
 #include <QDBusConnection>
 #include <QDBusError>
 #include <QDBusMessage>
@@ -7,9 +8,8 @@
 NotificationModel::NotificationModel(QObject *parent)
     : QAbstractListModel(parent),
       dbusInterface(new NotificationDbusInterface(this)),
-      connection(QDBusConnection::connectToBus(
-          qEnvironmentVariable("DBUS_SESSION_BUS_ADDRESS"),
-          NotificationDbusInterface::Name))
+      connection(QDBusConnection::connectToBus(defaultBus,
+                                               NotificationDbusInterface::Name))
 
 {
   connect(this, &QAbstractListModel::rowsInserted, this,
@@ -36,7 +36,6 @@ int NotificationModel::rowCount(const QModelIndex &parent) const {
 }
 
 QVariant NotificationModel::data(const QModelIndex &index, int role) const {
-  qDebug() << __PRETTY_FUNCTION__ << index.row() << index.column() << role;
   if (!index.isValid())
     return QVariant();
 
@@ -54,7 +53,6 @@ void NotificationModel::componentComplete() {
   if (!connection.isConnected()) {
     return;
   }
-  qDebug() << connection.name();
   connection.registerService(NotificationDbusInterface::Name);
 
   auto registered = connection.registerObject(
@@ -65,7 +63,6 @@ void NotificationModel::componentComplete() {
 void NotificationModel::dismissed(QString action) {
   NotificationData *data = qobject_cast<NotificationData *>(sender());
   auto idx = m_data.indexOf(data);
-  qDebug() << __PRETTY_FUNCTION__ << data->id() << action << data << idx;
   beginRemoveRows(QModelIndex(), idx, idx);
   m_data.removeAt(idx);
   endRemoveRows();

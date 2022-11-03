@@ -10,15 +10,16 @@ EmbeddedShell::EmbeddedShell()
 
 EmbeddedShellSurface *
 EmbeddedShell::createSurface(QtWaylandClient::QWaylandWindow *window,
-                             EmbeddedShellTypes::Anchor anchor,
-                             uint32_t margin) {
+                             EmbeddedShellTypes::Anchor anchor, uint32_t margin,
+                             int sort_index) {
   qDebug() << __PRETTY_FUNCTION__ << isActive() << anchor << margin;
   if (!isActive())
     return nullptr;
   auto surface = instance->surface_create(
       window->wlSurface(), static_cast<embedded_shell_anchor_border>(anchor),
-      margin);
-  auto ess = new EmbeddedShellSurface(surface, window, anchor, margin);
+      margin, sort_index);
+  auto ess =
+      new EmbeddedShellSurface(surface, window, anchor, margin, sort_index);
   return ess;
 }
 

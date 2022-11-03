@@ -21,6 +21,8 @@ public:
   Q_PROPERTY(EmbeddedShellTypes::Anchor anchor READ anchor WRITE setAnchor
                  NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
+  Q_PROPERTY(
+      int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
 
   EmbeddedShellTypes::Anchor anchor() const;
   void setAnchor(EmbeddedShellTypes::Anchor newAnchor);
@@ -31,19 +33,22 @@ public:
 
   int margin() const;
   void setMargin(int newMargin);
+  int sortIndex() const;
+  void setSortIndex(int sortIndex);
 
 public slots:
-  EmbeddedShellSurfaceView *createView(QString label);
+  EmbeddedShellSurfaceView *createView(QString label, int sort_index);
 
 signals:
   void anchorChanged(EmbeddedShellTypes::Anchor anchor);
-
-  void marginChanged();
+  void marginChanged(int margin);
+  void sortIndexChanged(int sortIndex);
 
 private:
   EmbeddedShellTypes::Anchor m_anchor = EmbeddedShellTypes::Anchor::Undefined;
   EmbeddedShellSurface *m_surface = nullptr;
   int m_margin = -1;
+  int m_sortIndex = 0;
 };
 
 #endif // QUICKEMBEDDEDSHELLWINDOW_H

@@ -25,10 +25,15 @@ EmbeddedShellIntegration::createShellSurface(QWaylandWindow *window) {
   if (prop.isValid())
     margin = prop.toInt();
 
+  int32_t sort_index = 0;
+  prop = window->window()->property("sortIndex");
+  if (prop.isValid())
+    sort_index = prop.toInt();
+
   qDebug() << __PRETTY_FUNCTION__ << "PROPERTIES" << window->properties()
            << "margin" << margin << "anchor" << anchor;
 
-  auto ess = m_shell->createSurface(window, anchor, margin);
+  auto ess = m_shell->createSurface(window, anchor, margin, sort_index);
   qDebug() << "shell surface:" << ess;
 
   if (ess == nullptr) {

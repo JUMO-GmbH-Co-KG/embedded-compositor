@@ -115,7 +115,7 @@ Rectangle {
             PropertyChanges {
                 target: notificationRoot
                 height: 40
-                opacity: 0.5
+                opacity: 0.9
             }
             PropertyChanges {
                 target: body
