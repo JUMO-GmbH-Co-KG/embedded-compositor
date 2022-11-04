@@ -3,10 +3,12 @@ import QtWayland.Compositor 1.0
 import com.embeddedcompositor.embeddedshell 1.0
 import QtGraphicalEffects 1.12
 import com.embeddedcompositor.utility 1.0
+import QtQuick.Layouts 1.0
+import QtQuick.Controls 2.2
 
 Rectangle {
     id: taskSwitcher
-    color: Qt.rgba(0.0,0.0,0.0,0.8)
+    color: Qt.rgba(0.5,0.5,0.5,0.8)
     anchors.fill: parent
 
     signal switchTask(shellSurface: ShellSurface, view: SurfaceView);
@@ -34,24 +36,32 @@ Rectangle {
         }
     }
 
-    ListView {
-        id: listView
-        z:100
-        model: sorted
-
-        anchors.centerIn: parent
-        width: contentWidth < parent.width ? contentWidth : parent.width
-        height: 200
-
-        delegate: taskSwitchComponent
-        spacing: 5
-        orientation: ListView.Horizontal
-    }
-
     MouseArea {
         anchors.fill: parent
         onClicked: taskSwitcher.close()
     }
+
+    ScrollView {
+        id: scroller
+
+        width: parent.width * 0.5
+        height: parent.height * 0.8
+        anchors.centerIn: parent
+        clip : true
+
+        GridLayout {
+            columns: 2
+            rowSpacing: 5
+            columnSpacing: rowSpacing
+
+            Repeater {
+                model: sorted
+                delegate: taskSwitchComponent
+            }
+        }
+    }
+
+    property SurfaceView currentView
 
     Component {
         id: taskSwitchComponent
@@ -66,7 +76,7 @@ Rectangle {
             function select()
             {
                 console.log("switch task",shellSurface, view);
-                ListView.view.currentIndex = model.index
+                currentView = view;
                 taskSwitcher.switchTask(shellSurface, view);
                 taskSwitcher.close()
             }
@@ -77,7 +87,7 @@ Rectangle {
                 id: sItem
                 visible: taskSwitcher.visible
                 shellSurface: model.data.surface
-                bufferLocked: !taskSwitchComponentRoot.ListView.isCurrentItem
+                bufferLocked: currentView !== view
             }
 
             FastBlur {

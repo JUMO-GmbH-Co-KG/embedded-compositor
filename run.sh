@@ -48,7 +48,7 @@ $BUILD_ROOT/testclients/topclient/topclient &
 $BUILD_ROOT/testclients/bottomclient/bottomclient &
 $BUILD_ROOT/testclients/quickcenterclient/quickcenterclient &
 #sleep 1
-#$BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
+$BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
 
 #notify-send 'test' 'test message'
 #notify-send 'Attention 5' 'your fridge is running'

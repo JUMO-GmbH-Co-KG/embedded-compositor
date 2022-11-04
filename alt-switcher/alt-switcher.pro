@@ -1,0 +1,3 @@
+DISTFILES += \
+    GridSwitcher.qml
+

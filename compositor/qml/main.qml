@@ -22,8 +22,8 @@ WaylandCompositor {
                 Keys.onPressed:
                     (event)=> {
                         if (event.key == Qt.Key_Super_L || event.key == Qt.Key_Super_R) {
-                            if(taskSwitcher.state == "open") taskSwitcher.close();
-                            else taskSwitcher.open();
+                            if(taskSwitcherLoader.item.state == "open") taskSwitcherLoader.item.close();
+                            else taskSwitcherLoader.item.open();
                         }
                 }
                 focus: true
@@ -86,11 +86,19 @@ WaylandCompositor {
                 property Item surfaceItem
             }
 
-            TaskSwitcher {
-                id: taskSwitcher
+            Loader {
+                id:taskSwitcherLoader
                 anchors.fill:parent
-                onSwitchTask: {
-                    if(view != null) view.select();
+//                source: "file://home/florian/basyskom/compositor/alt-switcher/GridSwitcher.qml"
+                source:"DefaultTaskSwitcher/TaskSwitcher.qml"
+                active: true
+                onLoaded: {
+                    item.surfaceModel = centerApplicationViewModel
+                    item.switchTask.connect(doSwitch)
+                }
+                function doSwitch(shellSurface, view)
+                {
+                    if(view !== null) view.select();
                     centerArea.selectSurface(shellSurface, view);
                 }
             }
@@ -109,6 +117,54 @@ WaylandCompositor {
          [EmbeddedShellTypes.Center]: centerArea,
          [EmbeddedShellTypes.Undefined]: limboArea,
     })
+
+    ListModel {
+        id: centerApplicationViewModel
+        property var surfaces: ({});
+
+        function addSurface(shellSurface)
+        {
+            surfaces[shellSurface] = {
+                views: []
+            };
+            append({data: {view: null, surface: shellSurface}});
+        }
+
+        function removeSurface(shellSurface)
+        {
+            for(var i = count - 1; i>0; i--)
+            {
+                if(get(i).data.surface === shellSurface)
+                {
+                    remove(i);
+                }
+            }
+            delete surfaces[shellSurface]
+        }
+
+        function createView(shellSurface, view)
+        {
+            var entry = surfaces[shellSurface];
+            console.log("compositor: create view! "+ view +" have entry "+entry);
+            if(entry.views.length === 0)
+            {
+                console.log("setting first view!");
+                entry.views.push(view);
+                append({data: {view: view, surface: shellSurface}});
+                for(var i = 0; i<count; i++)
+                {
+                    if(get(i).data.surface == shellSurface)
+                    {
+                        remove(i);
+                        break;
+                    }
+                }
+                return;
+            }
+
+            append({data: {view: view, surface: shellSurface}});
+        }
+    }
 
     Component {
         id: chromeComponent
@@ -130,7 +186,7 @@ WaylandCompositor {
                     var targetArea = anchorMap[shellSurface.anchor];
 
                     if(shellSurface.anchor === EmbeddedShellTypes.Center) {
-                       taskSwitcher.addSurface(shellSurface, shellSurfaceItem);
+                       centerApplicationViewModel.addSurface(shellSurface, shellSurfaceItem);
                     }
 
                     shellSurfaceItem.parent = targetArea;
@@ -145,7 +201,7 @@ WaylandCompositor {
                 }
 
                 function onCreateView(view){
-                    taskSwitcher.createView(shellSurface, view);
+                    centerApplicationViewModel.createView(shellSurface, view);
                 }
             }
 
@@ -166,7 +222,7 @@ WaylandCompositor {
         onSurfaceAdded: chromeComponent.createObject(limboArea, { "shellSurface": surface } );
     }
     TaskSwitcherInterface {
-        onOpenRequested: taskSwitcher.open();
-        onCloseRequested: taskSwitcher.close();
+        onOpenRequested: taskSwitcherLoader.item.open();
+        onCloseRequested: taskSwitcherLoader.item.close();
     }
 }
