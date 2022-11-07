@@ -22,6 +22,8 @@ int main(int argc, char *argv[]) {
       "managed by wayland");
   qmlRegisterType<TaskSwitcherInterface>("com.embeddedcompositor.dbus", 1, 0,
                                          "TaskSwitcherInterface");
+  qmlRegisterType<GlobalOverlayInterface>("com.embeddedcompositor.dbus", 1, 0,
+                                          "GlobalOverlayInterface");
 
   qmlRegisterType<NotificationModel>("com.embeddedcompositor.dbus", 1, 0,
                                      "NotificationModel");

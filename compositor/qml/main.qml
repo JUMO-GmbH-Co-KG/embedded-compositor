@@ -106,6 +106,10 @@ WaylandCompositor {
             Notifications {
                 anchors.fill: parent
             }
+
+            GlobalOverlay {
+                id: globalOverlay
+            }
         }
     }
 
@@ -224,5 +228,9 @@ WaylandCompositor {
     TaskSwitcherInterface {
         onOpenRequested: taskSwitcherLoader.item.open();
         onCloseRequested: taskSwitcherLoader.item.close();
+    }
+    GlobalOverlayInterface {
+        onShowRequested: globalOverlay.show(message)
+        onHideRequested: globalOverlay.hide()
     }
 }

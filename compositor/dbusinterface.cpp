@@ -5,7 +5,6 @@
 #include <QDebug>
 
 void TaskSwitcherInterface::componentComplete() {
-  qDebug() << __PRETTY_FUNCTION__;
   m_valid = getBus().registerObject("/taskswitcher",
                                     "com.embeddedcompositor.taskswitcher", this,
                                     QDBusConnection::ExportScriptableSlots);
@@ -25,4 +24,11 @@ bool InitDbusConnection(QString serviceName) {
     return false;
   }
   return true;
+}
+
+void GlobalOverlayInterface::componentComplete() {
+  m_valid = getBus().registerObject(
+      "/globaloverlay", "com.embeddedcompositor.globaloverlay", this,
+      QDBusConnection::ExportScriptableSlots);
+  emit validChanged();
 }

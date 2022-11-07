@@ -35,5 +35,28 @@ signals:
   void closeRequested();
 };
 
-#endif // DBUSINTERFACE_H
+class GlobalOverlayInterface : public QObject, public QQmlParserStatus {
+  Q_OBJECT
+  bool m_valid = false;
 
+public:
+  GlobalOverlayInterface() {}
+  virtual ~GlobalOverlayInterface() override {}
+
+  Q_PROPERTY(bool valid READ valid NOTIFY validChanged)
+  bool valid() const { return m_valid; }
+
+  // QQmlParserStatus interface
+  void classBegin() override {}
+  void componentComplete() override;
+
+public slots:
+  Q_SCRIPTABLE void Show(QString message) { emit showRequested(message); }
+  Q_SCRIPTABLE void Hide() { emit hideRequested(); }
+
+signals:
+  void validChanged();
+  void showRequested(QString message);
+  void hideRequested();
+};
+#endif // DBUSINTERFACE_H
