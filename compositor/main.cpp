@@ -1,7 +1,7 @@
+// SPDX-License-Identifier: GPL-3.0-only
 #include "dbusinterface.h"
 #include "embeddedshellextension.h"
 #include "notificationmodel.h"
-#include <QTimer>
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
 #include <QtGui/QGuiApplication>

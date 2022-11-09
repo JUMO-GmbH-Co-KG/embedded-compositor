@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-only
+
 #ifndef EMBEDDEDSHELLEXTENSION_H
 #define EMBEDDEDSHELLEXTENSION_H
 
