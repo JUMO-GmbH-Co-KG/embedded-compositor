@@ -4,20 +4,20 @@
 #include <QtWaylandClient/private/qwaylandclientextension_p.h>
 #include <QtWaylandClient/private/qwaylandshellintegration_p.h>
 
-using namespace QtWaylandClient;
 class EmbeddedShellSurface;
 class EmbeddedShell;
 
 class Q_WAYLAND_CLIENT_EXPORT EmbeddedShellIntegration
-    : public QWaylandShellIntegration {
-  QMap<QWaylandWindow *, EmbeddedShellSurface *> m_windows;
+    : public QtWaylandClient::QWaylandShellIntegration {
+  QMap<QtWaylandClient::QWaylandWindow *, EmbeddedShellSurface *> m_windows;
   QScopedPointer<EmbeddedShell> m_shell;
 
 public:
   bool isActive() const;
   EmbeddedShellIntegration();
-  QWaylandShellSurface *createShellSurface(QWaylandWindow *window) override;
-  bool initialize(QWaylandDisplay *display) override;
+  QtWaylandClient::QWaylandShellSurface *
+  createShellSurface(QtWaylandClient::QWaylandWindow *window) override;
+  bool initialize(QtWaylandClient::QWaylandDisplay *display) override;
   // QWaylandShellIntegration interface
   void *nativeResourceForWindow(const QByteArray &resource,
                                 QWindow *window) override;

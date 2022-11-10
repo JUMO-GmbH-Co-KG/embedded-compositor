@@ -6,12 +6,11 @@
 bool EmbeddedShellIntegration::isActive() const { return m_shell->isActive(); }
 
 EmbeddedShellIntegration::EmbeddedShellIntegration()
-    : m_shell(new EmbeddedShell()) {
-  qDebug() << __PRETTY_FUNCTION__;
-}
+    : m_shell(new EmbeddedShell()) {}
 
-QWaylandShellSurface *
-EmbeddedShellIntegration::createShellSurface(QWaylandWindow *window) {
+QtWaylandClient::QWaylandShellSurface *
+EmbeddedShellIntegration::createShellSurface(
+    QtWaylandClient::QWaylandWindow *window) {
 
   EmbeddedShellTypes::Anchor anchor = EmbeddedShellTypes::Anchor::Undefined;
 
@@ -23,46 +22,40 @@ EmbeddedShellIntegration::createShellSurface(QWaylandWindow *window) {
 
   prop = window->window()->property("margin");
   if (prop.isValid())
-    margin = prop.toInt();
+    margin = prop.toUInt();
 
   int32_t sort_index = 0;
   prop = window->window()->property("sortIndex");
   if (prop.isValid())
     sort_index = prop.toInt();
 
-  qDebug() << __PRETTY_FUNCTION__ << "PROPERTIES" << window->properties()
-           << "margin" << margin << "anchor" << anchor;
-
   auto ess = m_shell->createSurface(window, anchor, margin, sort_index);
-  qDebug() << "shell surface:" << ess;
 
   if (ess == nullptr) {
     return nullptr;
   }
+
   m_windows.insert(window, ess);
   emit EmbeddedPlatform::instance()->shellSurfaceCreated(ess, window->window());
   return ess->shellSurface();
 }
 
-bool EmbeddedShellIntegration::initialize(QWaylandDisplay *display) {
+bool EmbeddedShellIntegration::initialize(
+    QtWaylandClient::QWaylandDisplay *display) {
   QWaylandShellIntegration::initialize(display);
-  qDebug() << __PRETTY_FUNCTION__ << "active" << m_shell->isActive();
   return m_shell->isActive();
 }
 
 void *
 EmbeddedShellIntegration::nativeResourceForWindow(const QByteArray &resource,
                                                   QWindow *window) {
-  qDebug() << __PRETTY_FUNCTION__ << resource << window << window->handle();
-
   if (resource == "embedded-shell-surface") {
-    auto qww = static_cast<QWaylandWindow *>(window->handle());
+    auto qww = static_cast<QtWaylandClient::QWaylandWindow *>(window->handle());
     auto found = m_windows.find(qww);
     if (found != m_windows.end()) {
-      qDebug() << "found";
       return found.value();
     }
-    qDebug() << "NOT FOUND";
+    qDebug() << __PRETTY_FUNCTION__ << " ... not found";
     return nullptr;
   }
   return QWaylandShellIntegration::nativeResourceForWindow(resource, window);

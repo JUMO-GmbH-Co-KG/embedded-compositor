@@ -4,8 +4,6 @@
 #include <qpa/qplatformwindow.h>
 #include <qpa/qwindowsysteminterface.h>
 
-using namespace QtWaylandClient;
-
 EmbeddedShellSurface::EmbeddedShellSurface(
     struct ::embedded_shell_surface *shell_surface, QWaylandWindow *window,
     EmbeddedShellTypes::Anchor anchor, uint32_t margin, int32_t sort_index)
