@@ -22,6 +22,7 @@ fi
 #qdbusviewer &
 
 #export QDBUS_DEBUG=1
+export QT_LOGGING_RULES="embeddedshell.compositor.debug=false;embeddedshell.quick=false"
 $BUILD_ROOT/compositor/compositor &
 compositor_pid=$!
 

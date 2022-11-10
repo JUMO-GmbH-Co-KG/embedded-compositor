@@ -1,12 +1,10 @@
 #ifndef DBUSINTERFACE_H
 #define DBUSINTERFACE_H
-#include <QDebug>
+#include <QDBusConnection>
+#include <QDBusError>
 #include <QObject>
 #include <QQmlParserStatus>
 #include <QTimer>
-
-#include <QDBusConnection>
-#include <QDBusError>
 
 bool InitDbusConnection(QString serviceName);
 
@@ -15,6 +13,7 @@ class TaskSwitcherInterface : public QObject, public QQmlParserStatus {
   bool m_valid = false;
 
 public:
+  Q_INTERFACES(QQmlParserStatus)
   TaskSwitcherInterface() {}
   virtual ~TaskSwitcherInterface() override {}
 
@@ -40,6 +39,7 @@ class GlobalOverlayInterface : public QObject, public QQmlParserStatus {
   bool m_valid = false;
 
 public:
+  Q_INTERFACES(QQmlParserStatus)
   GlobalOverlayInterface() {}
   virtual ~GlobalOverlayInterface() override {}
 

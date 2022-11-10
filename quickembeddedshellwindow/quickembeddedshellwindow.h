@@ -3,10 +3,13 @@
 
 #include "embeddedplatform.h"
 #include "quickembeddedshellwindow_global.h"
+#include <QLoggingCategory>
 #include <QQuickWindow>
 
 class EmbeddedShellSurfaceView;
 class EmbeddedShellSurface;
+
+Q_DECLARE_LOGGING_CATEGORY(quickShell)
 
 class EMBEDDEDSHELLWINDOW_EXPORT QuickEmbeddedShellWindow
     : public QQuickWindow,

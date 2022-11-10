@@ -2,13 +2,10 @@
 #include "embeddedplatform.h"
 #include "embeddedshellsurface.h"
 #include <QDebug>
-#include <QEvent>
 #include <QLabel>
-#include <QTimer>
 #include <QWindow>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-  qDebug() << __PRETTY_FUNCTION__;
   m_label = new QLabel("initial state", this);
   this->setCentralWidget(m_label);
 
@@ -23,12 +20,9 @@ MainWindow::~MainWindow() {}
 
 void MainWindow::initShell(EmbeddedShellSurface *shellSurface,
                            QWindow *window) {
-  qDebug() << __PRETTY_FUNCTION__;
   if (this->windowHandle() != window) {
-    qDebug() << "wrong window" << window;
     return;
   }
-  qDebug() << "shellSurface" << shellSurface;
   if (shellSurface == nullptr) {
     qWarning() << "NO SHELL SURFACE!";
     return;

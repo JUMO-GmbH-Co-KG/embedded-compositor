@@ -34,8 +34,6 @@ public:
          -1
 
         });
-    qDebug() << message.errorMessage() << message.errorName() << message.type()
-             << message.arguments();
 
     return message.arguments().first().toUInt();
   }

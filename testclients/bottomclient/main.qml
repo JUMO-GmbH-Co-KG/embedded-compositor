@@ -99,5 +99,4 @@ Window {
     }
 
     Component.onCompleted: dbusClient.hideGlobalOverlay()
-
 }

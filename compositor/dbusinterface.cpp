@@ -14,13 +14,13 @@ void TaskSwitcherInterface::componentComplete() {
 bool InitDbusConnection(QString serviceName) {
   auto bus = getBus();
   if (!bus.isConnected()) {
-    fprintf(stderr, "Cannot connect to the D-Bus.\n"
-                    "To start it, run:\n"
-                    "\teval `dbus-launch --auto-syntax`\n");
+    qWarning() << "Cannot connect to the D-Bus.\n"
+                  "To start it, run:\n"
+                  "\teval `dbus-launch --auto-syntax`\n";
     return false;
   }
   if (!bus.registerService(serviceName)) {
-    fprintf(stderr, "%s\n", qPrintable(bus.lastError().message()));
+    qDebug() << bus.lastError().message();
     return false;
   }
   return true;

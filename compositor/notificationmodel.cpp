@@ -32,6 +32,7 @@ void NotificationModel::Add(NotificationData *data) {
 }
 
 int NotificationModel::rowCount(const QModelIndex &parent) const {
+  Q_UNUSED(parent)
   return m_data.count();
 }
 
@@ -55,9 +56,9 @@ void NotificationModel::componentComplete() {
   }
   connection.registerService(NotificationDbusInterface::Name);
 
-  auto registered = connection.registerObject(
-      NotificationDbusInterface::Path, dbusInterface.data(),
-      QDBusConnection::ExportAllContents);
+  connection.registerObject(NotificationDbusInterface::Path,
+                            dbusInterface.data(),
+                            QDBusConnection::ExportAllContents);
 }
 
 void NotificationModel::dismissed(QString action) {
@@ -131,10 +132,6 @@ QStringList NotificationDbusInterface::GetCapabilities() {
   */
 }
 
-void NotificationData::dismiss(QString action) {
-
-  qDebug() << __PRETTY_FUNCTION__ << action;
-  emit dismissed(action);
-}
+void NotificationData::dismiss(QString action) { emit dismissed(action); }
 
 unsigned int NotificationModel::count() const { return m_data.count(); }

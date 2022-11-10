@@ -89,7 +89,8 @@ WaylandCompositor {
             Loader {
                 id:taskSwitcherLoader
                 anchors.fill:parent
-//                source: "file://home/florian/basyskom/compositor/alt-switcher/GridSwitcher.qml"
+                // this path probably only works while debugging on desktop
+                // source: "file:../alt-switcher/GridSwitcher.qml"
                 source:"DefaultTaskSwitcher/TaskSwitcher.qml"
                 active: true
                 onLoaded: {

@@ -1,5 +1,4 @@
 #include "sortfilterproxymodel.h"
-#include <QDebug>
 
 SortFilterProxyModel::SortFilterProxyModel() {
   setDynamicSortFilter(true);
@@ -8,23 +7,12 @@ SortFilterProxyModel::SortFilterProxyModel() {
           &SortFilterProxyModel::countChanged);
   connect(this, &QSortFilterProxyModel::rowsRemoved, this,
           &SortFilterProxyModel::countChanged);
-  connect(this, &QSortFilterProxyModel::rowsInserted,
-          [=](QModelIndex p, int f, int l) {
-            auto index = this->index(f, 0, p);
-            qDebug() << "inserted!" << f << l << data(index);
-          });
 }
 
 void SortFilterProxyModel::setSourceModel(QAbstractItemModel *newSourceModel) {
   if (sourceModel() == newSourceModel)
     return;
   QSortFilterProxyModel::setSourceModel(newSourceModel);
-  connect(newSourceModel, &QAbstractItemModel::rowsInserted,
-          [=](QModelIndex i, int f, int l) {
-            auto index = sourceModel()->index(f, 0, i);
-            qDebug() << "source inserted!" << f << l
-                     << sourceModel()->data(index);
-          });
 
   if (newSourceModel && newSourceModel->roleNames().isEmpty()) {
     // QTBUG-57971

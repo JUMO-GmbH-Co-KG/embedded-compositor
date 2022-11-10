@@ -2,20 +2,22 @@
 #include "embeddedshellsurface.h"
 #include "quickembeddedshell.h"
 
+Q_LOGGING_CATEGORY(quickShell, "embeddedshell.quick")
+
 QuickEmbeddedShellWindow::QuickEmbeddedShellWindow(QWindow *parent)
     : QQuickWindow(parent) {
-  qDebug() << __PRETTY_FUNCTION__;
+  qCDebug(quickShell) << __PRETTY_FUNCTION__;
 }
 
 QuickEmbeddedShellWindow::~QuickEmbeddedShellWindow() {}
 
 EmbeddedShellTypes::Anchor QuickEmbeddedShellWindow::anchor() const {
-  qDebug() << __PRETTY_FUNCTION__ << m_anchor;
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << m_anchor;
   return m_anchor;
 }
 
 void QuickEmbeddedShellWindow::setAnchor(EmbeddedShellTypes::Anchor newAnchor) {
-  qDebug() << __PRETTY_FUNCTION__ << m_anchor << "->" << newAnchor;
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << m_anchor << "->" << newAnchor;
   if (m_anchor == newAnchor)
     return;
   m_anchor = newAnchor;
@@ -25,7 +27,7 @@ void QuickEmbeddedShellWindow::setAnchor(EmbeddedShellTypes::Anchor newAnchor) {
 EmbeddedShellSurfaceView *QuickEmbeddedShellWindow::createView(QString label,
                                                                int sort_index) {
   auto view = m_surface->createView(label, sort_index);
-  qDebug() << __PRETTY_FUNCTION__ << view << label;
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << view << label;
   return view;
 }
 
@@ -39,7 +41,9 @@ void QuickEmbeddedShell::registerTypes(const char *uri) {
                                    "uncreatable enums namespace");
 }
 
-void QuickEmbeddedShellWindow::classBegin() { qDebug() << __PRETTY_FUNCTION__; }
+void QuickEmbeddedShellWindow::classBegin() {
+  qCDebug(quickShell) << __PRETTY_FUNCTION__;
+}
 
 void QuickEmbeddedShellWindow::componentComplete() {
   m_surface = EmbeddedPlatform::shellSurfaceForWindow(this);
@@ -48,16 +52,16 @@ void QuickEmbeddedShellWindow::componentComplete() {
     m_surface->sendAnchor(m_anchor);
     m_surface->sendMargin(m_margin);
   }
-  qDebug() << __PRETTY_FUNCTION__ << m_surface;
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << m_surface;
 }
 
 int QuickEmbeddedShellWindow::margin() const {
-  qDebug() << __PRETTY_FUNCTION__ << m_margin;
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << m_margin;
   return m_margin;
 }
 
 void QuickEmbeddedShellWindow::setMargin(int newMargin) {
-  qDebug() << __PRETTY_FUNCTION__ << newMargin;
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << newMargin;
   if (m_margin == newMargin)
     return;
   m_margin = newMargin;
@@ -67,7 +71,7 @@ void QuickEmbeddedShellWindow::setMargin(int newMargin) {
 int QuickEmbeddedShellWindow::sortIndex() const { return m_sortIndex; }
 
 void QuickEmbeddedShellWindow::setSortIndex(int sortIndex) {
-  qDebug() << __PRETTY_FUNCTION__ << sortIndex;
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << sortIndex;
   if (m_sortIndex == sortIndex)
     return;
   m_sortIndex = sortIndex;

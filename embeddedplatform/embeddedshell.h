@@ -1,8 +1,11 @@
 #ifndef EMBEDDEDSHELL_H
 #define EMBEDDEDSHELL_H
 #include "embeddedshellsurface.h"
+#include <QLoggingCategory>
 #include <QObject>
 #include <QtWaylandClient/private/qwaylandclientextension_p.h>
+
+Q_DECLARE_LOGGING_CATEGORY(shellExt)
 
 class EmbeddedShellPrivate;
 namespace QtWayland {

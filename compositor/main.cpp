@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
                                    "EmbeddedShellTypes", "Not Instantiable!");
 
   if (!InitDbusConnection("com.basyskom.embeddedcompositor")) {
-    qDebug() << "failed to init dbus";
+    qWarning() << "failed to init dbus";
     return 1;
   }
 
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
                      foreach (auto &error, warnings) {
                        qWarning() << "warning: " << error.toString();
                      }
-                     qDebug() << "exiting due to qml warning.";
+                     qWarning() << "exiting due to qml warning.";
                      exit(1);
                    });
 

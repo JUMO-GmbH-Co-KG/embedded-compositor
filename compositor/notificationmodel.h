@@ -5,7 +5,6 @@
 
 #include <QDBusConnection>
 #include <QDBusError>
-#include <QDebug>
 #include <QQmlParserStatus>
 
 class NotificationModel;
@@ -42,10 +41,9 @@ public slots:
 
   void GetServerInformation(QString &name, QString &vendor, QString &version,
                             QString &spec_version) {
-    qDebug() << "get info...";
-    name = "foo";
-    vendor = "bar";
-    version = "1.2.3.4";
+    name = "EmbeddedCompositor";
+    vendor = "EmbeddedCompositor";
+    version = "0.0.0.1";
     spec_version = "1.2";
   }
 signals:
@@ -111,6 +109,7 @@ class NotificationModel : public QAbstractListModel, public QQmlParserStatus {
   Q_PROPERTY(unsigned int count READ count NOTIFY countChanged)
 
 public:
+  Q_INTERFACES(QQmlParserStatus)
   explicit NotificationModel(QObject *parent = nullptr);
   virtual ~NotificationModel() override;
 

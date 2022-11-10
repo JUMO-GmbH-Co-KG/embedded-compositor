@@ -1,4 +1,3 @@
-#include <QtCore/QDebug>
 #include <QtCore/QUrl>
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>

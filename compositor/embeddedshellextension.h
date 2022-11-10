@@ -15,6 +15,8 @@
 class EmbeddedShellSurface;
 class EmbeddedShellSurfaceView;
 
+Q_DECLARE_LOGGING_CATEGORY(shellExt)
+
 namespace EmbeddedShellTypes {
 Q_NAMESPACE
 #include "embeddedshellanchor.h"
