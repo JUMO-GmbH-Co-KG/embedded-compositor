@@ -51,7 +51,10 @@ For convenience of QML applications, we also implement a QML interface to embedd
 
 ### Compositor side
 
+The compositor is built around Qt's qtwayland qml compositor examples with a custom shell implemented similar to the IVI shell example.
+We leverage `QWaylandShellTemplate<EmbeddedShellExtension>` and `public QWaylandShellSurfaceTemplate<EmbeddedShellSurface>` to register our shell extension and surface interface with Qt.
 
+We require surfaces to bind to `embedded_shell` and to specify their anchor edge before the compositor displays them. Unfortunately it is tricky to get these values from clients from the moment of creating the `embedded_shell_surface` interface, so until the anchor changes from `undefined` a surface remains hidden.
 
 ## Implementation Notes
 
