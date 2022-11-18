@@ -42,14 +42,14 @@ export QML2_IMPORT_PATH=$BUILD_ROOT/quickembeddedshellwindow
 #export WAYLAND_DEBUG=1
 export LD_LIBRARY_PATH=$BUILD_ROOT/quickembeddedshellwindow/EmbeddedShell:$BUILD_ROOT/embeddedplatform
 
-echo "======\nLaunching Clients...\n======"
+echo "======  Launching Clients... ======"
 $BUILD_ROOT/testclients/leftclient/leftclient &
 $BUILD_ROOT/testclients/rightclient/rightclient &
 $BUILD_ROOT/testclients/topclient/topclient &
 $BUILD_ROOT/testclients/bottomclient/bottomclient &
 $BUILD_ROOT/testclients/quickcenterclient/quickcenterclient &
-#sleep 1
 $BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
+#EMBEDDED_SHELL_ANCHOR=center EMBEDDED_SHELL_SORT_INDEX=100 kcalc &
 
 #notify-send 'test' 'test message'
 #notify-send 'Attention 5' 'your fridge is running'

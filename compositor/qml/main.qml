@@ -181,32 +181,39 @@ WaylandCompositor {
             onSurfaceDestroyed:  destroy()
             onWidthChanged: handleResized()
             onHeightChanged: handleResized()
-            Component.onCompleted: handleResized();
+            Component.onCompleted: {
+                handleResized();
+                handleAnchor();
+            }
 
             property int margin: shellSurface.margin
 
             Connections {
                 target: shellSurface
-                function onAnchorChanged(){
-                    var targetArea = anchorMap[shellSurface.anchor];
-
-                    if(shellSurface.anchor === EmbeddedShellTypes.Center) {
-                       centerApplicationViewModel.addSurface(shellSurface, shellSurfaceItem);
-                    }
-
-                    shellSurfaceItem.parent = targetArea;
-                    shellSurfaceItem.anchors.left = targetArea !== rightArea ? targetArea.left : undefined;
-                    shellSurfaceItem.anchors.right = targetArea !== leftArea ? targetArea.right : undefined;
-                    shellSurfaceItem.anchors.top = targetArea !== bottomArea ? targetArea.top : undefined;
-                    shellSurfaceItem.anchors.bottom = targetArea !== topArea ? targetArea.bottom : undefined;
-
-                    if(shellSurface.anchor !== EmbeddedShellTypes.Undefined) {
-                        targetArea.surfaceItem = shellSurfaceItem;
-                    }
+                function onAnchorChanged() {
+                    handleAnchor();
                 }
 
-                function onCreateView(view){
+                function onCreateView(view) {
                     centerApplicationViewModel.createView(shellSurface, view);
+                }
+            }
+
+            function handleAnchor() {
+                var targetArea = anchorMap[shellSurface.anchor];
+
+                if(shellSurface.anchor === EmbeddedShellTypes.Center) {
+                    centerApplicationViewModel.addSurface(shellSurface, shellSurfaceItem);
+                }
+
+                shellSurfaceItem.parent = targetArea;
+                shellSurfaceItem.anchors.left = targetArea !== rightArea ? targetArea.left : undefined;
+                shellSurfaceItem.anchors.right = targetArea !== leftArea ? targetArea.right : undefined;
+                shellSurfaceItem.anchors.top = targetArea !== bottomArea ? targetArea.top : undefined;
+                shellSurfaceItem.anchors.bottom = targetArea !== topArea ? targetArea.bottom : undefined;
+
+                if(shellSurface.anchor !== EmbeddedShellTypes.Undefined) {
+                    targetArea.surfaceItem = shellSurfaceItem;
                 }
             }
 
