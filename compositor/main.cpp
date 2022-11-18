@@ -45,14 +45,16 @@ int main(int argc, char *argv[]) {
                                         "SortFilterProxyModel");
 
   QQmlApplicationEngine appEngine;
-
+  bool exitOnQmlWarning = qgetenv("QML_WARNING_EXIT") == "1";
   QObject::connect(&appEngine, &QQmlApplicationEngine::warnings,
-                   [](auto &warnings) {
+                   [=](auto &warnings) {
                      foreach (auto &error, warnings) {
                        qWarning() << "warning: " << error.toString();
                      }
-                     qWarning() << "exiting due to qml warning.";
-                     exit(1);
+                     if (exitOnQmlWarning) {
+                       qWarning() << "exiting due to qml warning.";
+                       exit(1);
+                     }
                    });
 
   appEngine.load(QUrl("qrc:///qml/main.qml"));
