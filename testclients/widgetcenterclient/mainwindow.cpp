@@ -8,18 +8,19 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
   m_label = new QLabel("initial state", this);
   this->setCentralWidget(m_label);
-
+  // callback when the QPA has finished creating the shell integration,
+  // at which point we can start using the API with the provided
+  // EmbeddedShellSurface object
   connect(EmbeddedPlatform::instance(), &EmbeddedPlatform::shellSurfaceCreated,
           this, &MainWindow::initShell);
-
-  //  windowHandle()->setProperty(
-  //      "anchor", QVariant::fromValue(EmbeddedPlatform::Anchor::Center));
 }
 
 MainWindow::~MainWindow() {}
 
 void MainWindow::initShell(EmbeddedShellSurface *shellSurface,
                            QWindow *window) {
+  // the callback is invoked for all windows but in this
+  // example we will only look for this one
   if (this->windowHandle() != window) {
     return;
   }

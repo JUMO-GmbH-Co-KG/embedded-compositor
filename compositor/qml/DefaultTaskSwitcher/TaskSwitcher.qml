@@ -90,7 +90,7 @@ Rectangle {
             Text {
                 id: text
                 anchors.centerIn: parent
-                text: (view? ("<"+view.label+"> "+view.sortIndex) : "NOT VIEW "+shellSurface.sortIndex)
+                text: (view? ("<"+view.label+"> "+view.sortIndex) : "NOT VIEW "+shellSurface.sortIndex+" "+JSON.stringify(shellSurface))
                 color:"white"
             }
 
