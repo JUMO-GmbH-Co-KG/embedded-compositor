@@ -5,5 +5,6 @@
         <file>qml/Notifications/Notifications.qml</file>
         <file>qml/Notifications/Notification.qml</file>
         <file>qml/GlobalOverlay.qml</file>
+        <file>qml/RootTransformer.qml</file>
     </qresource>
 </RCC>

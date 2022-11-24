@@ -5,8 +5,7 @@
 #include <QDebug>
 
 void TaskSwitcherInterface::componentComplete() {
-  m_valid = getBus().registerObject("/taskswitcher",
-                                    "com.embeddedcompositor.taskswitcher", this,
+  m_valid = getBus().registerObject("/taskswitcher", this,
                                     QDBusConnection::ExportScriptableSlots);
   emit validChanged();
 }
@@ -27,8 +26,30 @@ bool InitDbusConnection(QString serviceName) {
 }
 
 void GlobalOverlayInterface::componentComplete() {
-  m_valid = getBus().registerObject(
-      "/globaloverlay", "com.embeddedcompositor.globaloverlay", this,
-      QDBusConnection::ExportScriptableSlots);
+  m_valid = getBus().registerObject("/globaloverlay", this,
+                                    QDBusConnection::ExportScriptableSlots);
   emit validChanged();
+}
+
+CompositorScreenInterface::CompositorScreenInterface() {
+  auto bootScreenOrientation = qgetenv("SCREEN_ORIENTATION");
+  if (!bootScreenOrientation.isNull())
+    m_orientation = QString(bootScreenOrientation);
+}
+
+void CompositorScreenInterface::componentComplete() {
+  m_valid = getBus().registerObject("/screen", this,
+                                    QDBusConnection::ExportAllProperties);
+  emit validChanged();
+}
+
+const QString &CompositorScreenInterface::orientation() const {
+  return m_orientation;
+}
+
+void CompositorScreenInterface::setOrientation(const QString &newOrientation) {
+  if (m_orientation == newOrientation)
+    return;
+  m_orientation = newOrientation;
+  emit orientationChanged(m_orientation);
 }

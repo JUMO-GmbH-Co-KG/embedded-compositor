@@ -14,3 +14,14 @@ DBusClient::DBusClient(QObject *parent) : QObject{parent} {
       "org.freedesktop.Notifications", "ActionInvoked", this,
       SLOT(notificationActionInvoked(unsigned int, QString)));
 }
+
+uint DBusClient::notify(QString summary, QString body, QStringList actions) {
+    auto message = notifications.callWithArgumentList(
+        QDBus::CallMode::Block, "Notify",
+        {"bottom client", 0u, "no-icon", summary, body, actions, QVariantMap(),
+            -1
+
+        });
+
+    return message.arguments().first().toUInt();
+}

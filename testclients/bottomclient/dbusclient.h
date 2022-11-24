@@ -15,6 +15,9 @@ class DBusClient : public QObject {
                                "/globaloverlay",
                                "com.embeddedcompositor.globaloverlay"};
 
+  QDBusInterface compositorScreen{"com.basyskom.embeddedcompositor", "/screen",
+                                  "com.embeddedcompositor.screen"};
+
   QDBusInterface notifications{"org.freedesktop.Notifications",
                                "/org/freedesktop/Notifications",
                                "org.freedesktop.Notifications"};
@@ -27,23 +30,14 @@ public:
     globalOverlay.call("Show", message);
   }
   Q_INVOKABLE void hideGlobalOverlay() { globalOverlay.call("Hide"); }
-  Q_INVOKABLE uint notify(QString summary, QString body, QStringList actions) {
-    auto message = notifications.callWithArgumentList(
-        QDBus::CallMode::Block, "Notify",
-        {"bottom client", 0u, "no-icon", summary, body, actions, QVariantMap(),
-         -1
+  Q_INVOKABLE uint notify(QString summary, QString body, QStringList actions);
 
-        });
-
-    return message.arguments().first().toUInt();
+  Q_INVOKABLE void setOrientation(QString orientation) {
+    compositorScreen.setProperty("orientation", orientation);
   }
 signals:
   void notificationActionInvoked(unsigned int id, QString action);
   void notificationClosed(unsigned int id, unsigned int);
-private slots:
-  void testNoti(unsigned int id, QString action) {
-    qDebug() << __PRETTY_FUNCTION__ << id << action;
-  }
 };
 
 #endif // DBUSCLIENT_H

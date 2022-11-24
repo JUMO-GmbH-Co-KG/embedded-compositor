@@ -18,98 +18,111 @@ WaylandCompositor {
             visible: true
             property real initialSize: 0
 
-            Item {
-                Keys.onPressed:
-                    (event)=> {
-                        if (event.key == Qt.Key_Super_L || event.key == Qt.Key_Super_R) {
-                            if(taskSwitcherLoader.item.state == "open") taskSwitcherLoader.item.close();
-                            else taskSwitcherLoader.item.open();
-                        }
-                }
-                focus: true
-            }
+            RootTransformer {
+                id: rootTransformItem
+                state: dbusScreenInterface.orientation
 
-            Rectangle {
-                id: centerArea
-                anchors.top: topArea.bottom
-                anchors.left: leftArea.right
-                anchors.right: rightArea.left
-                anchors.bottom: bottomArea.top
-                border {
-                    width: 1
-                    color:"red"
+                Item {
+                    Keys.onPressed:
+                        (event)=> {
+                            if (event.key === Qt.Key_Super_L || event.key === Qt.Key_Super_R) {
+                                if(taskSwitcherLoader.item.state === "open") taskSwitcherLoader.item.close();
+                                else taskSwitcherLoader.item.open();
+                            } else if(event.key === Qt.Key_F1) {
+                                rootTransformItem.state = "0"
+                            } else if(event.key === Qt.Key_F2) {
+                                rootTransformItem.state = "90"
+                            } else if(event.key === Qt.Key_F3) {
+                                rootTransformItem.state = "180"
+                            } else if(event.key === Qt.Key_F4) {
+                                rootTransformItem.state = "270"
+                            }
+                        }
+                    focus: true
                 }
-                property Item surfaceItem
-                property ShellSurface surface
-                function selectSurface(shellSurface, view)
-                {
-                    for(var i =0; i < children.length; i++)
+
+                Rectangle {
+                    id: centerArea
+                    anchors.top: topArea.bottom
+                    anchors.left: leftArea.right
+                    anchors.right: rightArea.left
+                    anchors.bottom: bottomArea.top
+                    border {
+                        width: 1
+                        color:"red"
+                    }
+                    property Item surfaceItem
+                    property ShellSurface surface
+                    function selectSurface(shellSurface, view)
                     {
-                        var window = children[i];
-                        if(window.shellSurface === shellSurface) {
-                            surfaceItem = window;
-                            break;
+                        for(var i =0; i < children.length; i++)
+                        {
+                            var window = children[i];
+                            if(window.shellSurface === shellSurface) {
+                                surfaceItem = window;
+                                break;
+                            }
                         }
                     }
                 }
-            }
-            Item {
-                id:leftArea
-                width: surfaceItem ? surfaceItem.margin:window.initialSize
-                anchors.bottom: bottomArea.top
-                anchors.left: parent.left
-                anchors.top: topArea.bottom
-                property Item surfaceItem
-            }
-            Item {
-                id:rightArea
-                width: surfaceItem ? surfaceItem.margin :window.initialSize
-                anchors.bottom:bottomArea.top
-                anchors.right: parent.right
-                anchors.top: topArea.bottom
-                property Item surfaceItem
-            }
-            Item {
-                id: topArea
-                height: surfaceItem ? surfaceItem.margin : window.initialSize
-                anchors.top: parent.top
-                anchors.left: parent.left
-                anchors.right: parent.right
-                property Item surfaceItem
-            }
-            Item {
-                id: bottomArea
-                height: surfaceItem ? surfaceItem.margin : window.initialSize
-                anchors.bottom: parent.bottom
-                anchors.left: parent.left
-                anchors.right: parent.right
-                property Item surfaceItem
-            }
-
-            Loader {
-                id:taskSwitcherLoader
-                anchors.fill:parent
-                // this path probably only works while debugging on desktop
-                // source: "file:../alt-switcher/GridSwitcher.qml"
-                source:"DefaultTaskSwitcher/TaskSwitcher.qml"
-                active: true
-                onLoaded: {
-                    item.surfaceModel = centerApplicationViewModel
-                    item.switchTask.connect(doSwitch)
+                Item {
+                    id:leftArea
+                    width: surfaceItem ? surfaceItem.margin:window.initialSize
+                    anchors.bottom: bottomArea.top
+                    anchors.left: parent.left
+                    anchors.top: topArea.bottom
+                    property Item surfaceItem
                 }
-                function doSwitch(shellSurface, view)
-                {
-                    if(view !== null) view.select();
-                    centerArea.selectSurface(shellSurface, view);
+                Item {
+                    id:rightArea
+                    width: surfaceItem ? surfaceItem.margin :window.initialSize
+                    anchors.bottom:bottomArea.top
+                    anchors.right: parent.right
+                    anchors.top: topArea.bottom
+                    property Item surfaceItem
                 }
-            }
+                Item {
+                    id: topArea
+                    height: surfaceItem ? surfaceItem.margin : window.initialSize
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    property Item surfaceItem
+                }
+                Item {
+                    id: bottomArea
+                    height: surfaceItem ? surfaceItem.margin : window.initialSize
+                    anchors.bottom: parent.bottom
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    property Item surfaceItem
+                }
 
-            Notifications {
-                anchors.fill: parent
-            }
+                Loader {
+                    id:taskSwitcherLoader
+                    anchors.fill:parent
+                    // this path probably only works while debugging on desktop
+                    // source: "file:../alt-switcher/GridSwitcher.qml"
+                    source:"DefaultTaskSwitcher/TaskSwitcher.qml"
+                    active: true
+                    onLoaded: {
+                        item.surfaceModel = centerApplicationViewModel
+                        item.switchTask.connect(doSwitch)
+                    }
+                    function doSwitch(shellSurface, view)
+                    {
+                        if(view !== null) view.select();
+                        centerArea.selectSurface(shellSurface, view);
+                    }
+                }
 
-            GlobalOverlay {
-                id: globalOverlay
+                Notifications {
+                    anchors.fill: parent
+                }
+
+                GlobalOverlay {
+                    id: globalOverlay
+                }
             }
         }
     }
@@ -240,5 +253,8 @@ WaylandCompositor {
     GlobalOverlayInterface {
         onShowRequested: globalOverlay.show(message)
         onHideRequested: globalOverlay.hide()
+    }
+    CompositorScreenInterface {
+        id: dbusScreenInterface
     }
 }

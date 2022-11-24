@@ -25,6 +25,8 @@ int main(int argc, char *argv[]) {
   qmlRegisterType<GlobalOverlayInterface>("com.embeddedcompositor.dbus", 1, 0,
                                           "GlobalOverlayInterface");
 
+  qmlRegisterType<CompositorScreenInterface>("com.embeddedcompositor.dbus", 1,
+                                             0, "CompositorScreenInterface");
   qmlRegisterType<NotificationModel>("com.embeddedcompositor.dbus", 1, 0,
                                      "NotificationModel");
 

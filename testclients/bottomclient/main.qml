@@ -96,6 +96,67 @@ Window {
             }
 
         }
+
+        Rectangle {
+            width: 40
+            height: 40
+            color: "plum"
+            MouseArea {
+                anchors.fill:parent
+                onClicked:  dbusClient.setOrientation("0")
+            }
+
+            Text {
+                anchors.centerIn: parent
+                text: "0"
+                font.pixelSize: 24
+            }
+        }
+        Rectangle {
+            width: 40
+            height: 40
+            color: "plum"
+            MouseArea {
+                anchors.fill:parent
+                onClicked:  dbusClient.setOrientation("90")
+            }
+
+            Text {
+                anchors.centerIn: parent
+                text: "90"
+                font.pixelSize: 24
+            }
+        }
+        Rectangle {
+            width: 40
+            height: 40
+            color: "plum"
+            MouseArea {
+                anchors.fill:parent
+                onClicked:  dbusClient.setOrientation("180")
+            }
+
+            Text {
+                anchors.centerIn: parent
+                text: "180"
+                font.pixelSize: 24
+            }
+        }
+        Rectangle {
+            width: 40
+            height: 40
+            color: "plum"
+            MouseArea {
+                anchors.fill:parent
+                onClicked:  dbusClient.setOrientation("270")
+            }
+
+            Text {
+                anchors.centerIn: parent
+                text: "270"
+                font.pixelSize: 24
+            }
+        }
     }
 
     Component.onCompleted: dbusClient.hideGlobalOverlay()

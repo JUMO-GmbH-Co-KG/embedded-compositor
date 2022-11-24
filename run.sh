@@ -8,22 +8,22 @@ if [ $(arch) = "armv7l" ]; then
 	BUILD_ROOT=../build-jupiter
 else
     echo "running on dev host"
-	BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
+    export $(dbus-launch)
+    #qdbusviewer &
+    BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
 	export QT_SCREEN_SCALE_FACTORS=
 	export QT_AUTO_SCREEN_SCALE_FACTOR=0
 	mkdir -p $BUILD_ROOT/plugins/wayland-shell-integration
 	ln -sf $BUILD_ROOT/shellintegration/libshellintegration.so $BUILD_ROOT/plugins/wayland-shell-integration
 	export QT_PLUGIN_PATH=$BUILD_ROOT/plugins
 
-  export $(dbus-launch)
   set | grep DBUS
 fi
 
-#qdbusviewer &
 
 #export QDBUS_DEBUG=1
 export QT_LOGGING_RULES="embeddedshell.compositor.debug=false;embeddedshell.quick=false"
-$BUILD_ROOT/compositor/compositor &
+SCREEN_ORIENTATION=0 $BUILD_ROOT/compositor/compositor &
 compositor_pid=$!
 
 
