@@ -34,6 +34,10 @@ The Anchor/Margin functionality is provided by way of an extension we call "embe
 The main interface is the embedded_shell_surface and it is expected that clients bind to it to be shown in our compositor. For Qt applications we provide a plugin that handles this integration via the QPA.
 The embedded_shell_surface provides a request to additionally create objects bound to the surface_view interface. These objects are not surfaces but just handles to facilitate switching to a virtual view of a embedded_shell_surface.
 
+## Screen orientation
+
+Screen orientation can be speciefied at startup time through the `SCREEN_ORIENTATION` environment variable. later, screen orientation can be controlled using the DBus interface `com.embeddedcompositor.screen` exposed under `com.basyskom.embeddedcompositor/screen`
+
 ## Architecture
 
 ### Client side
@@ -151,11 +155,15 @@ We provide logging through [Qt's logging framework](https://doc.qt.io/qt-5/qlogg
 
 ## DBus integration
 
-The compositor implements a couple of DBus interfaces to provide system/window manager services:
+The compositor implements a couple of DBus interfaces to provide system/window manager services. They are exposed under the compositor service name `com.basyskom.embeddedcompositor`:
 
-* com.embeddedcompositor.taskswitcher - allows the task switcher to be opened or closed from e.g. a menu button.
-* com.embeddedcompositor.globaloverlay - displays a global overlay hiding all other UI elements for a boot or shutdown message.
-* org.freedesktop.Notifications - implements a small subset of notifications which are displayed as a global modal until dismissed or one of the options is chosen.
+* /taskswitcher (com.embeddedcompositor.taskswitcher) - allows the task switcher to be opened or closed from e.g. a menu button.
+* /globaloverlay (com.embeddedcompositor.globaloverlay) - displays a global overlay hiding all other UI elements for a boot or shutdown message.
+* /screen (com.embeddedcompositor.screen) - control screen orientation via the orientation property. allowed values: "0", "90", "180", "270"
+
+Additionally, we implement a notification service under the standard name `org.freedesktop.Notifications`:
+
+* /org/freedesktop/Notifications (org.freedesktop.Notifications) - implements a small subset of notifications which are displayed as a global modal until dismissed or one of the options is chosen.
 
 ## Building
 
