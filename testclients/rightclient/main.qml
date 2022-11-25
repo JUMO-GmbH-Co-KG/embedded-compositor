@@ -4,7 +4,6 @@ import EmbeddedShell 1.0
 Window {
     id: window
     width: menu.visible ? menu.width : bar.width
-    height: 700
     visible: true
     title: qsTr("Hello World")
     color: "transparent"

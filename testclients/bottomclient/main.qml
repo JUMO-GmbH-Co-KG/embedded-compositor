@@ -4,7 +4,6 @@ import EmbeddedShell 1.0
 Window {
     id: window
     height: 48
-    width: 100
     visible: true
     title: qsTr("Hello World")
     color: "grey"

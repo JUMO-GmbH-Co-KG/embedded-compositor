@@ -59,13 +59,13 @@ Item {
                     target: rootTransformItem
                     direction: RotationAnimation.Shortest
                     duration: 250
-                    easing: Easing.InOutQuad
+                    easing.type: Easing.InOutQuad
                 }
                 PropertyAnimation {
                     target: rootTransformItem
                     properties: "width,height"
                     duration: 250
-                    easing: Easing.InOutQuad
+                    easing.type: Easing.InOutQuad
                 }
             }
         }

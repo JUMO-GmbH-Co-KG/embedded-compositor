@@ -195,7 +195,6 @@ WaylandCompositor {
             onWidthChanged: handleResized()
             onHeightChanged: handleResized()
             Component.onCompleted: {
-                handleResized();
                 handleAnchor();
             }
 
@@ -213,10 +212,15 @@ WaylandCompositor {
             }
 
             function handleAnchor() {
+                console.log("handleAnchor anchor:"+shellSurface.anchor+" size "+width+"x"+height+" parent: "+shellSurfaceItem.parent);
                 var targetArea = anchorMap[shellSurface.anchor];
 
                 if(shellSurface.anchor === EmbeddedShellTypes.Center) {
                     centerApplicationViewModel.addSurface(shellSurface, shellSurfaceItem);
+                } else if(shellSurface.anchor === EmbeddedShellTypes.Undefined) {
+                    shellSurfaceItem.parent = limboArea;
+                    console.log("undefined -> noop");
+                    return;
                 }
 
                 shellSurfaceItem.parent = targetArea;
@@ -231,8 +235,8 @@ WaylandCompositor {
             }
 
             function handleResized() {
-                console.log("handleResize anchor:"+shellSurface.anchor+" size "+width+"x"+height);
-                if(width < 0 || height <0) return;
+                console.log("handleResize anchor:"+shellSurface.anchor+" size "+width+"x"+height+" parent: "+shellSurfaceItem.parent);
+                if(width <= 0 || height <=0) return;
                 shellSurface.sendConfigure(Qt.size(width, height));
             }
         }

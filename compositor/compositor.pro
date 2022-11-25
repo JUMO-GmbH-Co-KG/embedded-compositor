@@ -1,5 +1,13 @@
 QT += core gui waylandcompositor waylandcompositor-private core-private gui-private quick dbus
 CONFIG += c++17 wayland-scanner
+
+use_system_bus {
+    message(using system dbus)
+    DEFINES+="USE_SYSTEM_BUS=1"
+} else {
+    message(using session dbus)
+}
+
 SOURCES +=  main.cpp \
             dbusinterface.cpp \
             embeddedshellextension.cpp \
