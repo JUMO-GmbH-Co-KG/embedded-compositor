@@ -1,22 +1,27 @@
 # Embedded-compositor
 
-This project implements a wayland-based compositor suited for industrial HMIs. The implementation makes
+This project implements a wayland-based compositor suited for industrial HMIs. It aims to provide
+good out of the box defaults for this kind of application. Internally the implementation makes
 use of the [Qt Wayland module](https://doc.qt.io/qt-5/qtwaylandcompositor-index.html).
+
+## Layouting and general behavior
 
 The compositor implements window management through its QML UI.
 It is based around a custom wayland shell interface that allows windows to specify
 
 * an anchor representing a screen edge or the center area, and
-* a margin representing the width in pixels the window will reserve from that edge (if not center).
+* a margin representing the width in pixels the window will reserve from that edge (if not placed in the center).
 
 After the reserved amount of screen space is subtracted from each edge, the remaining
 screen area is provided to applications displayed in the center area.
 
 Wayland clients occupying one of the edge slots are expected to represent system launchers or menus,
-while the center area is expected to house the mein application content windows.
+while the center area is expected to house the main application content windows.
 
 Edge occupying clients can resize themselves bigger than the originally reserved size, however this will not change the dimensions of other clients.
 This is expected to be used to allow opening and closing of menus that overlay the central application.
+
+The compositor also implements a default task switcher.
 
 ## Virtual Surface Views
 
@@ -30,13 +35,13 @@ It is expected that clients read their sort index from configuration provided by
 
 ## Wayland Protocol Extension
 
-The Anchor/Margin functionality is provided by way of an extension we call "embedded_shell".
+The anchor/margin functionality is provided by way of an extension we call "embedded_shell".
 The main interface is the embedded_shell_surface and it is expected that clients bind to it to be shown in our compositor. For Qt applications we provide a plugin that handles this integration via the QPA.
 The embedded_shell_surface provides a request to additionally create objects bound to the surface_view interface. These objects are not surfaces but just handles to facilitate switching to a virtual view of a embedded_shell_surface.
 
 ## Screen orientation
 
-Screen orientation can be speciefied at startup time through the `SCREEN_ORIENTATION` environment variable. later, screen orientation can be controlled using the DBus interface `com.embeddedcompositor.screen` exposed under `com.basyskom.embeddedcompositor/screen`
+Screen orientation can be specified at startup time through the `SCREEN_ORIENTATION` environment variable. later, screen orientation can be controlled using the DBus interface `com.embeddedcompositor.screen` exposed under `com.basyskom.embeddedcompositor/screen`
 
 ## Architecture
 
@@ -45,11 +50,11 @@ Screen orientation can be speciefied at startup time through the `SCREEN_ORIENTA
 We developed with Qt clients in mind which will have wayland integration available automatically by way of the Qt wayland QPA.
 The wayland QPA is a plugin loaded by Qt plugins when `QT_QPA_PLATFORM=wayland` is set.
 The wayland QPA itself again has a plugin mechanism allowing it to load a different shell integration.
-We implement this plugin interface in the subproject "shellintegration" to integrate our embedded_shell into Qt clients.
+We implement this plugin interface in the sub project "shellintegration" to integrate our embedded_shell into Qt clients.
 
 When clients create their window, the QPA will load the embedded_shell plugin when `QT_WAYLAND_SHELL_INTEGRATION=embedded-shell` is set and bind to our shell interface. Through this alone, however clients have no access to our custom properties.
-We provide an additional library called embeddedplatform that provides access to our custom interfaces and properties to client application code.
-By linking this library, clients can acquire a pointer to a `EmbeddedShellSurface` (see [.h](embeddedplatform/embeddedshellsurface.h), [.cpp](embeddedplatform/embeddedshellsurface.cpp)) instance that allows access to shell surface properties and methods to create views. 
+We provide an additional library called "embeddedplatform" that provides access to our custom interfaces and properties to client application code.
+By linking this library, clients can acquire a pointer to a `EmbeddedShellSurface` (see [.h](embeddedplatform/embeddedshellsurface.h), [.cpp](embeddedplatform/embeddedshellsurface.cpp)) instance that allows access to shell surface properties and methods to create views.
 
 ```c++
 class MainWindow : public QMainWindow {
@@ -101,7 +106,7 @@ There is an alternative method to detect shell surface creation which is waiting
 
 ```
 
-For convenience of QML applications, we also implement a QML interface to embedded_shell_surface, which is implemented in the subproject quickembeddedshellwindow (see [.h](/quickembeddedshellwindow/quickembeddedshellwindow.h), [.cpp](quickembeddedshellwindow/quickembeddedshellwindow.cpp))
+For convenience of QML applications, we also implement a QML interface to embedded_shell_surface, which is implemented in the sub project "quickembeddedshellwindow" (see [.h](/quickembeddedshellwindow/quickembeddedshellwindow.h), [.cpp](quickembeddedshellwindow/quickembeddedshellwindow.cpp))
 
 ```qml
     import EmbeddedShell 1.0
@@ -167,7 +172,7 @@ Additionally, we implement a notification service under the standard name `org.f
 
 ## Building
 
-Building is straight forward through qmake and make or Qt creator. The egnerated makefiles should allow you to make install the project on a target device.
+Building is straight forward through qmake and make or Qt creator. The generated makefiles should allow you to install the project on a target device.
 
 ```sh
 ~/src/compositor $ mkdir ../build-compositor
@@ -176,7 +181,7 @@ Building is straight forward through qmake and make or Qt creator. The egnerated
 ~/src/build-compositor $ make
 ```
 
-Dependencies are Qt 5.12, configured with DBus, wayland and QtQuick.
+Dependencies are Qt 5.15, configured with DBus, wayland and QtQuick.
 
 The project can be developed and tested on a Linux workstation and the provided run.sh file tries to start the compositor and some test clients as well as an isolated DBus instance as to not confuse the hosts system.
 
@@ -198,5 +203,5 @@ we provide a set of test clients to populate the areas available in the composit
 
 ## Licensing
 
-The wayland compositor is licensed under the GPLv3.
-The shellintegration is licensed under the LGPLv3.
+The wayland compositor is licensed under the GPLv3 (all code below "compositor").
+The shellintegration library, the embeddedplatform library the quickembeddedshellwindow and the testclients are licensed under the LGPLv3.

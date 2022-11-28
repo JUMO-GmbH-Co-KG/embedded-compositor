@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "quickembeddedshellwindow.h"
 #include "embeddedshellsurface.h"
 #include "quickembeddedshell.h"

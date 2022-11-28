@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef DBUSCLIENT_H
 #define DBUSCLIENT_H
 

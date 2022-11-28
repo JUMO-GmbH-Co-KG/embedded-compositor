@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "embeddedshellintegration.h"
 #include <QCoreApplication>
 #include <QtWaylandClient/private/qwaylandshellintegrationplugin_p.h>

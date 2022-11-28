@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef QUICKEMBEDDEDSHELLWINDOW_H
 #define QUICKEMBEDDEDSHELLWINDOW_H
 
