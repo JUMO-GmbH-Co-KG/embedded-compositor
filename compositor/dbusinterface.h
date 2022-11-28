@@ -1,5 +1,8 @@
+// SPDX-License-Identifier: GPL-3.0-only
+
 #ifndef DBUSINTERFACE_H
 #define DBUSINTERFACE_H
+
 #include <QDBusConnection>
 #include <QDBusError>
 #include <QObject>

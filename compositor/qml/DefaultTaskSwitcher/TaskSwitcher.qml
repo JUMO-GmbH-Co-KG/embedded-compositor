@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-3.0-only
+
 import QtQuick 2.0
 import QtWayland.Compositor 1.0
 import com.embeddedcompositor.embeddedshell 1.0
