@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 import QtQuick 2.15
 import EmbeddedShell 1.0
 

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "dbusclient.h"
 
 DBusClient::DBusClient(QObject *parent) : QObject{parent} {

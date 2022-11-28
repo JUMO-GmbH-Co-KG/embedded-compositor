@@ -1,5 +1,8 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef EMBEDDEDSHELLSURFACE_P_H
 #define EMBEDDEDSHELLSURFACE_P_H
+
 #include "embeddedshellsurface.h"
 #include "qwayland-embedded-shell.h"
 #include <QDebug>

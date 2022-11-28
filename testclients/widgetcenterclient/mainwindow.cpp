@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "mainwindow.h"
 #include "embeddedplatform.h"
 #include "embeddedshellsurface.h"

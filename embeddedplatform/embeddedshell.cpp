@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "embeddedshell.h"
 #include "QtWaylandClient/private/qwaylandwindow_p.h"
 #include "qwayland-embedded-shell.h"

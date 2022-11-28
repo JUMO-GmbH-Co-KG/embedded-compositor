@@ -1,5 +1,8 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef QUICKEMBEDDEDSHELL_H
 #define QUICKEMBEDDEDSHELL_H
+
 #include <QQmlExtensionPlugin>
 
 class QuickEmbeddedShell : public QQmlExtensionPlugin

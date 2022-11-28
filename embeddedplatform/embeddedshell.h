@@ -1,5 +1,8 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef EMBEDDEDSHELL_H
 #define EMBEDDEDSHELL_H
+
 #include "embeddedshellsurface.h"
 #include <QLoggingCategory>
 #include <QObject>

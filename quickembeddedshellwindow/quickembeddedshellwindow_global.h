@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef EMBEDDEDSHELLWINDOW_GLOBAL_H
 #define EMBEDDEDSHELLWINDOW_GLOBAL_H
 

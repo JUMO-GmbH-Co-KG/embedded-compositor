@@ -1,5 +1,8 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef EMBEDDEDPLATFORM_H
 #define EMBEDDEDPLATFORM_H
+
 #include <QObject>
 
 class EmbeddedShellSurface;

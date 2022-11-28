@@ -1,5 +1,8 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef EMBEDDEDSHELLINTEGRATION_H
 #define EMBEDDEDSHELLINTEGRATION_H
+
 #include <QScopedPointer>
 #include <QtWaylandClient/private/qwaylandclientextension_p.h>
 #include <QtWaylandClient/private/qwaylandshellintegration_p.h>
