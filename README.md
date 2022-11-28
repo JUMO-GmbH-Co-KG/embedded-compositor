@@ -176,7 +176,7 @@ Building is straight forward through qmake and make or Qt creator. The egnerated
 ~/src/build-compositor $ make
 ```
 
-Dependencies are Qt 5.12, configured with DBus, wayland and QtQuick.
+Dependencies are Qt 5.15, configured with DBus, wayland and QtQuick.
 
 The project can be developed and tested on a Linux workstation and the provided run.sh file tries to start the compositor and some test clients as well as an isolated DBus instance as to not confuse the hosts system.
 
