@@ -198,5 +198,5 @@ we provide a set of test clients to populate the areas available in the composit
 
 ## Licensing
 
-The wayland compositor is licensed under the GPLv3.
-The shellintegration is licensed under the LGPLv3.
+The wayland compositor is licensed under the GPLv3 (all code below "compositor").
+The shellintegration library, the embeddedplatform library the quickembeddedshellwindow and the testclients are licensed under the LGPLv3.
