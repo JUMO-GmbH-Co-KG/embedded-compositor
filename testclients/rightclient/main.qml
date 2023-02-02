@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
 import QtQuick 2.15
-import EmbeddedShell 1.0
+import EmbeddedShell 1.0 as EmbeddedShell
 
-Window {
+EmbeddedShell.Window {
     id: window
     width: menu.visible ? menu.width : bar.width
     visible: true
     title: qsTr("Hello World")
     color: "transparent"
-    anchor: Window.Anchor.Right
+    anchor: EmbeddedShell.Window.Anchor.Right
     margin: bar.width
 
     Rectangle {

@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
 import QtQuick 2.15
-import EmbeddedShell 1.0
+import EmbeddedShell 1.0 as EmbeddedShell
 
-Window {
+EmbeddedShell.Window {
     id: window
     height: 48
     visible: true
     title: qsTr("Hello World")
     color: "grey"
-    anchor: Window.Anchor.Bottom
+    anchor: EmbeddedShell.Window.Anchor.Bottom
     margin: 48
 
     Row {
