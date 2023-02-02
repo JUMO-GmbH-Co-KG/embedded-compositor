@@ -81,7 +81,11 @@ EmbeddedShellIntegration::createShellSurface(
 
 bool EmbeddedShellIntegration::initialize(
     QtWaylandClient::QWaylandDisplay *display) {
-  QWaylandShellIntegration::initialize(display);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    QWaylandShellIntegration::initialize(display);
+#else
+    Q_UNUSED(display);
+#endif
   return m_shell->isActive();
 }
 
