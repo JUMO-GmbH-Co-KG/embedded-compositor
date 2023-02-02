@@ -11,6 +11,7 @@ else
     export $(dbus-launch)
     #qdbusviewer &
     BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
+	export QT_ENABLE_HIGHDPI_SCALING=0
 	export QT_SCREEN_SCALE_FACTORS=
 	export QT_AUTO_SCREEN_SCALE_FACTOR=0
 	mkdir -p $BUILD_ROOT/plugins/wayland-shell-integration
