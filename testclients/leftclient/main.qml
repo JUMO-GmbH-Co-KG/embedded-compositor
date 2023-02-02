@@ -62,7 +62,7 @@ Window {
                 width:32
                 height:32
                 onClicked: {
-                    var view =  window.createView();
+                    var view =  window.createView("New View", 0);
                     console.log("view:"+view);
                 }
                 Rectangle {
