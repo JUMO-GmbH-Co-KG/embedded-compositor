@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
 import QtQuick 2.15
-import EmbeddedShell 1.0
+import EmbeddedShell 1.0 as EmbeddedShell
 
-Window {
+EmbeddedShell.Window {
     id: window
     width: menu.visible ? menu.width : bar.width
     visible: true
     title: qsTr("Hello from LeftCLient")
-    anchor: Window.Anchor.Left
+    anchor: EmbeddedShell.Window.Anchor.Left
     color: "transparent"
     margin: 64
     Rectangle {
@@ -62,7 +62,7 @@ Window {
                 width:32
                 height:32
                 onClicked: {
-                    var view =  window.createView();
+                    var view =  window.createView("New View", 0);
                     console.log("view:"+view);
                 }
                 Rectangle {

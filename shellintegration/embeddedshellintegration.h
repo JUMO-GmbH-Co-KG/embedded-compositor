@@ -10,7 +10,13 @@
 class EmbeddedShellSurface;
 class EmbeddedShell;
 
-class Q_WAYLAND_CLIENT_EXPORT EmbeddedShellIntegration
+class
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
+Q_WAYLAND_CLIENT_EXPORT
+#else
+Q_WAYLANDCLIENT_EXPORT
+#endif
+        EmbeddedShellIntegration
     : public QtWaylandClient::QWaylandShellIntegration {
   QMap<QtWaylandClient::QWaylandWindow *, EmbeddedShellSurface *> m_windows;
   QScopedPointer<EmbeddedShell> m_shell;

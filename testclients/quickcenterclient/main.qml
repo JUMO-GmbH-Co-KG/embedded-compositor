@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
 import QtQuick 2.15
-import EmbeddedShell 1.0
+import EmbeddedShell 1.0 as EmbeddedShell
 
-Window {
+EmbeddedShell.Window {
     id: window
     visible: true
     title: qsTr("Hello from CenterCLient")
-    anchor: Window.Anchor.Center
+    anchor: EmbeddedShell.Window.Anchor.Center
     color: "darkgray"
     width: 200
     height:200
