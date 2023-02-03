@@ -13,7 +13,7 @@ bool InitDbusConnection(QString serviceName);
 
 class TaskSwitcherInterface : public QObject, public QQmlParserStatus {
   Q_OBJECT
-  Q_CLASSINFO("D-Bus Interface", "com.embeddedcompositor.takswitcher")
+  Q_CLASSINFO("D-Bus Interface", "com.embeddedcompositor.taskswitcher")
   bool m_valid = false;
 
 public:
