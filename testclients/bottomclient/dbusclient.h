@@ -3,43 +3,39 @@
 #ifndef DBUSCLIENT_H
 #define DBUSCLIENT_H
 
-#include <QDebug>
 #include <QObject>
-#include <QtDBus/QDBusInterface>
 
-class DBusClient : public QObject {
-  Q_OBJECT
-  QDBusInterface taskSwitcher{"com.basyskom.embeddedcompositor",
-                              "/taskswitcher",
-                              "com.embeddedcompositor.taskswitcher"};
+#include "globaloverlay_interface.h"
+#include "notifications_interface.h"
+#include "screen_interface.h"
+#include "taskswitcher_interface.h"
 
-  QDBusInterface globalOverlay{"com.basyskom.embeddedcompositor",
-                               "/globaloverlay",
-                               "com.embeddedcompositor.globaloverlay"};
-
-  QDBusInterface compositorScreen{"com.basyskom.embeddedcompositor", "/screen",
-                                  "com.embeddedcompositor.screen"};
-
-  QDBusInterface notifications{"org.freedesktop.Notifications",
-                               "/org/freedesktop/Notifications",
-                               "org.freedesktop.Notifications"};
+class DBusClient : public QObject
+{
+    Q_OBJECT
 
 public:
-  explicit DBusClient(QObject *parent = nullptr);
-  Q_INVOKABLE void openTaskSwitcher() { taskSwitcher.call("Open"); }
-  Q_INVOKABLE void closeTaskSwitcher() { taskSwitcher.call("Close"); }
-  Q_INVOKABLE void showGlobalOverlay(QString message) {
-    globalOverlay.call("Show", message);
-  }
-  Q_INVOKABLE void hideGlobalOverlay() { globalOverlay.call("Hide"); }
-  Q_INVOKABLE uint notify(QString summary, QString body, QStringList actions);
+    explicit DBusClient(QObject *parent = nullptr);
+    ~DBusClient() override = default;
 
-  Q_INVOKABLE void setOrientation(QString orientation) {
-    compositorScreen.setProperty("orientation", orientation);
-  }
-signals:
-  void notificationActionInvoked(unsigned int id, QString action);
-  void notificationClosed(unsigned int id, unsigned int);
+    Q_INVOKABLE void openTaskSwitcher();
+    Q_INVOKABLE void closeTaskSwitcher();
+
+    Q_INVOKABLE void showGlobalOverlay(const QString &message);
+    Q_INVOKABLE void hideGlobalOverlay();
+    Q_INVOKABLE uint notify(const QString &summary, const QString &body, const QStringList &actions);
+
+    Q_INVOKABLE void setOrientation(const QString &orientation);
+
+Q_SIGNALS:
+    void notificationActionInvoked(unsigned int id, const QString &action);
+    void notificationClosed(unsigned int id, unsigned int);
+
+private:
+    org::freedesktop::Notifications m_notificationsIface;
+    com::embeddedcompositor::globaloverlay m_overlayIface;
+    com::embeddedcompositor::screen m_screenIface;
+    com::embeddedcompositor::taskswitcher m_taskSwitcherIface;
 };
 
 #endif // DBUSCLIENT_H
