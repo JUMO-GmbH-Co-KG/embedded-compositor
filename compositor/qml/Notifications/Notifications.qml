@@ -25,26 +25,23 @@ Rectangle {
         spacing: 1
         model: notifications
         delegate: Notification {
-            property var idx: model.index
-            Component.onCompleted: {
-                if(idx <= 0) {
-                    state = "expanded"
-                }
-            }
+            required property int index
 
-            onIdxChanged: {
-                if(idx <= 0) { // while being in removed animation it is -1
-                    state = "expanded"
-                } else {
-                    state = "shade"
-                }
+            state: index <= 0 ? "expanded" : "shade"
+
+            onDismissed: {
+                const idx = notifications.index(index, 0);
+                notifications.dismiss(idx);
             }
-            state: "shade"
+            onActionInvoked: (action) => {
+                const idx = notifications.index(index, 0);
+                notifications.invokeAction(idx, action);
+            }
 
             width: ListView.view.width
             Text {
                 color: "white"
-                text:  idx +" "+parent.state
+                text:  index +" "+parent.state
             }
         }
 

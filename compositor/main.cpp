@@ -40,10 +40,6 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  qmlRegisterUncreatableType<NotificationData>("com.embeddedcompositor.dbus", 1,
-                                               0, "NotificationData",
-                                               "created from dbus data");
-
   qmlRegisterType<SortFilterProxyModel>("com.embeddedcompositor.utility", 1, 0,
                                         "SortFilterProxyModel");
 

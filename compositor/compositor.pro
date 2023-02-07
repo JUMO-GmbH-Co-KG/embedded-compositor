@@ -38,10 +38,15 @@ taskswitcher_adaptor.files = ../dbus/com.embeddedcompositor.taskswitcher.xml
 taskswitcher_adaptor.header_flags = -l TaskSwitcherInterface -i dbusinterface.h
 taskswitcher_adaptor.source_flags = -l TaskSwitcherInterface
 
+notifications_adaptor.files = ../dbus/org.freedesktop.Notifications.xml
+notifications_adaptor.header_flags = -l NotificationModel -i notificationmodel.h
+notifications_adaptor.source_flags = -l NotificationModel
+
 DBUS_ADAPTORS += \
     globaloverlay_adaptor \
     screen_adaptor \
-    taskswitcher_adaptor
+    taskswitcher_adaptor \
+    notifications_adaptor
 
 RESOURCES += qml.qrc
 
