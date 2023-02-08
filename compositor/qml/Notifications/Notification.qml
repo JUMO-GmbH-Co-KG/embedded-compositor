@@ -5,7 +5,15 @@ import com.embeddedcompositor.dbus 1.0
 
 Rectangle {
     id: notificationRoot
-    property NotificationData notification: model.data
+
+    signal dismissed
+    signal actionInvoked(string action)
+
+    required property string summary
+    required property string body
+    required property var actionNames
+    required property var actionLabels
+
     color: "#202040"
     Rectangle {
         id: header
@@ -17,10 +25,10 @@ Rectangle {
         }
         height: 32
         Text {
-            text: notification.summary
             color:"white"
             anchors.centerIn: parent
             font.pixelSize: 32
+            text: notificationRoot.summary
         }
         color: "#404060"
     }
@@ -37,7 +45,7 @@ Rectangle {
 
         Text {
             font.pixelSize: 24
-            text: notification.body
+            text: notificationRoot.body
             color: "#d0d0d0"
             anchors {
                 top: parent.top
@@ -59,13 +67,13 @@ Rectangle {
             width: parent.width
             spacing: 10
             Repeater {
-                model: notification.actions.length
+                id: actionsRepeater
+                model: notificationRoot.actionNames
                 delegate: MouseArea {
-                    property var action: notification.actions[model.index];
                     width:200
                     height:parent.height
                     onPressed: {
-                        notification.dismiss(action)
+                        notificationRoot.actionInvoked(modelData)
                     }
 
                     Rectangle {
@@ -79,18 +87,17 @@ Rectangle {
                             baselineOffset: font.pixelSize/2
                             horizontalCenter: parent.horizontalCenter
                         }
-                        text: action
+                        text: notificationRoot.actionLabels[index]
                         font.pixelSize:32
                     }
                 }
             }
             MouseArea {
-                visible: notification.actions.length === 0
-                property var action: notification.actions[model.index];
+                visible: actionsRepeater.count === 0
                 width:200
                 height:parent.height
                 onPressed: {
-                    notification.dismiss("")
+                    notificationRoot.dismissed()
                 }
 
                 Rectangle {

@@ -7,7 +7,7 @@ SUBDIRS = shellintegration \
         testclients \
         systemd
 
-OTHER_FILES = run.sh protocol/*.xml .qmake.conf
+OTHER_FILES = run.sh protocol/*.xml dbus/*.xml .qmake.conf
 
 shellintegration.depends += embeddedplatform
 quickembeddedshellwindow.depends += embeddedplatform

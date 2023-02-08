@@ -2,28 +2,68 @@
 
 #include "dbusclient.h"
 
-DBusClient::DBusClient(QObject *parent) : QObject{parent} {
-  QDBusConnection::sessionBus().connect(
-      "org.freedesktop.Notifications", "/org/freedesktop/Notifications",
-      "org.freedesktop.Notifications", "ActionInvoked", this,
-      SIGNAL(notificationActionInvoked(unsigned int, QString)));
-  QDBusConnection::sessionBus().connect(
-      "org.freedesktop.Notifications", "/org/freedesktop/Notifications",
-      "org.freedesktop.Notifications", "NotificationClosed", this,
-      SIGNAL(notificationClosed(unsigned int, unsigned int)));
-  QDBusConnection::sessionBus().connect(
-      "org.freedesktop.Notifications", "/org/freedesktop/Notifications",
-      "org.freedesktop.Notifications", "ActionInvoked", this,
-      SLOT(notificationActionInvoked(unsigned int, QString)));
+#include <QDBusConnection>
+
+static const QString compositorServiceName()
+{
+    return QStringLiteral("com.basyskom.embeddedcompositor");
 }
 
-uint DBusClient::notify(QString summary, QString body, QStringList actions) {
-    auto message = notifications.callWithArgumentList(
-        QDBus::CallMode::Block, "Notify",
-        {"bottom client", 0u, "no-icon", summary, body, actions, QVariantMap(),
-            -1
+DBusClient::DBusClient(QObject *parent)
+    : QObject(parent)
+    , m_notificationsIface(QStringLiteral("org.freedesktop.Notifications"), QStringLiteral("/org/freedesktop/Notifications"), QDBusConnection::sessionBus())
+    , m_overlayIface(compositorServiceName(), QStringLiteral("/globaloverlay"), QDBusConnection::sessionBus())
+    , m_screenIface(compositorServiceName(), QStringLiteral("/screen"), QDBusConnection::sessionBus())
+    , m_taskSwitcherIface(compositorServiceName(), QStringLiteral("/taskswitcher"), QDBusConnection::sessionBus())
+{
+    connect(&m_notificationsIface, &org::freedesktop::Notifications::ActionInvoked, this, &DBusClient::notificationActionInvoked);
+    connect(&m_notificationsIface, &org::freedesktop::Notifications::NotificationClosed, this, &DBusClient::notificationClosed);
+}
 
-        });
+void DBusClient::openTaskSwitcher()
+{
+    m_taskSwitcherIface.Open();
+}
 
-    return message.arguments().first().toUInt();
+void DBusClient::closeTaskSwitcher()
+{
+    m_taskSwitcherIface.Close();
+}
+
+void DBusClient::showGlobalOverlay(const QString &message)
+{
+    m_overlayIface.Show(message);
+}
+
+void DBusClient::hideGlobalOverlay()
+{
+    m_overlayIface.Hide();
+}
+
+uint DBusClient::notify(const QString &summary, const QString &body, const QStringList &actions)
+{
+    QStringList actionList;
+    actionList.reserve(actions.count() * 2);
+    // Notification actions are pairs of name - label.
+    // For now, use the label as action name.
+    for (const QString &action : actions) {
+        actionList << action << action;
+    }
+
+    const auto reply = m_notificationsIface.Notify(
+        QStringLiteral("bottom client"), // app_name
+        0, // replaces_id
+        QStringLiteral("no-icon"), // app_icon
+        summary,
+        body,
+        actionList,
+        QVariantMap{}, // hints
+        -1 // timeout
+    );
+    return reply.value();
+}
+
+void DBusClient::setOrientation(const QString &orientation)
+{
+    m_screenIface.setOrientation(orientation);
 }
