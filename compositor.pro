@@ -1,15 +1,14 @@
 QT       += core gui
 TEMPLATE = subdirs
 SUBDIRS = shellintegration \
-        compositor \
+        embedded-compositor \
         embeddedplatform \
         quickembeddedshellwindow \
-        testclients \
-        systemd
+        dev-tools
 
-OTHER_FILES = run.sh protocol/*.xml dbus/*.xml .qmake.conf
+OTHER_FILES = protocol/*.xml dbus/*.xml .qmake.conf
 
 shellintegration.depends += embeddedplatform
 quickembeddedshellwindow.depends += embeddedplatform
-testclients.depends += quickembeddedshellwindow
+dev-tools.depends += quickembeddedshellwindow
 

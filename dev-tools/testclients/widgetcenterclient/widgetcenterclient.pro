@@ -6,6 +6,6 @@ SOURCES += \
 HEADERS += \
     mainwindow.h
 
-include(../../embeddedplatform/embeddedplatform.pri)
+include($$top_srcdir/embeddedplatform/embeddedplatform.pri)
 include(../common.pri)
 
