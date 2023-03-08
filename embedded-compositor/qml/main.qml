@@ -54,6 +54,7 @@ WaylandCompositor {
                         color:"red"
                     }
                     property Item surfaceItem
+                    onSurfaceItemChanged: taskSwitcherInterface.currentView = surfaceItem.uuid
                     property ShellSurface surface
                     function selectSurface(shellSurface, view)
                     {
@@ -61,6 +62,7 @@ WaylandCompositor {
                         {
                             var window = children[i];
                             if(window.shellSurface === shellSurface) {
+                                window.currentView = view;
                                 surfaceItem = window;
                                 break;
                             }
@@ -111,9 +113,9 @@ WaylandCompositor {
                         item.surfaceModel = centerApplicationViewModel
                         item.switchTask.connect(doSwitch)
                     }
+
                     function doSwitch(shellSurface, view)
                     {
-                        if(view !== null) view.select();
                         centerArea.selectSurface(shellSurface, view);
                     }
                 }
@@ -179,11 +181,26 @@ WaylandCompositor {
                         break;
                     }
                 }
+                if (centerArea.surfaceItem.shellSurface === shellSurface)
+                    centerArea.selectSurface(shellSurface, view);
                 return;
             }
 
             append({data: {view: view, surface: shellSurface}});
         }
+
+        function findByUuid(uuid)
+        {
+            for(var i = 0; i<count; i++)
+            {
+                var entry = get(i).data;
+                if (entry.surface.uuid === uuid || entry.view !== null && entry.view.uuid === uuid)
+                {
+                    return entry
+                }
+            }
+        }
+
     }
 
     Component {
@@ -201,6 +218,11 @@ WaylandCompositor {
             }
 
             property int margin: shellSurface.margin
+            property string uuid: currentView ? currentView.uuid : shellSurface.uuid
+            property var currentView: null
+
+            onCurrentViewChanged: currentView.select();
+
 
             Connections {
                 target: shellSurface
@@ -214,7 +236,6 @@ WaylandCompositor {
             }
 
             function handleAnchor() {
-                console.log("handleAnchor anchor:"+shellSurface.anchor+" size "+width+"x"+height+" parent: "+shellSurfaceItem.parent);
                 var targetArea = anchorMap[shellSurface.anchor];
 
                 if(shellSurface.anchor === EmbeddedShellTypes.Center) {
@@ -237,7 +258,6 @@ WaylandCompositor {
             }
 
             function handleResized() {
-                console.log("handleResize anchor:"+shellSurface.anchor+" size "+width+"x"+height+" parent: "+shellSurfaceItem.parent);
                 if(width <= 0 || height <=0) return;
                 shellSurface.sendConfigure(Qt.size(width, height));
             }
@@ -253,8 +273,14 @@ WaylandCompositor {
         onSurfaceAdded: chromeComponent.createObject(limboArea, { "shellSurface": surface } );
     }
     TaskSwitcherInterface {
+        id: taskSwitcherInterface
         onOpenRequested: taskSwitcherLoader.item.open();
         onCloseRequested: taskSwitcherLoader.item.close();
+        viewModel: centerApplicationViewModel
+        onCurrentViewChanged: {
+            var entry = centerApplicationViewModel.findByUuid(currentView);
+            centerArea.selectSurface(entry.surface, entry.view);
+        }
     }
     GlobalOverlayInterface {
         onShowRequested: (message) => {

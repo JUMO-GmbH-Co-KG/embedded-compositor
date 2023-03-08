@@ -5,6 +5,9 @@
 
 <method name="Open"/>
 <method name="Close"/>
-
+<property name="currentView" type="s" access="readwrite"/>
+<property name="views" type="a(ssu)"  access="read" >
+    <annotation name="org.qtproject.QtDBus.QtTypeName" value="QList&lt;TaskSwitcherEntry&gt;"/>
+</property>
 </interface>
 </node>

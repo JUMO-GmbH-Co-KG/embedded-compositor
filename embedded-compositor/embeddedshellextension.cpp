@@ -70,7 +70,8 @@ EmbeddedShellSurface::EmbeddedShellSurface(EmbeddedShellExtension *ext,
       m_surface(surface), m_anchor(anchor), m_margin(margin),
       m_sort_index(sort_index) {
   Q_UNUSED(ext)
-  qCDebug(shellExt) << __PRETTY_FUNCTION__ << anchor;
+  qCDebug(shellExt) << __PRETTY_FUNCTION__ << anchor
+                    << wl_resource_get_id(resource.resource());
   init(resource.resource());
   setExtensionContainer(surface);
   QWaylandCompositorExtension::initialize();
@@ -96,6 +97,18 @@ void EmbeddedShellSurface::setSortIndex(int sort_index) {
 void EmbeddedShellSurface::sendConfigure(const QSize size) {
   qCDebug(shellExt) << __PRETTY_FUNCTION__ << size;
   send_configure(size.width(), size.height());
+}
+
+QString EmbeddedShellSurface::getUuid() const {
+  return m_uuid.toString(QUuid::WithoutBraces);
+}
+
+pid_t EmbeddedShellSurface::getClientPid() const {
+  pid_t pid;
+  uid_t uid;
+  gid_t gid;
+  wl_client_get_credentials(resource()->client(), &pid, &uid, &gid);
+  return pid;
 }
 
 QuickEmbeddedShellIntegration::QuickEmbeddedShellIntegration(
@@ -177,6 +190,10 @@ void EmbeddedShellSurfaceView::setSortIndex(int newSortIndex) {
     return;
   m_sortIndex = newSortIndex;
   emit sortIndexChanged(m_sortIndex);
+}
+
+QString EmbeddedShellSurfaceView::getUuid() const {
+  return m_uuid.toString(QUuid::WithoutBraces);
 }
 
 void EmbeddedShellSurfaceView::surface_view_set_sort_index(Resource *resource,

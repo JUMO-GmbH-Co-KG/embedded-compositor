@@ -6,6 +6,7 @@
 #include <QtWaylandCompositor/QWaylandShellSurfaceTemplate>
 #include <QtWaylandCompositor/QWaylandShellTemplate>
 
+#include "quuid.h"
 #include "qwayland-server-embedded-shell.h"
 #include <QWaylandResource>
 #include <QtWaylandCompositor/QWaylandCompositor>
@@ -63,11 +64,14 @@ public:
       EmbeddedShellTypes::Anchor anchor READ getAnchor NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ getMargin NOTIFY marginChanged)
   Q_PROPERTY(int sortIndex READ sortIndex NOTIFY sortIndexChanged)
+  Q_PROPERTY(QString uuid READ getUuid CONSTANT)
 
   void setAnchor(embedded_shell_anchor_border newAnchor);
   void setMargin(int newMargin);
   void setSortIndex(int sort_index);
   Q_INVOKABLE void sendConfigure(const QSize size);
+  QString getUuid() const;
+  pid_t getClientPid() const;
 
 signals:
   void anchorChanged(EmbeddedShellTypes::Anchor anchor);
@@ -80,6 +84,7 @@ private:
   EmbeddedShellTypes::Anchor m_anchor = EmbeddedShellTypes::Anchor::Undefined;
   uint32_t m_margin = 0;
   int32_t m_sort_index = 0;
+  QUuid m_uuid = QUuid::createUuid();
 
   // embedded_shell_surface interface
 protected:
@@ -100,6 +105,7 @@ class EmbeddedShellSurfaceView : public QObject,
   Q_OBJECT
   Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
   Q_PROPERTY(int sortIndex READ sortIndex NOTIFY sortIndexChanged)
+  Q_PROPERTY(QString uuid READ getUuid CONSTANT)
 public:
   EmbeddedShellSurfaceView(const QString &label, int32_t sort_index,
                            wl_client *client, int id, int version)
@@ -110,6 +116,8 @@ public:
 
   int sortIndex() const;
   void setSortIndex(int newSortIndex);
+
+  QString getUuid() const;
 
 public slots:
   void select() { surface_view::send_selected(); }
@@ -123,6 +131,7 @@ protected:
                                    int32_t sort_index) override;
 
 private:
+  QUuid m_uuid = QUuid::createUuid();
   QString m_label;
   int32_t m_sortIndex = 0;
 };

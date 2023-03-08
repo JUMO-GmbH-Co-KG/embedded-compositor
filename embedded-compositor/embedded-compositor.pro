@@ -1,5 +1,6 @@
 QT += core gui waylandcompositor waylandcompositor-private core-private gui-private quick dbus
 CONFIG += c++17 wayland-scanner
+# CONFIG += sanitizer sanitize_address
 
 use_system_bus {
     message(using system dbus)

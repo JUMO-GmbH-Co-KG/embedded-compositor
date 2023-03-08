@@ -92,7 +92,9 @@ Rectangle {
             Text {
                 id: text
                 anchors.centerIn: parent
-                text: (view? ("<"+view.label+"> "+view.sortIndex) : "NOT VIEW "+shellSurface.sortIndex+" "+JSON.stringify(shellSurface))
+                text: (view?
+                           ("<"+view.label+"> "+view.sortIndex+" view id "+view.uuid)
+                         : "NOT VIEW "+shellSurface.sortIndex+" "+JSON.stringify(shellSurface,null,2)) + "\nsurf:"+shellSurface.uuid
                 color:"white"
             }
 
