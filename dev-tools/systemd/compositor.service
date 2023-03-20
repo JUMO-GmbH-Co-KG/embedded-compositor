@@ -12,7 +12,7 @@ Before=graphical.target
 [Service]
 Type=simple
 EnvironmentFile=/etc/default/compositor/env-compositor
-ExecStart=/usr/bin/compositor
+ExecStart=/usr/bin/embedded-compositor
 
 # Optional watchdog setup
 #TimeoutStartSec=60

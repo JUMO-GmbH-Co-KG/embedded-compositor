@@ -24,7 +24,7 @@ fi
 
 #export QDBUS_DEBUG=1
 export QT_LOGGING_RULES="embeddedshell.compositor.debug=false;embeddedshell.quick=false"
-SCREEN_ORIENTATION=0 $BUILD_ROOT/compositor/compositor &
+SCREEN_ORIENTATION=0 $BUILD_ROOT/embedded-compositor/embedded-compositor &
 compositor_pid=$!
 
 
@@ -44,12 +44,14 @@ export QML2_IMPORT_PATH=$BUILD_ROOT/quickembeddedshellwindow
 export LD_LIBRARY_PATH=$BUILD_ROOT/quickembeddedshellwindow/EmbeddedShell:$BUILD_ROOT/embeddedplatform
 
 echo "======  Launching Clients... ======"
-$BUILD_ROOT/testclients/leftclient/leftclient &
-$BUILD_ROOT/testclients/rightclient/rightclient &
-$BUILD_ROOT/testclients/topclient/topclient &
-$BUILD_ROOT/testclients/bottomclient/bottomclient &
-$BUILD_ROOT/testclients/quickcenterclient/quickcenterclient &
-$BUILD_ROOT/testclients/widgetcenterclient/widgetcenterclient &
+CLIENTS=$BUILD_ROOT/dev-tools/testclients
+
+$CLIENTS/leftclient/leftclient &
+$CLIENTS/rightclient/rightclient &
+$CLIENTS/topclient/topclient &
+$CLIENTS/bottomclient/bottomclient &
+$CLIENTS/quickcenterclient/quickcenterclient &
+$CLIENTS/widgetcenterclient/widgetcenterclient &
 #EMBEDDED_SHELL_ANCHOR=center EMBEDDED_SHELL_SORT_INDEX=100 kcalc &
 
 #notify-send 'test' 'test message'

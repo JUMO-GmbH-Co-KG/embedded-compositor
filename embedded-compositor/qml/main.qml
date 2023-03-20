@@ -257,7 +257,9 @@ WaylandCompositor {
         onCloseRequested: taskSwitcherLoader.item.close();
     }
     GlobalOverlayInterface {
-        onShowRequested: globalOverlay.show(message)
+        onShowRequested: (message) => {
+            globalOverlay.show(message);
+        }
         onHideRequested: globalOverlay.hide()
     }
     CompositorScreenInterface {
