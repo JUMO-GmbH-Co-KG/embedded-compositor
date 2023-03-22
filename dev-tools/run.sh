@@ -9,7 +9,7 @@ if [ $(arch) = "armv7l" ]; then
 else
     echo "running on dev host"
     export $(dbus-launch)
-    #qdbusviewer &
+    qdbusviewer &
     BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
 	export QT_ENABLE_HIGHDPI_SCALING=0
 	export QT_SCREEN_SCALE_FACTORS=
