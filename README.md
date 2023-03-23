@@ -174,6 +174,20 @@ Additionally, we implement a notification service under the standard name `org.f
 
 * /org/freedesktop/Notifications (org.freedesktop.Notifications) - implements a small subset of notifications which are displayed as a global modal until dismissed or one of the options is chosen.
 
+## Configuration
+
+parts of the compositor can be configured with values pulled from the process environment or commandline options to the compositor process.
+
+```qml
+ConfigurationHive {
+    id: configuration
+    property int testInt: 123
+    onTestIntChanged: console.log(testInt);
+}
+```
+In this example, the testInt option can be set either through an env variable like `COMPOSITOR_testInt=123 embedded-compositor` or through a commandline option `embedded-compositor --testInt 123`
+other QML Objects can then just bind their properties to the properties of the configuration object.
+
 ## Building
 
 Building is straight forward through qmake and make or Qt creator. The generated makefiles should allow you to install the project on a target device.
