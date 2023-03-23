@@ -163,6 +163,10 @@ We provide logging through [Qt's logging framework](https://doc.qt.io/qt-5/qlogg
 The compositor implements a couple of DBus interfaces to provide system/window manager services. They are exposed under the compositor service name `com.basyskom.embeddedcompositor`:
 
 * /taskswitcher (com.embeddedcompositor.taskswitcher) - allows the task switcher to be opened or closed from e.g. a menu button. Provides List of currently active views (/taskswitcher/views) and allows currently active view to be queried and set (taskswitcher/currentView). Views are identified by a GUID and the list of surfaces includes process id and view label for convenience.
+  * properties
+    * currentView (type:string, access:readwrite)
+    * views (type:a(ssu), access:read)
+      * annotation name="org.qtproject.QtDBus.QtTypeName" value="QList&lt;TaskSwitcherEntry&gt;" 
 * /globaloverlay (com.embeddedcompositor.globaloverlay) - displays a global overlay hiding all other UI elements for a boot or shutdown message.
 * /screen (com.embeddedcompositor.screen) - control screen orientation via the orientation property. allowed values: "0", "90", "180", "270"
 
