@@ -24,7 +24,9 @@ fi
 
 #export QDBUS_DEBUG=1
 export QT_LOGGING_RULES="embeddedshell.compositor.debug=false;embeddedshell.quick=false"
-SCREEN_ORIENTATION=0 $BUILD_ROOT/embedded-compositor/embedded-compositor &
+export COMPOSITOR_taskSwitcherUrl="file:$BUILD_ROOT/../embedded-compositor/dev-tools/example-components/GridSwitcher.qml"
+
+SCREEN_ORIENTATION=0 $BUILD_ROOT/embedded-compositor/embedded-compositor --testInt 42 &
 compositor_pid=$!
 
 

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
+#include "configurationhive.h"
 #include "dbusinterface.h"
 #include "embeddedshellextension.h"
 #include "notificationmodel.h"
@@ -41,6 +42,9 @@ int main(int argc, char *argv[]) {
                                              0, "CompositorScreenInterface");
   qmlRegisterType<NotificationModel>("com.embeddedcompositor.dbus", 1, 0,
                                      "NotificationModel");
+
+  qmlRegisterType<ConfigurationHive>("com.embeddedcompositor.configuration", 1,
+                                     0, "ConfigurationHive");
 
   qmlRegisterUncreatableMetaObject(EmbeddedShellTypes::staticMetaObject,
                                    "com.embeddedcompositor.embeddedshell", 1, 0,
