@@ -294,7 +294,5 @@ WaylandCompositor {
     ConfigurationHive {
         id: configuration
         property url taskSwitcherUrl: "DefaultTaskSwitcher/TaskSwitcher.qml"
-        property int testInt: 123
-        onTestIntChanged: console.log(testInt);
     }
 }
