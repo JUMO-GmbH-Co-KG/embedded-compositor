@@ -7,6 +7,8 @@ import QtQml.Models 2.1
 
 import com.embeddedcompositor.dbus 1.0
 import com.embeddedcompositor.embeddedshell 1.0
+import com.embeddedcompositor.configuration 1.0
+
 import "DefaultTaskSwitcher"
 import "Notifications"
 
@@ -105,9 +107,7 @@ WaylandCompositor {
                 Loader {
                     id:taskSwitcherLoader
                     anchors.fill:parent
-                    // this path probably only works while debugging on desktop
-                    // source: "file:../alt-switcher/GridSwitcher.qml"
-                    source:"DefaultTaskSwitcher/TaskSwitcher.qml"
+                    source: configuration.taskSwitcherUrl
                     active: true
                     onLoaded: {
                         item.surfaceModel = centerApplicationViewModel
@@ -221,7 +221,7 @@ WaylandCompositor {
             property string uuid: currentView ? currentView.uuid : shellSurface.uuid
             property var currentView: null
 
-            onCurrentViewChanged: currentView.select();
+            onCurrentViewChanged: if(currentView != null) currentView.select();
 
 
             Connections {
@@ -290,5 +290,9 @@ WaylandCompositor {
     }
     CompositorScreenInterface {
         id: dbusScreenInterface
+    }
+    ConfigurationHive {
+        id: configuration
+        property url taskSwitcherUrl: "DefaultTaskSwitcher/TaskSwitcher.qml"
     }
 }

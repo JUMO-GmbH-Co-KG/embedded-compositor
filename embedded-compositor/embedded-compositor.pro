@@ -10,11 +10,13 @@ use_system_bus {
 }
 
 SOURCES +=  main.cpp \
+            configurationhive.cpp \
             dbusinterface.cpp \
             embeddedshellextension.cpp \
             notificationmodel.cpp \
             sortfilterproxymodel.cpp
 HEADERS +=  embeddedshellextension.h \
+            configurationhive.h \
             dbus-selector.h \
             dbusinterface.h \
             notificationmodel.h \
