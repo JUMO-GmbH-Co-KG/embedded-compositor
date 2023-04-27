@@ -131,6 +131,10 @@ WaylandCompositor {
                     active: true
                 }
             }
+            Item {
+                id: limboArea
+                visible: false
+            }
         }
     }
 
@@ -267,10 +271,6 @@ WaylandCompositor {
         }
     }
 
-    Item {
-        id: limboArea
-        visible: false
-    }
 
     EmbeddedShell {
         onSurfaceAdded: chromeComponent.createObject(limboArea, { "shellSurface": surface } );
