@@ -6,5 +6,7 @@
         <file>qml/Notifications/Notification.qml</file>
         <file>qml/RootTransformer.qml</file>
         <file>qml/DefaultGlobalOverlay/GlobalOverlay.qml</file>
+        <file>qml/DefaultScreenSaver/ScreenSaver.qml</file>
+        <file>qml/ScreenSaverController.qml</file>
     </qresource>
 </RCC>

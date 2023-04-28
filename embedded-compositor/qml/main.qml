@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import QtQuick 2.0
+import QtQuick 2.15
 import QtWayland.Compositor 1.0
 import QtQuick.Window 2.2
 import QtQml.Models 2.1
@@ -40,6 +40,8 @@ WaylandCompositor {
                                 rootTransformItem.state = "180"
                             } else if(event.key === Qt.Key_F4) {
                                 rootTransformItem.state = "270"
+                            } else {
+                               screenSaverController.reset();
                             }
                         }
                     focus: true
@@ -129,6 +131,12 @@ WaylandCompositor {
                     anchors.fill:parent
                     source: configuration.globalOverlayUrl
                     active: true
+                }
+
+                ScreenSaverController {
+                    id: screenSaverController
+                    timeoutSeconds: configuration.screenSaverTimeoutSeconds
+                    screenSaverUrl: configuration.screenSaverUrl
                 }
             }
             Item {
@@ -291,12 +299,19 @@ WaylandCompositor {
         }
         onHideRequested: globalOverlayLoader.item.hide()
     }
+
     CompositorScreenInterface {
         id: dbusScreenInterface
+        screenSaverActive: screenSaverController.screenSaverActive
+        onShowScreenSaver: screenSaverController.showScreenSaver();
     }
+
     ConfigurationHive {
         id: configuration
         property url taskSwitcherUrl: "DefaultTaskSwitcher/TaskSwitcher.qml"
         property url globalOverlayUrl: "DefaultGlobalOverlay/GlobalOverlay.qml"
+        property url screenSaverUrl: "DefaultScreenSaver/ScreenSaver.qml"
+        property int screenSaverTimeoutSeconds: 60
+        property bool screenSaverMouseHoverSupport: false
     }
 }
