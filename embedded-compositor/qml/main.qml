@@ -124,9 +124,16 @@ WaylandCompositor {
                     anchors.fill: parent
                 }
 
-                GlobalOverlay {
-                    id: globalOverlay
+                Loader {
+                    id: globalOverlayLoader
+                    anchors.fill:parent
+                    source: configuration.globalOverlayUrl
+                    active: true
                 }
+            }
+            Item {
+                id: limboArea
+                visible: false
             }
         }
     }
@@ -264,10 +271,6 @@ WaylandCompositor {
         }
     }
 
-    Item {
-        id: limboArea
-        visible: false
-    }
 
     EmbeddedShell {
         onSurfaceAdded: chromeComponent.createObject(limboArea, { "shellSurface": surface } );
@@ -284,9 +287,9 @@ WaylandCompositor {
     }
     GlobalOverlayInterface {
         onShowRequested: (message) => {
-            globalOverlay.show(message);
+            globalOverlayLoader.item.show(message);
         }
-        onHideRequested: globalOverlay.hide()
+        onHideRequested: globalOverlayLoader.item.hide()
     }
     CompositorScreenInterface {
         id: dbusScreenInterface
@@ -294,5 +297,6 @@ WaylandCompositor {
     ConfigurationHive {
         id: configuration
         property url taskSwitcherUrl: "DefaultTaskSwitcher/TaskSwitcher.qml"
+        property url globalOverlayUrl: "DefaultGlobalOverlay/GlobalOverlay.qml"
     }
 }
