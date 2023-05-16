@@ -18,6 +18,9 @@ else
 	ln -sf $BUILD_ROOT/shellintegration/libshellintegration.so $BUILD_ROOT/plugins/wayland-shell-integration
 	export QT_PLUGIN_PATH=$BUILD_ROOT/plugins
 
+  export COMPOSITOR_screenWidth=1280
+  export COMPOSITOR_screenHeight=800
+
   set | grep DBUS
 fi
 
@@ -27,7 +30,6 @@ export QT_LOGGING_RULES="embeddedshell.compositor.debug=false;embeddedshell.quic
 export COMPOSITOR_taskSwitcherUrl="file:$BUILD_ROOT/../embedded-compositor/dev-tools/example-components/GridSwitcher.qml"
 #export COMPOSITOR_globalOverlayUrl="file:$BUILD_ROOT/../embedded-compositor/dev-tools/example-components/AltBootScreen.qml"
 #export QT_DEBUG_PLUGINS=1
-
 SCREEN_ORIENTATION=0 $BUILD_ROOT/embedded-compositor/embedded-compositor &
 compositor_pid=$!
 
