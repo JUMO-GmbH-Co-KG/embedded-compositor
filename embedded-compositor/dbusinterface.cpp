@@ -220,3 +220,17 @@ void TaskSwitcherInterface::publishViews() {
   m_views = list;
   emit viewsChanged(m_views);
 }
+
+bool CompositorScreenInterface::screenSaverActive() const {
+  return m_screenSaverActive;
+}
+
+void CompositorScreenInterface::setScreenSaverActive(
+    bool newScreenSaverActive) {
+  if (m_screenSaverActive == newScreenSaverActive)
+    return;
+  m_screenSaverActive = newScreenSaverActive;
+  emit screenSaverActiveChanged(m_screenSaverActive);
+}
+
+void CompositorScreenInterface::ShowScreenSaver() { Q_EMIT showScreenSaver(); }

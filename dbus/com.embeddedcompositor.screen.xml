@@ -2,8 +2,8 @@
     "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
 <interface name="com.embeddedcompositor.screen">
-
 <property name="orientation" type="s" access="readwrite"/>
-
+<property name="screenSaverActive" type="b" access="read"/>
+<method name="ShowScreenSaver" />
 </interface>
 </node>
