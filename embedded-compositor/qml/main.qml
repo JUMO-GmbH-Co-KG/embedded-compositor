@@ -17,8 +17,8 @@ WaylandCompositor {
         sizeFollowsWindow: true
         window: Window {
             id: window
-            width: 1280
-            height: 800
+            width: configuration.screenWidth
+            height: configuration.screenHeight
             visible: true
             property real initialSize: 0
 
@@ -313,5 +313,7 @@ WaylandCompositor {
         property url screenSaverUrl: "DefaultScreenSaver/ScreenSaver.qml"
         property int screenSaverTimeoutSeconds: 60
         property bool screenSaverMouseHoverSupport: false
+        property int screenWidth: (Qt.application.primaryScreen || Qt.application.screens[0]).width
+        property int screenHeight: (Qt.application.primaryScreen || Qt.application.screens[0]).height
     }
 }
