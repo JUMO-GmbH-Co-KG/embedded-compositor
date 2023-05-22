@@ -153,14 +153,14 @@ public:
   void setScreenSaverEnabled(bool newScreenSaverEnabled);
 
   int screenSaverTimeoutSeconds() const;
-  void setScreenSaverTimeoutSeconds(int newScreenSaverTimerSeconds);
+  void setScreenSaverTimeoutSeconds(int newScreenSaverTimeoutSeconds);
 
 Q_SIGNALS:
   void orientationChanged(const QString &orientation);
   void screenSaverActiveChanged(bool screenSaverActive);
   void showScreenSaver();
   void screenSaverEnabledChanged(bool screenSaverEnabled);
-  void screenSaverTimeoutSecondsChanged(int screenSaverTimerSeconds);
+  void screenSaverTimeoutSecondsChanged(int screenSaverTimeoutSeconds);
 
 private:
   QString m_orientation;

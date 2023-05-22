@@ -235,28 +235,26 @@ void CompositorScreenInterface::setScreenSaverActive(
 
 void CompositorScreenInterface::ShowScreenSaver() { Q_EMIT showScreenSaver(); }
 
-bool CompositorScreenInterface::screenSaverEnabled() const
-{
+bool CompositorScreenInterface::screenSaverEnabled() const {
   return m_screenSaverEnabled;
 }
 
-void CompositorScreenInterface::setScreenSaverEnabled(bool newScreenSaverEnabled)
-{
+void CompositorScreenInterface::setScreenSaverEnabled(
+    bool newScreenSaverEnabled) {
   if (m_screenSaverEnabled == newScreenSaverEnabled)
     return;
   m_screenSaverEnabled = newScreenSaverEnabled;
   emit screenSaverEnabledChanged(m_screenSaverEnabled);
 }
 
-int CompositorScreenInterface::screenSaverTimeoutSeconds() const
-{
+int CompositorScreenInterface::screenSaverTimeoutSeconds() const {
   return m_screenSaverTimeoutSeconds;
 }
 
-void CompositorScreenInterface::setScreenSaverTimeoutSeconds(int newScreenSaverTimerSeconds)
-{
-  if (m_screenSaverTimeoutSeconds == newScreenSaverTimerSeconds)
+void CompositorScreenInterface::setScreenSaverTimeoutSeconds(
+    int newScreenSaverTimeoutSeconds) {
+  if (m_screenSaverTimeoutSeconds == newScreenSaverTimeoutSeconds)
     return;
-  m_screenSaverTimeoutSeconds = newScreenSaverTimerSeconds;
+  m_screenSaverTimeoutSeconds = newScreenSaverTimeoutSeconds;
   emit screenSaverTimeoutSecondsChanged(m_screenSaverTimeoutSeconds);
 }
