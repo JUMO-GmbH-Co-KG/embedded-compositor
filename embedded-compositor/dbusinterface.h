@@ -132,6 +132,11 @@ class CompositorScreenInterface : public DBusInterface {
                  orientationChanged)
   Q_PROPERTY(bool screenSaverActive READ screenSaverActive WRITE
                  setScreenSaverActive NOTIFY screenSaverActiveChanged)
+  Q_PROPERTY(bool screenSaverEnabled READ screenSaverEnabled WRITE
+                 setScreenSaverEnabled NOTIFY screenSaverEnabledChanged)
+  Q_PROPERTY(
+      int screenSaverTimeoutSeconds READ screenSaverTimeoutSeconds WRITE
+          setScreenSaverTimeoutSeconds NOTIFY screenSaverTimeoutSecondsChanged)
 
 public:
   CompositorScreenInterface(QObject *parent = nullptr);
@@ -144,14 +149,24 @@ public:
   void setScreenSaverActive(bool newScreenSaverActive);
   void ShowScreenSaver();
 
+  bool screenSaverEnabled() const;
+  void setScreenSaverEnabled(bool newScreenSaverEnabled);
+
+  int screenSaverTimeoutSeconds() const;
+  void setScreenSaverTimeoutSeconds(int newScreenSaverTimeoutSeconds);
+
 Q_SIGNALS:
   void orientationChanged(const QString &orientation);
   void screenSaverActiveChanged(bool screenSaverActive);
   void showScreenSaver();
+  void screenSaverEnabledChanged(bool screenSaverEnabled);
+  void screenSaverTimeoutSecondsChanged(int screenSaverTimeoutSeconds);
 
 private:
   QString m_orientation;
   bool m_screenSaverActive;
+  bool m_screenSaverEnabled;
+  int m_screenSaverTimeoutSeconds;
 };
 
 #endif // DBUSINTERFACE_H

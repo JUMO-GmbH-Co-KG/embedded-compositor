@@ -17,11 +17,18 @@ Item {
     property url screenSaverUrl
     readonly property bool screenSaverActive: screenSaverLoader.active
     property bool mouseHoverSupport
+    property bool screenSaverEnabled: true
 
     function reset()
     {
         screenSaverLoader.active = false;
         screenSaverTimeOut.restart();
+    }
+
+    onScreenSaverEnabledChanged: {
+        if(!screenSaverEnabled) {
+            screenSaverLoader.active = false;
+        }
     }
 
     function showScreenSaver()
@@ -31,7 +38,7 @@ Item {
 
     Timer {
         id: screenSaverTimeOut
-        running: true
+        running: screenSaverEnabled
         interval: screenSaverController.timeoutSeconds * 1000
         onTriggered: {
             screenSaverLoader.active = true;

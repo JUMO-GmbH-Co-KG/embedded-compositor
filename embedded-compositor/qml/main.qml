@@ -135,8 +135,9 @@ WaylandCompositor {
 
                 ScreenSaverController {
                     id: screenSaverController
-                    timeoutSeconds: configuration.screenSaverTimeoutSeconds
+                    timeoutSeconds: dbusScreenInterface.screenSaverTimeoutSeconds
                     screenSaverUrl: configuration.screenSaverUrl
+                    screenSaverEnabled: dbusScreenInterface.screenSaverEnabled
                 }
             }
             Item {
@@ -304,6 +305,8 @@ WaylandCompositor {
         id: dbusScreenInterface
         screenSaverActive: screenSaverController.screenSaverActive
         onShowScreenSaver: screenSaverController.showScreenSaver();
+        screenSaverEnabled: configuration.screenSaverEnabled
+        screenSaverTimeoutSeconds: configuration.screenSaverTimeoutSeconds
     }
 
     ConfigurationHive {
@@ -311,8 +314,9 @@ WaylandCompositor {
         property url taskSwitcherUrl: "DefaultTaskSwitcher/TaskSwitcher.qml"
         property url globalOverlayUrl: "DefaultGlobalOverlay/GlobalOverlay.qml"
         property url screenSaverUrl: "DefaultScreenSaver/ScreenSaver.qml"
-        property int screenSaverTimeoutSeconds: 60
+        property int screenSaverTimeoutSeconds: 6
         property bool screenSaverMouseHoverSupport: false
+        property bool screenSaverEnabled: false
         property int screenWidth: (Qt.application.primaryScreen || Qt.application.screens[0]).width
         property int screenHeight: (Qt.application.primaryScreen || Qt.application.screens[0]).height
     }
