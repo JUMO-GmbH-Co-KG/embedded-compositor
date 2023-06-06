@@ -5,5 +5,5 @@ use_system_bus {
     message(using session dbus)
 }
 
-target.path = /usr/share/embeddedcompositor-examples/
+target.path = /usr/share/embedded-compositor-testclients/
 INSTALLS += target
