@@ -10,6 +10,14 @@
 #include "screen_interface.h"
 #include "taskswitcher_interface.h"
 
+inline QDBusConnection getBus() {
+#ifdef USE_SYSTEM_BUS
+  return QDBusConnection::systemBus();
+#else
+  return QDBusConnection::sessionBus();
+#endif
+}
+
 class DBusClient : public QObject
 {
     Q_OBJECT
