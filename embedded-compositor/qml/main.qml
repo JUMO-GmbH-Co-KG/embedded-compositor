@@ -58,7 +58,18 @@ WaylandCompositor {
                         color:"red"
                     }
                     property Item surfaceItem
-                    onSurfaceItemChanged: taskSwitcherInterface.currentView = surfaceItem.uuid
+                    onSurfaceItemChanged: {
+                        if(surfaceItem == null) {
+                            if(centerApplicationViewModel.count > 0) {
+                                var entry = centerApplicationViewModel.get(0);
+                                selectSurface(entry.data.surface, entry.data.view);
+                            } else {
+                                console.log("last surface closed...");
+                            }
+                        } else {
+                            taskSwitcherInterface.currentView = surfaceItem.uuid
+                        }
+                    }
                     property ShellSurface surface
                     function selectSurface(shellSurface, view)
                     {
@@ -160,17 +171,20 @@ WaylandCompositor {
         id: centerApplicationViewModel
         property var surfaces: ({});
 
-        function addSurface(shellSurface)
+        function addSurface(shellSurface, shellSurfaceItem)
         {
             surfaces[shellSurface] = {
                 views: []
             };
             append({data: {view: null, surface: shellSurface}});
+            shellSurfaceItem.surfaceDestroyed.connect(function(){
+                removeSurface(shellSurface);
+            });
         }
 
         function removeSurface(shellSurface)
         {
-            for(var i = count - 1; i>0; i--)
+            for(var i = count - 1; i >= 0; i--)
             {
                 if(get(i).data.surface === shellSurface)
                 {
