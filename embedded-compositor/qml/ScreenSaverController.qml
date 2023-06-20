@@ -22,7 +22,9 @@ Item {
     function reset()
     {
         screenSaverLoader.active = false;
-        screenSaverTimeOut.restart();
+        if(screenSaverEnabled) {
+            screenSaverTimeOut.restart();
+        }
     }
 
     onScreenSaverEnabledChanged: {
