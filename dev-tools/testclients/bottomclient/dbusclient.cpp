@@ -11,10 +11,10 @@ static const QString compositorServiceName()
 
 DBusClient::DBusClient(QObject *parent)
     : QObject(parent)
-    , m_notificationsIface(QStringLiteral("org.freedesktop.Notifications"), QStringLiteral("/org/freedesktop/Notifications"), QDBusConnection::sessionBus())
-    , m_overlayIface(compositorServiceName(), QStringLiteral("/globaloverlay"), QDBusConnection::sessionBus())
-    , m_screenIface(compositorServiceName(), QStringLiteral("/screen"), QDBusConnection::sessionBus())
-    , m_taskSwitcherIface(compositorServiceName(), QStringLiteral("/taskswitcher"), QDBusConnection::sessionBus())
+    , m_notificationsIface(QStringLiteral("org.freedesktop.Notifications"), QStringLiteral("/org/freedesktop/Notifications"), getBus())
+    , m_overlayIface(compositorServiceName(), QStringLiteral("/globaloverlay"), getBus())
+    , m_screenIface(compositorServiceName(), QStringLiteral("/screen"), getBus())
+    , m_taskSwitcherIface(compositorServiceName(), QStringLiteral("/taskswitcher"), getBus())
 {
     connect(&m_notificationsIface, &org::freedesktop::Notifications::ActionInvoked, this, &DBusClient::notificationActionInvoked);
     connect(&m_notificationsIface, &org::freedesktop::Notifications::NotificationClosed, this, &DBusClient::notificationClosed);

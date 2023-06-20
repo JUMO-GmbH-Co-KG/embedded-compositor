@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
 
-  if (!QDBusConnection::sessionBus().isConnected()) {
+  if (!getBus().isConnected()) {
     qWarning() << "Cannot connect to the D-Bus session bus.\n"
                   "To start it, run:\n"
                   "\teval `dbus-launch --auto-syntax`\n";
