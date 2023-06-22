@@ -10,7 +10,7 @@ else
     echo "running on dev host"
     export $(dbus-launch)
     qdbusviewer &
-    BUILD_ROOT=/home/florian/basyskom/build-compositor-Desktop-Debug
+    BUILD_ROOT=/home/florian/basyskom/build-embedded-compositor-Desktop-Debug
 	export QT_ENABLE_HIGHDPI_SCALING=0
 	export QT_SCREEN_SCALE_FACTORS=
 	export QT_AUTO_SCREEN_SCALE_FACTOR=0
@@ -20,6 +20,9 @@ else
 
   export COMPOSITOR_screenWidth=1280
   export COMPOSITOR_screenHeight=800
+  export COMPOSITOR_screenSaverEnabled=true
+  export COMPOSITOR_screenSaverTimeoutSeconds=3
+  export COMPOSITOR_screenSaverMouseHoverSupport=true
 
   set | grep DBUS
 fi
