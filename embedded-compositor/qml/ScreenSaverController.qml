@@ -74,4 +74,9 @@ Item {
         }
         Keys.onPressed: screenSaverController.reset();
     }
+
+    MouseArea {
+        anchors.fill: parent
+        enabled: screenSaverLoader.active
+    }
 }

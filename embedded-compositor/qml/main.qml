@@ -149,6 +149,7 @@ WaylandCompositor {
                     timeoutSeconds: dbusScreenInterface.screenSaverTimeoutSeconds
                     screenSaverUrl: configuration.screenSaverUrl
                     screenSaverEnabled: dbusScreenInterface.screenSaverEnabled
+                    mouseHoverSupport: configuration.screenSaverMouseHoverSupport
                 }
             }
             Item {
