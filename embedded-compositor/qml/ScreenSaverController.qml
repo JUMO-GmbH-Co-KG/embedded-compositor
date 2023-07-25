@@ -78,5 +78,6 @@ Item {
     MouseArea {
         anchors.fill: parent
         enabled: screenSaverLoader.active
+        onClicked: screenSaverController.reset();
     }
 }
