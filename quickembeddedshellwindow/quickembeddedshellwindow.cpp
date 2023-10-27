@@ -2,7 +2,6 @@
 
 #include "quickembeddedshellwindow.h"
 #include "embeddedshellsurface.h"
-#include "quickembeddedshell.h"
 
 Q_LOGGING_CATEGORY(quickShell, "embeddedshell.quick")
 
@@ -31,16 +30,6 @@ EmbeddedShellSurfaceView *QuickEmbeddedShellWindow::createView(QString label,
   auto view = m_surface->createView(label, sort_index);
   qCDebug(quickShell) << __PRETTY_FUNCTION__ << view << label;
   return view;
-}
-
-void QuickEmbeddedShell::registerTypes(const char *uri) {
-  qmlRegisterType<QuickEmbeddedShellWindow>(uri, 1, 0, "Window");
-  qmlRegisterType<EmbeddedPlatform>(uri, 1, 0, "Platform");
-  qmlRegisterUncreatableType<EmbeddedShellSurfaceView>(
-      uri, 1, 0, "SurfaceView", "created by wayland request only");
-  qmlRegisterUncreatableMetaObject(EmbeddedShellTypes::staticMetaObject, uri, 1,
-                                   0, "EmbeddedShellTypes",
-                                   "uncreatable enums namespace");
 }
 
 void QuickEmbeddedShellWindow::classBegin() {
