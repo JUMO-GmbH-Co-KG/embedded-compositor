@@ -139,10 +139,12 @@ void QuickEmbeddedShellIntegration::handleEmbeddedShellSurfaceDestroyed() {
 void EmbeddedShellSurface::embedded_shell_surface_set_anchor(Resource *resource,
                                                              uint32_t anchor) {
   Q_UNUSED(resource)
-  qCDebug(shellExt) << __PRETTY_FUNCTION__ << m_anchor << "->" << anchor;
-  m_anchor = static_cast<EmbeddedShellTypes::Anchor>(anchor);
-  qCDebug(shellExt) << "emitting" << m_anchor;
-  emit anchorChanged(m_anchor);
+  auto newAnchor = static_cast<EmbeddedShellTypes::Anchor>(anchor);
+  qCDebug(shellExt) << __PRETTY_FUNCTION__ << m_anchor << "->" << newAnchor;
+  if(newAnchor != m_anchor) {
+    m_anchor = newAnchor;
+    emit anchorChanged(m_anchor);
+  }
 }
 
 void EmbeddedShellSurface::embedded_shell_surface_view_create(

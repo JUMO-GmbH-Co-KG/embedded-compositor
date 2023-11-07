@@ -174,12 +174,22 @@ WaylandCompositor {
 
         function addSurface(shellSurface, shellSurfaceItem)
         {
+            if(surfaces.hasOwnProperty(shellSurface))
+            {
+                console.debug("application model: duplicate key! "+shellSurface.uuid);
+                return;
+            }
+
             surfaces[shellSurface] = {
                 views: []
             };
             append({data: {view: null, surface: shellSurface}});
             shellSurfaceItem.surfaceDestroyed.connect(function(){
                 removeSurface(shellSurface);
+            });
+
+            shellSurface.anchorChanged.connect(function(){
+                if(shellSurface.anchor !== EmbeddedShellTypes.Center) removeSurface(shellSurface);
             });
         }
 
@@ -206,7 +216,7 @@ WaylandCompositor {
                 append({data: {view: view, surface: shellSurface}});
                 for(var i = 0; i<count; i++)
                 {
-                    if(get(i).data.surface == shellSurface)
+                    if(get(i).data.surface === shellSurface)
                     {
                         remove(i);
                         break;
@@ -313,7 +323,10 @@ WaylandCompositor {
         onShowRequested: (message) => {
             globalOverlayLoader.item.show(message);
         }
-        onHideRequested: globalOverlayLoader.item.hide()
+        onHideRequested: {
+            if(globalOverlayLoader.active)
+                globalOverlayLoader.item.hide()
+        }
     }
 
     CompositorScreenInterface {
