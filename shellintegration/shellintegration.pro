@@ -3,15 +3,12 @@ CONFIG += c++17 plugin relative_qt_rpath
 TEMPLATE = lib
 DEFINES += EMBEDDEDSHELLINTEGRATION_LIBRARY
 
-qtConfig(xkbcommon): \
-    QMAKE_USE += xkbcommon
-
 HEADERS += \
     embeddedshellintegration.h
 
 SOURCES += \
     main.cpp \
-	embeddedshellintegration.cpp
+  	embeddedshellintegration.cpp
 
 OTHER_FILES += \
     embedded-shell.json
