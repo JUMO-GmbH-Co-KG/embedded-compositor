@@ -29,15 +29,15 @@ OTHER_FILES += \
     qml/Notifications/Notification.qml
 
 # NOTE There appears to be no easy way to specify the parent class of qdbusxml2cpp through QMake.
-globaloverlay_adaptor.files = ../dbus/com.embeddedcompositor.globaloverlay.xml
+globaloverlay_adaptor.files = ../dbus/de.EmbeddedCompositor.globaloverlay.xml
 globaloverlay_adaptor.header_flags = -l GlobalOverlayInterface -i dbusinterface.h
 globaloverlay_adaptor.source_flags = -l GlobalOverlayInterface
 
-screen_adaptor.files = ../dbus/com.embeddedcompositor.screen.xml
+screen_adaptor.files = ../dbus/de.EmbeddedCompositor.screen.xml
 screen_adaptor.header_flags = -l CompositorScreenInterface -i dbusinterface.h
 screen_adaptor.source_flags = -l CompositorScreenInterface
 
-taskswitcher_adaptor.files = ../dbus/com.embeddedcompositor.taskswitcher.xml
+taskswitcher_adaptor.files = ../dbus/de.EmbeddedCompositor.taskswitcher.xml
 taskswitcher_adaptor.header_flags = -l TaskSwitcherInterface -i dbusinterface.h
 taskswitcher_adaptor.source_flags = -l TaskSwitcherInterface
 

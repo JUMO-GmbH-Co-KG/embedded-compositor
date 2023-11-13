@@ -4,7 +4,7 @@ import QtQuick 2.0
 import QtWayland.Compositor 1.0
 import QtQuick.Window 2.2
 
-import com.embeddedcompositor.embeddedshell 1.0
+import de.EmbeddedCompositor.embeddedshell 1.0
 
 WaylandCompositor {
     WaylandOutput {

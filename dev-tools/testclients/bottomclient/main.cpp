@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
                   "\teval `dbus-launch --auto-syntax`\n";
     return 1;
   }
-  qmlRegisterUncreatableType<DBusClient>("com.embeddedcompositor.dbusclient", 1,
+  qmlRegisterUncreatableType<DBusClient>("de.EmbeddedCompositor.dbusclient", 1,
                                          0, "DbusClient", "singleton");
 
   DBusClient dbusClient;

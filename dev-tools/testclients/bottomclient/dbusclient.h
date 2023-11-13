@@ -41,9 +41,9 @@ Q_SIGNALS:
 
 private:
     org::freedesktop::Notifications m_notificationsIface;
-    com::embeddedcompositor::globaloverlay m_overlayIface;
-    com::embeddedcompositor::screen m_screenIface;
-    com::embeddedcompositor::taskswitcher m_taskSwitcherIface;
+    de::EmbeddedCompositor::globaloverlay m_overlayIface;
+    de::EmbeddedCompositor::screen m_screenIface;
+    de::EmbeddedCompositor::taskswitcher m_taskSwitcherIface;
 };
 
 #endif // DBUSCLIENT_H

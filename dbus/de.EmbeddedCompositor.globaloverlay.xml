@@ -1,7 +1,7 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
     "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
-<interface name="com.embeddedcompositor.globaloverlay">
+<interface name="de.EmbeddedCompositor.globaloverlay">
 
 <method name="Show">
     <arg name="message" type="s" direction="in"/>

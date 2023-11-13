@@ -41,7 +41,7 @@ The embedded_shell_surface provides a request to additionally create objects bou
 
 ## Screen orientation
 
-Screen orientation can be specified at startup time through the `SCREEN_ORIENTATION` environment variable. later, screen orientation can be controlled using the DBus interface `com.embeddedcompositor.screen` exposed under `com.basyskom.embeddedcompositor/screen`
+Screen orientation can be specified at startup time through the `SCREEN_ORIENTATION` environment variable. later, screen orientation can be controlled using the DBus interface `de.EmbeddedCompositor.screen` exposed under `de.jumo.EmbeddedCompositor/screen`
 
 ## Architecture
 
@@ -160,15 +160,15 @@ We provide logging through [Qt's logging framework](https://doc.qt.io/qt-5/qlogg
 
 ## DBus integration
 
-The compositor implements a couple of DBus interfaces to provide system/window manager services. They are exposed under the compositor service name `com.basyskom.embeddedcompositor`:
+The compositor implements a couple of DBus interfaces to provide system/window manager services. They are exposed under the compositor service name `de.jumo.EmbeddedCompositor`:
 
-* /taskswitcher (com.embeddedcompositor.taskswitcher) - allows the task switcher to be opened or closed from e.g. a menu button. Provides List of currently active views (/taskswitcher/views) and allows currently active view to be queried and set (taskswitcher/currentView). Views are identified by a GUID and the list of surfaces includes process id and view label for convenience.
+* /taskswitcher (de.EmbeddedCompositor.taskswitcher) - allows the task switcher to be opened or closed from e.g. a menu button. Provides List of currently active views (/taskswitcher/views) and allows currently active view to be queried and set (taskswitcher/currentView). Views are identified by a GUID and the list of surfaces includes process id and view label for convenience.
   * properties
     * currentView (type:string, access:readwrite)
     * views (type:a(ssu), access:read)
       * annotation name="org.qtproject.QtDBus.QtTypeName" value="QList&lt;TaskSwitcherEntry&gt;" 
-* /globaloverlay (com.embeddedcompositor.globaloverlay) - displays a global overlay hiding all other UI elements for a boot or shutdown message.
-* /screen (com.embeddedcompositor.screen) - control screen orientation via the orientation property. allowed values: "0", "90", "180", "270"
+* /globaloverlay (de.EmbeddedCompositor.globaloverlay) - displays a global overlay hiding all other UI elements for a boot or shutdown message.
+* /screen (de.EmbeddedCompositor.screen) - control screen orientation via the orientation property. allowed values: "0", "90", "180", "270"
 
 Additionally, we implement a notification service under the standard name `org.freedesktop.Notifications`:
 
