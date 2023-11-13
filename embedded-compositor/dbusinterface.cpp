@@ -173,11 +173,6 @@ void GlobalOverlayInterface::Hide() { Q_EMIT hideRequested(); }
 CompositorScreenInterface::CompositorScreenInterface(QObject *parent)
     : DBusInterface(QStringLiteral("/screen"), parent) {
   new ScreenAdaptor(this);
-
-  m_orientation = qEnvironmentVariable("SCREEN_ORIENTATION");
-  if (m_orientation.isEmpty()) {
-    m_orientation = QStringLiteral("0");
-  }
 }
 
 QString CompositorScreenInterface::orientation() const { return m_orientation; }

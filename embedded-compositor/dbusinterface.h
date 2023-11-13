@@ -163,7 +163,7 @@ Q_SIGNALS:
   void screenSaverTimeoutSecondsChanged(int screenSaverTimeoutSeconds);
 
 private:
-  QString m_orientation;
+  QString m_orientation = QStringLiteral("0");
   bool m_screenSaverActive;
   bool m_screenSaverEnabled;
   int m_screenSaverTimeoutSeconds;

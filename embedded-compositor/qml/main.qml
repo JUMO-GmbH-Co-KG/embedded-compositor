@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import QtQuick 2.15
-import QtWayland.Compositor 1.0
+import QtWayland.Compositor 1.15
 import QtQuick.Window 2.2
 import QtQml.Models 2.1
 
@@ -13,149 +13,177 @@ import "DefaultTaskSwitcher"
 import "Notifications"
 
 WaylandCompositor {
-    WaylandOutput {
-        sizeFollowsWindow: true
-        window: Window {
-            id: window
-            width: configuration.screenWidth
-            height: configuration.screenHeight
-            visible: true
-            property real initialSize: 0
+    objectName: "compositor"
+    XdgOutputManagerV1 {
+        WaylandOutput {
+            objectName: "output"
+            id: waylandOutput
+            transform: {
+                if(rootTransformItem.state == "90") return WaylandOutput.Transform90;
+                else  if(rootTransformItem.state == "180") return WaylandOutput.Transform180;
+                else  if(rootTransformItem.state == "270") return WaylandOutput.Transform270;
+                else  return WaylandOutput.TransformNormal;
+            }
+            physicalSize: Qt.size(configuration.screenPhysicalWidth,configuration.screenPhysicalHeight)
+            manufacturer: "JUMO"
+            model: "variTron"
 
-            RootTransformer {
-                id: rootTransformItem
-                state: dbusScreenInterface.orientation
-
-                Item {
-                    Keys.onPressed:
-                        (event)=> {
-                            if (event.key === Qt.Key_Super_L || event.key === Qt.Key_Super_R) {
-                                if(taskSwitcherLoader.item.state === "open") taskSwitcherLoader.item.close();
-                                else taskSwitcherLoader.item.open();
-                            } else if(event.key === Qt.Key_F1) {
-                                rootTransformItem.state = "0"
-                            } else if(event.key === Qt.Key_F2) {
-                                rootTransformItem.state = "90"
-                            } else if(event.key === Qt.Key_F3) {
-                                rootTransformItem.state = "180"
-                            } else if(event.key === Qt.Key_F4) {
-                                rootTransformItem.state = "270"
-                            } else {
-                               screenSaverController.reset();
-                            }
-                        }
-                    focus: true
+            XdgOutputV1 {
+                id: xdgOutput
+                name: "main screen"
+                logicalPosition: waylandOutput.position
+                logicalSize: {
+                    if(waylandOutput.transform == WaylandOutput.Transform90
+                            || waylandOutput.transform == WaylandOutput.Transform270)
+                    return Qt.size(window.height,window.width);
+                    return Qt.size(window.width,window.height);
                 }
+            }
+            window: window
+        }
+    }
 
-                Rectangle {
-                    id: centerArea
-                    anchors.top: topArea.bottom
-                    anchors.left: leftArea.right
-                    anchors.right: rightArea.left
-                    anchors.bottom: bottomArea.top
-                    border {
-                        width: 1
-                        color:"red"
-                    }
-                    property Item surfaceItem
-                    onSurfaceItemChanged: {
-                        if(surfaceItem == null) {
-                            if(centerApplicationViewModel.count > 0) {
-                                var entry = centerApplicationViewModel.get(0);
-                                selectSurface(entry.data.surface, entry.data.view);
-                            } else {
-                                console.log("last surface closed...");
-                            }
+    Window {
+        id: window
+        // the window tracks the physical screen dimensions
+        width: configuration.screenWidth
+        height: configuration.screenHeight
+        visible: true
+        property real initialSize: 0
+
+        RootTransformer {
+            id: rootTransformItem
+            state: dbusScreenInterface.orientation
+
+            Item {
+                Keys.onPressed:
+                    (event)=> {
+                        if (event.key === Qt.Key_Super_L || event.key === Qt.Key_Super_R) {
+                            if(taskSwitcherLoader.item.state === "open") taskSwitcherLoader.item.close();
+                            else taskSwitcherLoader.item.open();
+                        } else if(event.key === Qt.Key_F1) {
+                            rootTransformItem.state = "0"
+                        } else if(event.key === Qt.Key_F2) {
+                            rootTransformItem.state = "90"
+                        } else if(event.key === Qt.Key_F3) {
+                            rootTransformItem.state = "180"
+                        } else if(event.key === Qt.Key_F4) {
+                            rootTransformItem.state = "270"
                         } else {
-                            taskSwitcherInterface.currentView = surfaceItem.uuid
+                            screenSaverController.reset();
                         }
                     }
-                    property ShellSurface surface
-                    function selectSurface(shellSurface, view)
+                focus: true
+            }
+
+            Rectangle {
+                id: centerArea
+                anchors.top: topArea.bottom
+                anchors.left: leftArea.right
+                anchors.right: rightArea.left
+                anchors.bottom: bottomArea.top
+                border {
+                    width: 1
+                    color:"red"
+                }
+                property Item surfaceItem
+                onSurfaceItemChanged: {
+                    if(surfaceItem == null) {
+                        if(centerApplicationViewModel.count > 0) {
+                            var entry = centerApplicationViewModel.get(0);
+                            selectSurface(entry.data.surface, entry.data.view);
+                        } else {
+                            console.log("last surface closed...");
+                        }
+                    } else {
+                        taskSwitcherInterface.currentView = surfaceItem.uuid
+                    }
+                }
+                property ShellSurface surface
+                function selectSurface(shellSurface, view)
+                {
+                    for(var i =0; i < children.length; i++)
                     {
-                        for(var i =0; i < children.length; i++)
-                        {
-                            var window = children[i];
-                            if(window.shellSurface === shellSurface) {
-                                window.currentView = view;
-                                surfaceItem = window;
-                                break;
-                            }
+                        var window = children[i];
+                        if(window.shellSurface === shellSurface) {
+                            window.currentView = view;
+                            surfaceItem = window;
+                            break;
                         }
                     }
-                }
-                Item {
-                    id:leftArea
-                    width: surfaceItem ? surfaceItem.margin:window.initialSize
-                    anchors.bottom: bottomArea.top
-                    anchors.left: parent.left
-                    anchors.top: topArea.bottom
-                    property Item surfaceItem
-                }
-                Item {
-                    id:rightArea
-                    width: surfaceItem ? surfaceItem.margin :window.initialSize
-                    anchors.bottom:bottomArea.top
-                    anchors.right: parent.right
-                    anchors.top: topArea.bottom
-                    property Item surfaceItem
-                }
-                Item {
-                    id: topArea
-                    height: surfaceItem ? surfaceItem.margin : window.initialSize
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    property Item surfaceItem
-                }
-                Item {
-                    id: bottomArea
-                    height: surfaceItem ? surfaceItem.margin : window.initialSize
-                    anchors.bottom: parent.bottom
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    property Item surfaceItem
-                }
-
-                Loader {
-                    id:taskSwitcherLoader
-                    anchors.fill:parent
-                    source: configuration.taskSwitcherUrl
-                    active: true
-                    onLoaded: {
-                        item.surfaceModel = centerApplicationViewModel
-                        item.switchTask.connect(doSwitch)
-                    }
-
-                    function doSwitch(shellSurface, view)
-                    {
-                        centerArea.selectSurface(shellSurface, view);
-                    }
-                }
-
-                Notifications {
-                    anchors.fill: parent
-                }
-
-                Loader {
-                    id: globalOverlayLoader
-                    anchors.fill:parent
-                    source: configuration.globalOverlayUrl
-                    active: true
-                }
-
-                ScreenSaverController {
-                    id: screenSaverController
-                    timeoutSeconds: dbusScreenInterface.screenSaverTimeoutSeconds
-                    screenSaverUrl: configuration.screenSaverUrl
-                    screenSaverEnabled: dbusScreenInterface.screenSaverEnabled
-                    mouseHoverSupport: configuration.screenSaverMouseHoverSupport
                 }
             }
             Item {
-                id: limboArea
-                visible: false
+                id:leftArea
+                width: surfaceItem ? surfaceItem.margin:window.initialSize
+                anchors.bottom: bottomArea.top
+                anchors.left: parent.left
+                anchors.top: topArea.bottom
+                property Item surfaceItem
             }
+            Item {
+                id:rightArea
+                width: surfaceItem ? surfaceItem.margin :window.initialSize
+                anchors.bottom:bottomArea.top
+                anchors.right: parent.right
+                anchors.top: topArea.bottom
+                property Item surfaceItem
+            }
+            Item {
+                id: topArea
+                height: surfaceItem ? surfaceItem.margin : window.initialSize
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                property Item surfaceItem
+            }
+            Item {
+                id: bottomArea
+                height: surfaceItem ? surfaceItem.margin : window.initialSize
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                property Item surfaceItem
+            }
+
+            Loader {
+                id:taskSwitcherLoader
+                anchors.fill:parent
+                source: configuration.taskSwitcherUrl
+                active: true
+                onLoaded: {
+                    item.surfaceModel = centerApplicationViewModel
+                    item.switchTask.connect(doSwitch)
+                }
+
+                function doSwitch(shellSurface, view)
+                {
+                    centerArea.selectSurface(shellSurface, view);
+                }
+            }
+
+            Notifications {
+                anchors.fill: parent
+            }
+
+            Loader {
+                id: globalOverlayLoader
+                anchors.fill:parent
+                source: configuration.globalOverlayUrl
+                active: true
+            }
+
+            ScreenSaverController {
+                id: screenSaverController
+                timeoutSeconds: dbusScreenInterface.screenSaverTimeoutSeconds
+                screenSaverUrl: configuration.screenSaverUrl
+                screenSaverEnabled: dbusScreenInterface.screenSaverEnabled
+                mouseHoverSupport: configuration.screenSaverMouseHoverSupport
+            }
+        }
+        Item {
+            id: limboArea
+            visible: false
         }
     }
 
@@ -335,6 +363,7 @@ WaylandCompositor {
         onShowScreenSaver: screenSaverController.showScreenSaver();
         screenSaverEnabled: configuration.screenSaverEnabled
         screenSaverTimeoutSeconds: configuration.screenSaverTimeoutSeconds
+        orientation: configuration.screenOrientation
     }
 
     ConfigurationHive {
@@ -345,7 +374,14 @@ WaylandCompositor {
         property int screenSaverTimeoutSeconds: 6
         property bool screenSaverMouseHoverSupport: false
         property bool screenSaverEnabled: false
+        // size in pixels as seen by the OS before compositor controlled rotation
         property int screenWidth: (Qt.application.primaryScreen || Qt.application.screens[0]).width
         property int screenHeight: (Qt.application.primaryScreen || Qt.application.screens[0]).height
+        // size in millimeters, as seen by the OS before compositor controlled rotation.
+        // e.g. size of a common 10.1" display, seen by the OS in default widescreen
+        property real screenPhysicalWidth: 219
+        property real screenPhysicalHeight: 137
+        // compositor controlled rotation, i.e. "0", "90", "180", "270"
+        property string screenOrientation: "0"
     }
 }

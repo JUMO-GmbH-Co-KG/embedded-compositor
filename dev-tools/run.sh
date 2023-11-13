@@ -23,7 +23,7 @@ else
   export COMPOSITOR_screenSaverEnabled=true
   export COMPOSITOR_screenSaverTimeoutSeconds=3
   export COMPOSITOR_screenSaverMouseHoverSupport=true
-
+  export COMPOSITOR_screenOrientation=0
   set | grep DBUS
 fi
 
@@ -33,7 +33,7 @@ export QT_LOGGING_RULES="embeddedshell.compositor.debug=false;embeddedshell.quic
 export COMPOSITOR_taskSwitcherUrl="file:$BUILD_ROOT/../embedded-compositor/dev-tools/example-components/GridSwitcher.qml"
 #export COMPOSITOR_globalOverlayUrl="file:$BUILD_ROOT/../embedded-compositor/dev-tools/example-components/AltBootScreen.qml"
 #export QT_DEBUG_PLUGINS=1
-SCREEN_ORIENTATION=0 $BUILD_ROOT/embedded-compositor/embedded-compositor &
+$BUILD_ROOT/embedded-compositor/embedded-compositor &
 compositor_pid=$!
 
 
