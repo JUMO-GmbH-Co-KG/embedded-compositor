@@ -7,12 +7,15 @@ DEFINES += QUICKEMBEDDEDSHELLWINDOW_LIBRARY
 CONFIG += c++17
 
 SOURCES += \
-    quickembeddedshellwindow.cpp
+    quickembeddedshell.cpp \
+    quickembeddedshellwindow.cpp \
+    waylandinputregion.cpp
 
 HEADERS += \
     quickembeddedshell.h \
     quickembeddedshellwindow_global.h \
-    quickembeddedshellwindow.h
+    quickembeddedshellwindow.h \
+    waylandinputregion.h
 OTHER_FILES = qmldir
 
 target = $$qtLibraryTarget($$TARGET)
