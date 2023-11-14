@@ -2,9 +2,9 @@
 
 import QtQuick 2.0
 import QtWayland.Compositor 1.0
-import com.embeddedcompositor.embeddedshell 1.0
+import de.EmbeddedCompositor.embeddedshell 1.0
 import QtGraphicalEffects 1.12
-import com.embeddedcompositor.utility 1.0
+import de.EmbeddedCompositor.utility 1.0
 
 Rectangle {
     id: taskSwitcher

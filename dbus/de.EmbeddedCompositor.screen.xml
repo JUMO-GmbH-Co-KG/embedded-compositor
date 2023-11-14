@@ -1,7 +1,7 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
     "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 <node>
-<interface name="com.embeddedcompositor.screen">
+<interface name="de.EmbeddedCompositor.screen">
 <property name="orientation" type="s" access="readwrite"/>
 <property name="screenSaverActive" type="b" access="read"/>
 <property name="screenSaverEnabled" type="b" access="readwrite"/>

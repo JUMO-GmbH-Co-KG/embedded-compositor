@@ -19,43 +19,43 @@ int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
 
   qmlRegisterType<EmbeddedShellExtensionQuickExtension>(
-      "com.embeddedcompositor.embeddedshell", 1, 0, "EmbeddedShell");
+      "de.EmbeddedCompositor.embeddedshell", 1, 0, "EmbeddedShell");
   qmlRegisterUncreatableType<EmbeddedShellSurfaceView>(
-      "com.embeddedcompositor.embeddedshell", 1, 0, "SurfaceView",
+      "de.EmbeddedCompositor.embeddedshell", 1, 0, "SurfaceView",
       "managed by wayland");
 
   qmlRegisterUncreatableType<QAbstractListModel>(
-      "com.embeddedcompositor.embeddedshell", 1, 0, "QAbstractListModel",
+      "de.EmbeddedCompositor.embeddedshell", 1, 0, "QAbstractListModel",
       "only a property");
 
-  qmlRegisterType<TaskSwitcherInterface>("com.embeddedcompositor.dbus", 1, 0,
+  qmlRegisterType<TaskSwitcherInterface>("de.EmbeddedCompositor.dbus", 1, 0,
                                          "TaskSwitcherInterface");
   qDBusRegisterMetaType<TaskSwitcherEntry>();
   qDBusRegisterMetaType<QList<TaskSwitcherEntry>>();
   qRegisterMetaType<TaskSwitcherEntry>("TaskSwitcherEntry");
   qRegisterMetaType<QList<TaskSwitcherEntry>>("QList<TaskSwitcherEntry>");
 
-  qmlRegisterType<GlobalOverlayInterface>("com.embeddedcompositor.dbus", 1, 0,
+  qmlRegisterType<GlobalOverlayInterface>("de.EmbeddedCompositor.dbus", 1, 0,
                                           "GlobalOverlayInterface");
 
-  qmlRegisterType<CompositorScreenInterface>("com.embeddedcompositor.dbus", 1,
+  qmlRegisterType<CompositorScreenInterface>("de.EmbeddedCompositor.dbus", 1,
                                              0, "CompositorScreenInterface");
-  qmlRegisterType<NotificationModel>("com.embeddedcompositor.dbus", 1, 0,
+  qmlRegisterType<NotificationModel>("de.EmbeddedCompositor.dbus", 1, 0,
                                      "NotificationModel");
 
-  qmlRegisterType<ConfigurationHive>("com.embeddedcompositor.configuration", 1,
+  qmlRegisterType<ConfigurationHive>("de.EmbeddedCompositor.configuration", 1,
                                      0, "ConfigurationHive");
 
   qmlRegisterUncreatableMetaObject(EmbeddedShellTypes::staticMetaObject,
-                                   "com.embeddedcompositor.embeddedshell", 1, 0,
+                                   "de.EmbeddedCompositor.embeddedshell", 1, 0,
                                    "EmbeddedShellTypes", "Not Instantiable!");
 
-  if (!InitDbusConnection("com.basyskom.embeddedcompositor")) {
+  if (!InitDbusConnection("de.jumo.EmbeddedCompositor")) {
     qWarning() << "failed to init dbus";
     return 1;
   }
 
-  qmlRegisterType<SortFilterProxyModel>("com.embeddedcompositor.utility", 1, 0,
+  qmlRegisterType<SortFilterProxyModel>("de.EmbeddedCompositor.utility", 1, 0,
                                         "SortFilterProxyModel");
 
   QQmlApplicationEngine appEngine;

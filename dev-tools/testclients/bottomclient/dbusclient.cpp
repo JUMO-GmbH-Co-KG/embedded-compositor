@@ -6,7 +6,7 @@
 
 static const QString compositorServiceName()
 {
-    return QStringLiteral("com.basyskom.embeddedcompositor");
+    return QStringLiteral("de.jumo.EmbeddedCompositor");
 }
 
 DBusClient::DBusClient(QObject *parent)

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import QtQuick 2.0
-import com.embeddedcompositor.dbus 1.0
+import de.EmbeddedCompositor.dbus 1.0
 
 Rectangle {
     id: notificationRoot
