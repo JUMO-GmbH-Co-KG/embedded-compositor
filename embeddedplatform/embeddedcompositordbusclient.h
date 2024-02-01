@@ -4,11 +4,8 @@
 #define DBUSCLIENT_H
 
 #include <QObject>
-
-#include "globaloverlay_interface.h"
-#include "notifications_interface.h"
-#include "screen_interface.h"
-#include "taskswitcher_interface.h"
+#include <QDBusConnection>
+#include <QScopedPointer>
 
 inline QDBusConnection getBus() {
 #ifdef USE_SYSTEM_BUS
@@ -17,14 +14,17 @@ inline QDBusConnection getBus() {
   return QDBusConnection::sessionBus();
 #endif
 }
+class EmbeddedCompositorDBusInterfacePrivate;
 
-class DBusClient : public QObject
+class EmbeddedCompositorDBusInterface : public QObject
 {
     Q_OBJECT
 
+    Q_DECLARE_PRIVATE_D(m_d, EmbeddedCompositorDBusInterface)
+    QScopedPointer<EmbeddedCompositorDBusInterfacePrivate> m_d;
 public:
-    explicit DBusClient(QObject *parent = nullptr);
-    ~DBusClient() override = default;
+    explicit EmbeddedCompositorDBusInterface(QObject *parent = nullptr);
+    ~EmbeddedCompositorDBusInterface() override;
 
     Q_INVOKABLE void openTaskSwitcher();
     Q_INVOKABLE void closeTaskSwitcher();
@@ -39,11 +39,6 @@ Q_SIGNALS:
     void notificationActionInvoked(unsigned int id, const QString &action);
     void notificationClosed(unsigned int id, unsigned int);
 
-private:
-    org::freedesktop::Notifications m_notificationsIface;
-    de::EmbeddedCompositor::globaloverlay m_overlayIface;
-    de::EmbeddedCompositor::screen m_screenIface;
-    de::EmbeddedCompositor::taskswitcher m_taskSwitcherIface;
 };
 
 #endif // DBUSCLIENT_H

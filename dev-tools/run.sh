@@ -21,7 +21,7 @@ else
   export COMPOSITOR_screenWidth=1280
   export COMPOSITOR_screenHeight=800
   export COMPOSITOR_screenSaverEnabled=true
-  export COMPOSITOR_screenSaverTimeoutSeconds=3
+  export COMPOSITOR_screenSaverTimeoutSeconds=300
   export COMPOSITOR_screenSaverMouseHoverSupport=true
   export COMPOSITOR_screenOrientation=0
   set | grep DBUS
