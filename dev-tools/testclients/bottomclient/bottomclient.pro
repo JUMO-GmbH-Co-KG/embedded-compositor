@@ -1,18 +1,8 @@
-QT       += core quick dbus
+QT += core quick dbus
 CONFIG += c++17
-SOURCES +=  main.cpp \
-    dbusclient.cpp
+SOURCES +=  main.cpp
 OTHER_FILES += main.qml
 RESOURCES += qml.qrc
 
+include($$top_srcdir/embeddedplatform/embeddedplatform.pri)
 include(../common.pri)
-
-QDBUSXML2CPP_INTERFACE_HEADER_FLAGS = -i $$top_srcdir/embedded-compositor/dbusinterface.h
-DBUS_INTERFACES += \
-    $$top_srcdir/dbus/de.EmbeddedCompositor.globaloverlay.xml \
-    $$top_srcdir/dbus/de.EmbeddedCompositor.screen.xml \
-    $$top_srcdir/dbus/de.EmbeddedCompositor.taskswitcher.xml \
-    $$top_srcdir/dbus/org.freedesktop.Notifications.xml
-
-HEADERS += \
-    dbusclient.h

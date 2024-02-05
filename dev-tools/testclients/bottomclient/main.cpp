@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#include "dbusclient.h"
+#include "embeddedcompositordbusclient.h"
 #include <QQmlContext>
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
@@ -17,10 +17,10 @@ int main(int argc, char *argv[]) {
                   "\teval `dbus-launch --auto-syntax`\n";
     return 1;
   }
-  qmlRegisterUncreatableType<DBusClient>("de.EmbeddedCompositor.dbusclient", 1,
+  qmlRegisterUncreatableType<EmbeddedCompositorDBusInterface>("de.EmbeddedCompositor.dbusclient", 1,
                                          0, "DbusClient", "singleton");
 
-  DBusClient dbusClient;
+  EmbeddedCompositorDBusInterface dbusClient;
 
   QQmlApplicationEngine appEngine;
   appEngine.rootContext()->setContextProperty("dbusClient", &dbusClient);
