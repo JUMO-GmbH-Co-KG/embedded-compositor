@@ -55,6 +55,9 @@ void WaylandInputRegion::updateRegion() {
   auto result = grabToImage(aligned.size());
   connect(result.data(), &QQuickItemGrabResult::ready, this, [=](){
       this->SetImage(result->image(), aligned);
+      // QSharedPointer captured into this lambda remains alive indefinitely.
+      // Disconnect, to dispose of the lambda and subsequently the object held by the shared pointer.
+      disconnect(result.data(), &QQuickItemGrabResult::ready, this, nullptr);
     });
 }
 
