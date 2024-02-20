@@ -12,6 +12,24 @@ WaylandInputRegion::WaylandInputRegion(QQuickItem* parent): QQuickItem(parent) {
     setFlag(QQuickItem::ItemHasContents);
 }
 
+bool WaylandInputRegion::active() const
+{
+    return m_active;
+}
+
+void WaylandInputRegion::setActive(bool active)
+{
+    if (m_active == active) {
+        return;
+    }
+
+    m_active = active;
+    if (isComponentComplete()) {
+        updateRegion();
+    }
+    Q_EMIT activeChanged(active);
+}
+
 void WaylandInputRegion::itemChange(ItemChange c, const ItemChangeData& d) {
     updateRegion();
     QQuickItem::itemChange(c,d);
@@ -42,6 +60,12 @@ void WaylandInputRegion::updateRegion() {
   if(window() == nullptr) {
       return;
   }
+
+  if (!m_active) {
+      window()->handle()->setMask(QRegion());
+      return;
+  }
+
   // if we have no item to create a mask from, we can just use ourselves as a rectangle
   auto mapped = mapRectToScene(boundingRect());
   auto aligned = mapped.toAlignedRect();
