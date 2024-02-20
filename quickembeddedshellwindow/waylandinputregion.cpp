@@ -9,7 +9,6 @@
 #include <QPainter>
 
 WaylandInputRegion::WaylandInputRegion(QQuickItem* parent): QQuickItem(parent) {
-    setFlag(QQuickItem::ItemHasContents);
 }
 
 void WaylandInputRegion::itemChange(ItemChange c, const ItemChangeData& d) {
