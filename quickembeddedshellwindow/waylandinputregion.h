@@ -18,6 +18,14 @@ class WaylandInputRegion : public QQuickItem
 public:
     explicit WaylandInputRegion(QQuickItem *parent = nullptr);
     Q_PROPERTY(bool pixelMask READ pixelMask WRITE setPixelMask NOTIFY pixelMaskChanged)
+    /**
+     * @brief Whether masking is active
+     *
+     * When set to false, the window mask is reset.
+     * Default is true.
+     */
+    Q_PROPERTY(bool active READ active WRITE setActive NOTIFY activeChanged)
+
 protected:
     void itemChange(ItemChange, const ItemChangeData &) override;
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
@@ -39,11 +47,16 @@ public:
         emit pixelMaskChanged(m_pixelMask);
     }
 
+    bool active() const;
+    void setActive(bool active);
+    Q_SIGNAL void activeChanged(bool active);
+
 signals:
     void pixelMaskChanged(bool mask);
 
 private:
     bool m_pixelMask = false;
+    bool m_active = true;
 };
 
 #endif // WAYLANDINPUTREGION_H
