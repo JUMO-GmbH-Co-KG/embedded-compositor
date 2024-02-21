@@ -13,6 +13,7 @@
 #include <sortfilterproxymodel.h>
 
 int main(int argc, char *argv[]) {
+  qInfo() << "Version: " << QStringLiteral(EMBEDDED_COMPOSITOR_VERSION);
   qputenv("QT_SCREEN_SCALE_FACTORS", "");
   qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "0");
 
