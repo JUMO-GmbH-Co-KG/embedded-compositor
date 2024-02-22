@@ -25,10 +25,12 @@ void QuickEmbeddedShellWindow::setAnchor(EmbeddedShellTypes::Anchor newAnchor) {
   emit anchorChanged(newAnchor);
 }
 
-EmbeddedShellSurfaceView *QuickEmbeddedShellWindow::createView(QString label,
+EmbeddedShellSurfaceView *QuickEmbeddedShellWindow::createView(const QString &appId,
+                                                               const QString &appLabel,
+                                                               const QString &label,
                                                                int sort_index) {
-  auto view = m_surface->createView(label, sort_index);
-  qCDebug(quickShell) << __PRETTY_FUNCTION__ << view << label;
+  auto view = m_surface->createView(appId, appLabel, label, sort_index);
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << appId << appLabel << view << label;
   return view;
 }
 

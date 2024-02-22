@@ -92,7 +92,8 @@ protected:
                                          uint32_t anchor) override;
   void embedded_shell_surface_view_create(Resource *resource,
                                           wl_resource *shell_surface,
-                                          const QString &label, int sort_index,
+                                          const QString &appId, const QString &appLabel, const QString &appIcon,
+                                          const QString &label, const QString &icon, int sort_index,
                                           uint32_t id) override;
   void embedded_shell_surface_set_margin(Resource *resource,
                                          int32_t margin) override;
@@ -103,16 +104,39 @@ protected:
 class EmbeddedShellSurfaceView : public QObject,
                                  public QtWaylandServer::surface_view {
   Q_OBJECT
+  Q_PROPERTY(QString appId READ appId WRITE setAppId NOTIFY appIdChanged)
+  Q_PROPERTY(QString appLabel READ appLabel WRITE setAppLabel NOTIFY appLabelChanged)
+  Q_PROPERTY(QString appIcon READ appIcon WRITE setAppIcon NOTIFY appIconChanged)
   Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
+  Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
   Q_PROPERTY(int sortIndex READ sortIndex NOTIFY sortIndexChanged)
   Q_PROPERTY(QString uuid READ getUuid CONSTANT)
 public:
-  EmbeddedShellSurfaceView(const QString &label, int32_t sort_index,
-                           wl_client *client, int id, int version)
-      : QtWaylandServer::surface_view(client, id, version), m_label(label),
-        m_sortIndex(sort_index) {}
-  const QString &label() const { return m_label; }
-  void setLabel(const QString &newLabel);
+  EmbeddedShellSurfaceView(const QString &appId, const QString &label, const QString &icon,
+                           int32_t sort_index, wl_client *client, int id, int version);
+  EmbeddedShellSurfaceView(const QString &appId, const QString &appLabel, const QString &appIcon,
+                           const QString &label, const QString &icon, int32_t sort_index,
+                           wl_client *client, int id, int version);
+
+  QString appId() const;
+  void setAppId(const QString &appId);
+  Q_SIGNAL void appIdChanged(const QString &appId);
+
+  QString appLabel() const;
+  void setAppLabel(const QString &appLabel);
+  Q_SIGNAL void appLabelChanged(const QString &appLabel);
+
+  QString appIcon() const;
+  void setAppIcon(const QString &appIcon);
+  Q_SIGNAL void appIconChanged(const QString &appIcon);
+
+  QString label() const;
+  void setLabel(const QString &label);
+  Q_SIGNAL void labelChanged(const QString &label);
+
+  QString icon() const;
+  void setIcon(const QString &icon);
+  Q_SIGNAL void iconChanged(const QString &icon);
 
   int sortIndex() const;
   void setSortIndex(int newSortIndex);
@@ -122,17 +146,23 @@ public:
 public slots:
   void select() { surface_view::send_selected(); }
 signals:
-  void labelChanged();
   void sortIndexChanged(int index);
 
 protected:
+  void surface_view_set_app_label(Resource *resource, const QString &label) override;
+  void surface_view_set_app_icon(Resource *resource, const QString &icon) override;
   void surface_view_set_label(Resource *resource, const QString &text) override;
+  void surface_view_set_icon(Resource *resource, const QString &icon) override;
   void surface_view_set_sort_index(Resource *resource,
                                    int32_t sort_index) override;
 
 private:
   QUuid m_uuid = QUuid::createUuid();
+  QString m_appId;
+  QString m_appLabel;
+  QString m_appIcon;
   QString m_label;
+  QString m_icon;
   int32_t m_sortIndex = 0;
 };
 

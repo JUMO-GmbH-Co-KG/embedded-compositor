@@ -46,10 +46,30 @@ void EmbeddedShellSurfacePrivate::embedded_shell_surface_configure(
 }
 
 EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
-                                                           int32_t sort_index) {
+                                                           const QString &icon,
+                                                           int32_t sort_index)
+{
+    return createView(QString(), QString(), QString(), label, icon, sort_index);
+}
+
+EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &appId,
+                                                           const QString &label,
+                                                           const QString &icon,
+                                                           int32_t sort_index)
+{
+    return createView(appId, QString(), QString(), label, icon, sort_index);
+}
+
+EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &appId,
+                                                           const QString &appLabel,
+                                                           const QString &appIcon,
+                                                           const QString &label,
+                                                           const QString &icon,
+                                                           int32_t sort_index)
+{
   Q_D(EmbeddedShellSurface);
   auto view =
-      d->view_create(d->embedded_shell_surface::object(), label, sort_index);
+      d->view_create(d->embedded_shell_surface::object(), appId, appLabel, appIcon, label, icon, sort_index);
   auto ret = new EmbeddedShellSurfaceView(view, this, label);
   return ret;
 }
