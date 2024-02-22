@@ -58,3 +58,6 @@ INSTALLS += target
 
 WAYLANDSERVERSOURCES += ../protocol/embedded-shell.xml
 INCLUDEPATH += $$top_srcdir/embeddedplatform
+
+EMBEDDED_COMPOSITOR_VERSION = $$system(git describe --tags --always)
+DEFINES += EMBEDDED_COMPOSITOR_VERSION=\\\"$$EMBEDDED_COMPOSITOR_VERSION\\\"
