@@ -33,7 +33,8 @@ export QT_LOGGING_RULES="embeddedshell.compositor.debug=false;embeddedshell.quic
 export COMPOSITOR_taskSwitcherUrl="file:$BUILD_ROOT/../embedded-compositor/dev-tools/example-components/GridSwitcher.qml"
 #export COMPOSITOR_globalOverlayUrl="file:$BUILD_ROOT/../embedded-compositor/dev-tools/example-components/AltBootScreen.qml"
 #export QT_DEBUG_PLUGINS=1
-$BUILD_ROOT/embedded-compositor/embedded-compositor &
+# Launch only the compositor with qtvirtualkeyboard input method.
+QT_IM_MODULE=qtvirtualkeyboard $BUILD_ROOT/embedded-compositor/embedded-compositor &
 compositor_pid=$!
 
 
@@ -53,6 +54,11 @@ export QML2_IMPORT_PATH=$BUILD_ROOT/quickembeddedshellwindow
 export LD_LIBRARY_PATH=$BUILD_ROOT/quickembeddedshellwindow/EmbeddedShell:$BUILD_ROOT/embeddedplatform
 
 echo "======  Launching Clients... ======"
+
+# Ensure that no input module (e.g. ibus) is set for our clients.
+# We want Qt Wayland Client to use its built-in zwp_text_input_v2 support.
+unset QT_IM_MODULE
+
 CLIENTS=$BUILD_ROOT/dev-tools/testclients
 
 $CLIENTS/leftclient/leftclient &

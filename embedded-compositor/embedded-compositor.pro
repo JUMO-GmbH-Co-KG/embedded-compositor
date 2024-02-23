@@ -1,4 +1,6 @@
 QT += core gui waylandcompositor waylandcompositor-private core-private gui-private quick dbus
+
+QT += virtualkeyboard svg
 CONFIG += c++17 wayland-scanner
 # CONFIG += sanitizer sanitize_address
 
