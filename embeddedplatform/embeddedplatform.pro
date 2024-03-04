@@ -27,6 +27,13 @@ HEADERS += \
 QMAKE_USE += wayland-client
 WAYLANDCLIENTSOURCES += ../protocol/embedded-shell.xml
 
+headers.path = /usr/include/embedded-compositor
+headers.files += embeddedplatform.h
+headers.files += embeddedshellanchor.h
+headers.files += embeddedshellsurface.h
+
+INSTALLS += headers
+
 target.path = /usr/lib
 INSTALLS += target
 
