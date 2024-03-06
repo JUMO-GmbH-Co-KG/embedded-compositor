@@ -14,6 +14,9 @@ import "Notifications"
 
 WaylandCompositor {
     objectName: "compositor"
+
+    TextInputManager { }
+
     XdgOutputManagerV1 {
         WaylandOutput {
             objectName: "output"
@@ -82,6 +85,11 @@ WaylandCompositor {
                 anchors.left: leftArea.right
                 anchors.right: rightArea.left
                 anchors.bottom: bottomArea.top
+
+                transform: Translate {
+                    y: keyboardLoader.contentYTranslate
+                }
+
                 border {
                     width: 1
                     color:"red"
@@ -159,6 +167,18 @@ WaylandCompositor {
                 function doSwitch(shellSurface, view)
                 {
                     centerArea.selectSurface(shellSurface, view);
+                }
+            }
+
+            Loader {
+                id: keyboardLoader
+                readonly property int contentYTranslate: item ? item.contentYTranslate : 0
+                source: "Keyboard.qml"
+                anchors.fill: parent
+                onStatusChanged: {
+                    if (status === Loader.Error) {
+                        console.warn("Failed to load virtual keyboard:", sourceComponent.errorString());
+                    }
                 }
             }
 

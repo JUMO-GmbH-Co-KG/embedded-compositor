@@ -59,9 +59,9 @@ void MainWindow::initShell(EmbeddedShellSurface *shellSurface,
     return;
   }
   shellSurface->sendAnchor(EmbeddedShellTypes::Anchor::Center);
-  auto v1 = shellSurface->createView("View One", 3);
-  auto v2 = shellSurface->createView("View Two", 2);
-  auto v3 = shellSurface->createView("View Three", 1);
+  auto v1 = shellSurface->createView("View One", "View One", 3);
+  auto v2 = shellSurface->createView("View Two", "View Two", 2);
+  auto v3 = shellSurface->createView("View Three", "View Three", 1);
   connect(v1, &EmbeddedShellSurfaceView::selected, this, [=] {
     m_label->setText(v1->label() +
                      QString(" %1x%2\norientation %3\nnative %4")

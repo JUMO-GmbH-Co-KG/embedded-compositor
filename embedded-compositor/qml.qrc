@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file>qml/DefaultTaskSwitcher/TaskSwitcher.qml</file>
         <file>qml/main.qml</file>
+        <file>qml/Keyboard.qml</file>
         <file>qml/Notifications/Notifications.qml</file>
         <file>qml/Notifications/Notification.qml</file>
         <file>qml/RootTransformer.qml</file>
