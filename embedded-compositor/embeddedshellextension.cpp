@@ -148,27 +148,149 @@ void EmbeddedShellSurface::embedded_shell_surface_set_anchor(Resource *resource,
 }
 
 void EmbeddedShellSurface::embedded_shell_surface_view_create(
-    Resource *resource, wl_resource *shell_surface, const QString &label,
-    int32_t sort_index, uint32_t id) {
+    Resource *resource, wl_resource *shell_surface, const QString &appId, const QString &appLabel, const QString &appIcon,
+    const QString &label, const QString &icon, int32_t sort_index, uint32_t id) {
   Q_UNUSED(shell_surface)
-  qCDebug(shellExt) << __PRETTY_FUNCTION__ << label << id;
-  auto view = new EmbeddedShellSurfaceView(label, sort_index,
+  qCDebug(shellExt) << __PRETTY_FUNCTION__ << appId << appLabel << appIcon << label << icon << id;
+  auto view = new EmbeddedShellSurfaceView(appId, appLabel, appIcon, label, icon, sort_index,
                                            resource->client(), id, 1);
   emit createView(view);
 }
 
-void EmbeddedShellSurfaceView::setLabel(const QString &newLabel) {
-  if (m_label == newLabel)
-    return;
-  m_label = newLabel;
-  emit labelChanged();
+EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(const QString &appId,
+                                                   const QString &label,
+                                                   const QString &icon,
+                                                   int32_t sort_index,
+                                                   wl_client *client,
+                                                   int id, int version)
+    : QtWaylandServer::surface_view(client, id, version)
+    , m_appId(appId)
+    , m_label(label)
+    , m_icon(icon)
+    , m_sortIndex(sort_index)
+{
 }
 
-void EmbeddedShellSurfaceView::surface_view_set_label(Resource *resource,
-                                                      const QString &text) {
-  qCDebug(shellExt) << __PRETTY_FUNCTION__ << text;
-  Q_UNUSED(resource)
-  setLabel(text);
+EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(const QString &appId,
+                                                   const QString &appLabel,
+                                                   const QString &appIcon,
+                                                   const QString &label,
+                                                   const QString &icon,
+                                                   int32_t sort_index,
+                                                   wl_client *client,
+                                                   int id, int version)
+    : QtWaylandServer::surface_view(client, id, version)
+    , m_appId(appId)
+    , m_appLabel(appLabel)
+    , m_appIcon(appIcon)
+    , m_label(label)
+    , m_icon(icon)
+    , m_sortIndex(sort_index)
+{
+}
+
+QString EmbeddedShellSurfaceView::appId() const
+{
+    return m_appId;
+}
+
+void EmbeddedShellSurfaceView::setAppId(const QString &appId)
+{
+    if (m_appId == appId) {
+        return;
+    }
+
+    // TODO prevent changing after it was initialized.
+    m_appId = appId;
+    Q_EMIT appIdChanged(appId);
+}
+
+QString EmbeddedShellSurfaceView::appLabel() const
+{
+    return m_appLabel;
+}
+
+void EmbeddedShellSurfaceView::setAppLabel(const QString &appLabel)
+{
+    if (m_appLabel == appLabel) {
+        return;
+    }
+
+    m_appLabel = appLabel;
+    Q_EMIT appLabelChanged(appLabel);
+}
+
+QString EmbeddedShellSurfaceView::appIcon() const
+{
+    return m_appIcon;
+}
+
+void EmbeddedShellSurfaceView::setAppIcon(const QString &appIcon)
+{
+    if (m_appIcon == appIcon) {
+        return;
+    }
+
+    m_appIcon = appIcon;
+    Q_EMIT appIconChanged(appIcon);
+}
+
+QString EmbeddedShellSurfaceView::label() const
+{
+    return m_label;
+}
+
+void EmbeddedShellSurfaceView::setLabel(const QString &label)
+{
+    if (m_label == label) {
+        return;
+    }
+
+    m_label = label;
+    Q_EMIT labelChanged(label);
+}
+
+QString EmbeddedShellSurfaceView::icon() const
+{
+    return m_icon;
+}
+
+void EmbeddedShellSurfaceView::setIcon(const QString &icon)
+{
+    if (m_icon == icon) {
+        return;
+    }
+
+    m_icon = icon;
+    Q_EMIT iconChanged(icon);
+}
+
+void EmbeddedShellSurfaceView::surface_view_set_app_label(Resource *resource, const QString &label)
+{
+    qCDebug(shellExt) << __PRETTY_FUNCTION__ << label;
+    Q_UNUSED(resource);
+    setAppLabel(label);
+}
+
+void EmbeddedShellSurfaceView::surface_view_set_app_icon(Resource *resource, const QString &icon)
+{
+    qCDebug(shellExt) << __PRETTY_FUNCTION__ << icon;
+    Q_UNUSED(resource);
+    setAppIcon(icon);
+}
+
+void EmbeddedShellSurfaceView::surface_view_set_label(Resource *resource, const QString &text)
+{
+    qCDebug(shellExt) << __PRETTY_FUNCTION__ << text;
+    Q_UNUSED(resource)
+    setLabel(text);
+}
+
+void EmbeddedShellSurfaceView::surface_view_set_icon(Resource *resource, const QString &icon)
+{
+    qCDebug(shellExt) << __PRETTY_FUNCTION__ << icon;
+    Q_UNUSED(resource)
+    setIcon(icon);
 }
 
 void EmbeddedShellSurface::embedded_shell_surface_set_margin(Resource *resource,

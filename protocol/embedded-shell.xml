@@ -27,8 +27,19 @@
 		</event>
 
 		<request name="view_create">
+			<description summary="create an embedded shell surface_view">
+				Creates an Embedded Shell Surface.
+
+				The app_id identifies the logical application this surface belongs to.
+				The app_label can be empty at which point the label will be used.
+				The app_icon can be empty at which point the icon will be used.
+			</description>
 			<arg name="shell_surface" type="object" interface="embedded_shell_surface" />
-			<arg name="label" type="string" />
+			<arg name="app_id" type="string" summary="The application ID"/>
+			<arg name="app_label" type="string" summary="The user-visible name of the application"/>
+			<arg name="app_icon" type="string" summary="The icon name of the application"/>
+			<arg name="label" type="string" summary="The user-visible label for this particular view"/>
+			<arg name="icon" type="string" summary="The icon name of this particular view"/>
 			<arg name="sort_index" type="int" />
 			<arg name="new_view_id" type="new_id" interface="surface_view" />
 		</request>
@@ -59,7 +70,19 @@
 	</interface>
 
 	<interface name="surface_view" version="1">
+		<request name="set_app_label">
+			<description summary="Set the user-visible application name"/>
+			<arg name="label" type="string" />
+		</request>
+		<request name="set_app_icon">
+			<description summary="Set the application icon name"/>
+			<arg name="label" type="string" />
+		</request>
 		<request name="set_label">
+			<arg name="text" type="string" />
+		</request>
+		<request name="set_icon">
+			<description summary="Set the icon name for this view"/>
 			<arg name="text" type="string" />
 		</request>
 		<request name="set_sort_index">

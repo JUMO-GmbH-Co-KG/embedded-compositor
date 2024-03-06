@@ -53,8 +53,13 @@ class QAbstractListModel;
 
 struct TaskSwitcherEntry {
   QString uuid;
+  QString appId;
+  QString appLabel;
+  QString appIcon;
   QString label;
-  int pid;
+  QString icon;
+  uint32_t pid;
+  QVariantMap args; // for future extension
 };
 
 Q_DECLARE_METATYPE(TaskSwitcherEntry)

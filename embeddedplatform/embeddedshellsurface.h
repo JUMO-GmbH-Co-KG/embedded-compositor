@@ -34,6 +34,17 @@ public:
   EmbeddedShellTypes::Anchor getAnchor() const;
   int getSortIndex() const;
   EmbeddedShellSurfaceView *createView(const QString &label,
+                                       const QString &icon,
+                                       int32_t sort_index);
+  EmbeddedShellSurfaceView *createView(const QString &appId,
+                                       const QString &label,
+                                       const QString &icon,
+                                       int32_t sort_index);
+  EmbeddedShellSurfaceView *createView(const QString &appId,
+                                       const QString &appLabel,
+                                       const QString &appIcon,
+                                       const QString &label,
+                                       const QString &icon,
                                        int32_t sort_index);
 
   QtWaylandClient::QWaylandShellSurface *shellSurface();

@@ -42,7 +42,7 @@ public:
   void setSortIndex(int sortIndex);
 
 public slots:
-  EmbeddedShellSurfaceView *createView(QString label, int sort_index);
+  EmbeddedShellSurfaceView *createView(const QString &appId, const QString &appLabel, const QString &label, int sort_index);
 
 signals:
   void anchorChanged(EmbeddedShellTypes::Anchor anchor);
