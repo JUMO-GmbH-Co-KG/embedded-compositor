@@ -31,7 +31,8 @@ headers.path = /usr/include/embedded-compositor
 headers.files += \
     embeddedplatform.h \
     embeddedshellanchor.h \
-    embeddedshellsurface.h
+    embeddedshellsurface.h \
+    embeddedcompositordbusclient.h \
 
 INSTALLS += headers
 
