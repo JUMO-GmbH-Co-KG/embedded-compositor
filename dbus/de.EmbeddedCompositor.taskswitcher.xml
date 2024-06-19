@@ -6,8 +6,8 @@
 <method name="Open"/>
 <method name="Close"/>
 <property name="currentView" type="s" access="readwrite"/>
-<!-- app id, app label, app icon, view label, view icon, pid, properties -->
-<property name="views" type="a(ssssssia{sv})"  access="read" >
+<!-- app id, app label, app icon, view label, view icon, pid, sort index, properties -->
+<property name="views" type="a(ssssssiia{sv})"  access="read" >
     <annotation name="org.qtproject.QtDBus.QtTypeName" value="QList&lt;TaskSwitcherEntry&gt;"/>
 </property>
 </interface>
