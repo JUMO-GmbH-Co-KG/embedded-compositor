@@ -52,12 +52,12 @@ EmbeddedShellIntegration::createShellSurface(
   if (prop.isValid())
     margin = prop.toUInt();
 
-  int32_t sort_index = 0;
+  uint32_t sort_index = 0;
 
   auto env_sort_index = qgetenv("EMBEDDED_SHELL_SORT_INDEX");
   if (!env_sort_index.isNull()) {
     bool ok = false;
-    sort_index = env_sort_index.toInt(&ok);
+    sort_index = env_sort_index.toUInt(&ok);
     if (!ok) {
       qWarning() << "failed to read sort index from EMBEDDED_SORT_INDEX:"
                  << env_sort_index << "is not an integer";
@@ -66,7 +66,7 @@ EmbeddedShellIntegration::createShellSurface(
 
   prop = window->window()->property("sortIndex");
   if (prop.isValid())
-    sort_index = prop.toInt();
+    sort_index = prop.toUInt();
 
   auto ess = m_shell->createSurface(window, anchor, margin, sort_index);
 

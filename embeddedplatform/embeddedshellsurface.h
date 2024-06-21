@@ -28,24 +28,24 @@ public:
   EmbeddedShellSurface(struct ::embedded_shell_surface *shell_surface,
                        QtWaylandClient::QWaylandWindow *window,
                        EmbeddedShellTypes::Anchor anchor, uint32_t margin,
-                       int32_t sort_index);
+                       uint32_t sort_index);
   ~EmbeddedShellSurface() override;
 
   EmbeddedShellTypes::Anchor getAnchor() const;
-  int getSortIndex() const;
+  unsigned int getSortIndex() const;
   EmbeddedShellSurfaceView *createView(const QString &label,
                                        const QString &icon,
-                                       int32_t sort_index);
+                                       uint32_t sort_index);
   EmbeddedShellSurfaceView *createView(const QString &appId,
                                        const QString &label,
                                        const QString &icon,
-                                       int32_t sort_index);
+                                       uint32_t sort_index);
   EmbeddedShellSurfaceView *createView(const QString &appId,
                                        const QString &appLabel,
                                        const QString &appIcon,
                                        const QString &label,
                                        const QString &icon,
-                                       int32_t sort_index);
+                                       uint32_t sort_index);
 
   QtWaylandClient::QWaylandShellSurface *shellSurface();
 signals:
@@ -53,7 +53,7 @@ signals:
 public slots:
   void sendAnchor(EmbeddedShellTypes::Anchor anchor);
   void sendMargin(int margin);
-  void sendSortIndex(int sortIndex);
+  void sendSortIndex(unsigned int sortIndex);
 };
 
 class EmbeddedShellSurfaceView : public QObject {

@@ -28,7 +28,7 @@ public:
   EmbeddedShell();
   EmbeddedShellSurface *createSurface(QtWaylandClient::QWaylandWindow *window,
                                       EmbeddedShellTypes::Anchor anchor,
-                                      uint32_t margin, int sort_index);
+                                      uint32_t margin, unsigned int sort_index);
   const struct wl_interface *extensionInterface() const override;
   void bind(struct ::wl_registry *registry, int id, int ver) override;
 };

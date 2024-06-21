@@ -35,7 +35,7 @@ void EmbeddedShellExtension::initialize() {
 
 void EmbeddedShellExtension::embedded_shell_surface_create(
     Resource *resource, wl_resource *wl_surface, uint32_t id, uint32_t anchor,
-    uint32_t margin, int sort_index) {
+    uint32_t margin, unsigned int sort_index) {
   qCDebug(shellExt) << __PRETTY_FUNCTION__ << id << "anchor" << anchor
                     << "margin" << margin;
   Q_UNUSED(resource)
@@ -65,7 +65,7 @@ EmbeddedShellSurface::EmbeddedShellSurface(EmbeddedShellExtension *ext,
                                            QWaylandSurface *surface,
                                            const QWaylandResource &resource,
                                            EmbeddedShellTypes::Anchor anchor,
-                                           uint32_t margin, int32_t sort_index)
+                                           uint32_t margin, uint32_t sort_index)
     : QWaylandShellSurfaceTemplate<EmbeddedShellSurface>(this),
       m_surface(surface), m_anchor(anchor), m_margin(margin),
       m_sort_index(sort_index) {
@@ -89,7 +89,7 @@ void EmbeddedShellSurface::setMargin(int newMargin) {
   emit marginChanged(newMargin);
 }
 
-void EmbeddedShellSurface::setSortIndex(int sort_index) {
+void EmbeddedShellSurface::setSortIndex(unsigned int sort_index) {
   m_sort_index = sort_index;
   emit sortIndexChanged(sort_index);
 }
@@ -149,7 +149,7 @@ void EmbeddedShellSurface::embedded_shell_surface_set_anchor(Resource *resource,
 
 void EmbeddedShellSurface::embedded_shell_surface_view_create(
     Resource *resource, wl_resource *shell_surface, const QString &appId, const QString &appLabel, const QString &appIcon,
-    const QString &label, const QString &icon, int32_t sort_index, uint32_t id) {
+    const QString &label, const QString &icon, uint32_t sort_index, uint32_t id) {
   Q_UNUSED(shell_surface)
   qCDebug(shellExt) << __PRETTY_FUNCTION__ << appId << appLabel << appIcon << label << icon << id;
   auto view = new EmbeddedShellSurfaceView(appId, appLabel, appIcon, label, icon, sort_index,
@@ -160,7 +160,7 @@ void EmbeddedShellSurface::embedded_shell_surface_view_create(
 EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(const QString &appId,
                                                    const QString &label,
                                                    const QString &icon,
-                                                   int32_t sort_index,
+                                                   uint32_t sort_index,
                                                    wl_client *client,
                                                    int id, int version)
     : QtWaylandServer::surface_view(client, id, version)
@@ -176,7 +176,7 @@ EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(const QString &appId,
                                                    const QString &appIcon,
                                                    const QString &label,
                                                    const QString &icon,
-                                                   int32_t sort_index,
+                                                   uint32_t sort_index,
                                                    wl_client *client,
                                                    int id, int version)
     : QtWaylandServer::surface_view(client, id, version)
@@ -301,15 +301,15 @@ void EmbeddedShellSurface::embedded_shell_surface_set_margin(Resource *resource,
 }
 
 void EmbeddedShellSurface::embedded_shell_surface_set_sort_index(
-    Resource *resource, int32_t sort_index) {
+    Resource *resource, uint32_t sort_index) {
   qCDebug(shellExt) << __PRETTY_FUNCTION__ << sort_index;
   Q_UNUSED(resource)
   setSortIndex(sort_index);
 }
 
-int EmbeddedShellSurfaceView::sortIndex() const { return m_sortIndex; }
+unsigned int EmbeddedShellSurfaceView::sortIndex() const { return m_sortIndex; }
 
-void EmbeddedShellSurfaceView::setSortIndex(int newSortIndex) {
+void EmbeddedShellSurfaceView::setSortIndex(unsigned int newSortIndex) {
   if (m_sortIndex == newSortIndex)
     return;
   m_sortIndex = newSortIndex;
@@ -321,7 +321,7 @@ QString EmbeddedShellSurfaceView::getUuid() const {
 }
 
 void EmbeddedShellSurfaceView::surface_view_set_sort_index(Resource *resource,
-                                                           int32_t sort_index) {
+                                                           uint32_t sort_index) {
   Q_UNUSED(resource)
   setSortIndex(sort_index);
 }
