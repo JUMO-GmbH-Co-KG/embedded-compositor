@@ -214,7 +214,7 @@ void TaskSwitcherInterface::publishViews() {
         view ? view->label() : "surface",
         view ? view->icon() : QString(),
         uint32_t(surface->getClientPid()),
-        view ? int32_t(view->sortIndex()) : 0,
+        view ? uint32_t(view->sortIndex()) : 0,
         QVariantMap(), //args
     });
   }
