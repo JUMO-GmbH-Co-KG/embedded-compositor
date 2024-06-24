@@ -59,6 +59,7 @@ struct TaskSwitcherEntry {
   QString label;
   QString icon;
   uint32_t pid;
+  uint32_t sortIndex;
   QVariantMap args; // for future extension
 };
 

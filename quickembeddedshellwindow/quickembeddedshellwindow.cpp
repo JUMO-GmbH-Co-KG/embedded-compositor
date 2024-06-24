@@ -28,7 +28,7 @@ void QuickEmbeddedShellWindow::setAnchor(EmbeddedShellTypes::Anchor newAnchor) {
 EmbeddedShellSurfaceView *QuickEmbeddedShellWindow::createView(const QString &appId,
                                                                const QString &appLabel,
                                                                const QString &label,
-                                                               int sort_index) {
+                                                               unsigned int sort_index) {
   auto view = m_surface->createView(appId, appLabel, label, sort_index);
   qCDebug(quickShell) << __PRETTY_FUNCTION__ << appId << appLabel << view << label;
   return view;
@@ -61,9 +61,9 @@ void QuickEmbeddedShellWindow::setMargin(int newMargin) {
   emit marginChanged(newMargin);
 }
 
-int QuickEmbeddedShellWindow::sortIndex() const { return m_sortIndex; }
+unsigned int QuickEmbeddedShellWindow::sortIndex() const { return m_sortIndex; }
 
-void QuickEmbeddedShellWindow::setSortIndex(int sortIndex) {
+void QuickEmbeddedShellWindow::setSortIndex(unsigned int sortIndex) {
   qCDebug(quickShell) << __PRETTY_FUNCTION__ << sortIndex;
   if (m_sortIndex == sortIndex)
     return;

@@ -10,7 +10,7 @@
 			<arg name="anchor" type="uint" />
 		</request>
 		<request name="set_sort_index">
-			<arg name="sort_index" type="int" />
+			<arg name="sort_index" type="uint" />
 		</request>
 		<request name="set_margin">
 			<arg name="margin" type="int" />
@@ -40,7 +40,7 @@
 			<arg name="app_icon" type="string" summary="The icon name of the application"/>
 			<arg name="label" type="string" summary="The user-visible label for this particular view"/>
 			<arg name="icon" type="string" summary="The icon name of this particular view"/>
-			<arg name="sort_index" type="int" />
+			<arg name="sort_index" type="uint" />
 			<arg name="new_view_id" type="new_id" interface="surface_view" />
 		</request>
 	</interface>
@@ -51,7 +51,7 @@
 			<arg name="new_shellsurface_id" type="new_id" interface="embedded_shell_surface" />
 			<arg name="anchor" type="uint" />
 			<arg name="margin" type="uint" />
-			<arg name="sort_index" type="int" />
+			<arg name="sort_index" type="uint" />
 		</request>
 
 		<enum name="error">
@@ -86,7 +86,7 @@
 			<arg name="text" type="string" />
 		</request>
 		<request name="set_sort_index">
-			<arg name="sort_index" type="int" />
+			<arg name="sort_index" type="uint" />
 		</request>
 		<event name="selected"></event>
 		<request name="destroy" type="destructor"></request>

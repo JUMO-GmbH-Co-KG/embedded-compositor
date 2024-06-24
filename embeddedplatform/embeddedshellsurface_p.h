@@ -17,7 +17,7 @@ public:
   EmbeddedShellSurfacePrivate(struct ::embedded_shell_surface *shell_surface,
                               QtWaylandClient::QWaylandWindow *window,
                               EmbeddedShellTypes::Anchor anchor,
-                              uint32_t margin, int32_t sort_index);
+                              uint32_t margin, uint32_t sort_index);
   ~EmbeddedShellSurfacePrivate() override;
   EmbeddedShellTypes::Anchor getAnchor() const { return m_anchor; }
   uint32_t getMargin() const { return m_margin; }
@@ -27,7 +27,7 @@ public:
 private:
   EmbeddedShellTypes::Anchor m_anchor;
   uint32_t m_margin = 0;
-  int32_t m_sort_index = 0;
+  uint32_t m_sort_index = 0;
   QSize m_pendingSize = {0, 0};
   EmbeddedShellSurface *q_ptr = nullptr;
 

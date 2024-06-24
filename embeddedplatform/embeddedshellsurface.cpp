@@ -9,7 +9,7 @@
 EmbeddedShellSurface::EmbeddedShellSurface(
     struct ::embedded_shell_surface *shell_surface,
     QtWaylandClient::QWaylandWindow *window, EmbeddedShellTypes::Anchor anchor,
-    uint32_t margin, int32_t sort_index)
+    uint32_t margin, uint32_t sort_index)
     : d_ptr(new EmbeddedShellSurfacePrivate(shell_surface, window, anchor,
                                             margin, sort_index)) {}
 
@@ -18,7 +18,7 @@ EmbeddedShellSurface::~EmbeddedShellSurface() {}
 EmbeddedShellSurfacePrivate::EmbeddedShellSurfacePrivate(
     struct ::embedded_shell_surface *shell_surface,
     QtWaylandClient::QWaylandWindow *window, EmbeddedShellTypes::Anchor anchor,
-    uint32_t margin, int32_t sort_index)
+    uint32_t margin, uint32_t sort_index)
     : QWaylandShellSurface(window), QtWayland::embedded_shell_surface(
                                         shell_surface),
       m_anchor(anchor), m_margin(margin), m_sort_index(sort_index) {}
@@ -30,7 +30,7 @@ EmbeddedShellTypes::Anchor EmbeddedShellSurface::getAnchor() const {
   return d->m_anchor;
 }
 
-int EmbeddedShellSurface::getSortIndex() const {
+unsigned int EmbeddedShellSurface::getSortIndex() const {
   Q_D(const EmbeddedShellSurface);
   return d->m_sort_index;
 }
@@ -47,7 +47,7 @@ void EmbeddedShellSurfacePrivate::embedded_shell_surface_configure(
 
 EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
                                                            const QString &icon,
-                                                           int32_t sort_index)
+                                                           uint32_t sort_index)
 {
     return createView(QString(), QString(), QString(), label, icon, sort_index);
 }
@@ -55,7 +55,7 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
 EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &appId,
                                                            const QString &label,
                                                            const QString &icon,
-                                                           int32_t sort_index)
+                                                           uint32_t sort_index)
 {
     return createView(appId, QString(), QString(), label, icon, sort_index);
 }
@@ -65,7 +65,7 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &appId,
                                                            const QString &appIcon,
                                                            const QString &label,
                                                            const QString &icon,
-                                                           int32_t sort_index)
+                                                           uint32_t sort_index)
 {
   Q_D(EmbeddedShellSurface);
   auto view =
@@ -88,7 +88,7 @@ void EmbeddedShellSurface::sendMargin(int margin) {
   d->set_margin(margin);
 }
 
-void EmbeddedShellSurface::sendSortIndex(int sortIndex) {
+void EmbeddedShellSurface::sendSortIndex(unsigned int sortIndex) {
   Q_D(EmbeddedShellSurface);
   d->set_sort_index(sortIndex);
 }

@@ -146,7 +146,7 @@ const QList<TaskSwitcherEntry> &TaskSwitcherInterface::views() const {
 QDBusArgument &operator<<(QDBusArgument &argument,
                           const TaskSwitcherEntry &entry) {
   argument.beginStructure();
-  argument << entry.uuid << entry.appId << entry.appLabel << entry.appIcon << entry.label << entry.icon << entry.pid << entry.args;
+  argument << entry.uuid << entry.appId << entry.appLabel << entry.appIcon << entry.label << entry.icon << entry.pid << entry.sortIndex << entry.args;
   argument.endStructure();
   return argument;
 }
@@ -154,7 +154,7 @@ QDBusArgument &operator<<(QDBusArgument &argument,
 const QDBusArgument &operator>>(const QDBusArgument &argument,
                                 TaskSwitcherEntry &entry) {
   argument.beginStructure();
-  argument >> entry.uuid >> entry.appId >> entry.appLabel >> entry.appIcon >> entry.label >> entry.icon >> entry.pid >> entry.args;
+  argument >> entry.uuid >> entry.appId >> entry.appLabel >> entry.appIcon >> entry.label >> entry.icon >> entry.pid >> entry.sortIndex >> entry.args;
   argument.endStructure();
   return argument;
 }
@@ -214,6 +214,7 @@ void TaskSwitcherInterface::publishViews() {
         view ? view->label() : "surface",
         view ? view->icon() : QString(),
         uint32_t(surface->getClientPid()),
+        view ? uint32_t(view->sortIndex()) : 0,
         QVariantMap(), //args
     });
   }
