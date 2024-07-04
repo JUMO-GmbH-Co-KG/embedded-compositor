@@ -116,6 +116,7 @@ WaylandCompositor {
                         if(window.shellSurface === shellSurface) {
                             window.currentView = view;
                             surfaceItem = window;
+                            taskSwitcherInterface.currentView = surfaceItem.uuid;
                             break;
                         }
                     }
