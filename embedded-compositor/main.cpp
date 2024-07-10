@@ -11,6 +11,7 @@
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
 #include <sortfilterproxymodel.h>
+#include "ScreenShotInterface.hpp"
 
 int main(int argc, char *argv[]) {
   qInfo() << "Version: " << QStringLiteral(EMBEDDED_COMPOSITOR_VERSION);
@@ -60,6 +61,8 @@ int main(int argc, char *argv[]) {
                                         "SortFilterProxyModel");
 
   QQmlApplicationEngine appEngine;
+  ScreenShotInterface screenShot(&appEngine);
+
   bool exitOnQmlWarning = qgetenv("QML_WARNING_EXIT") == "1";
   QObject::connect(&appEngine, &QQmlApplicationEngine::warnings,
                    [=](auto &warnings) {

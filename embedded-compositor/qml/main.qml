@@ -48,6 +48,7 @@ WaylandCompositor {
 
     Window {
         id: window
+        objectName: "compositorWindow"
         // the window tracks the physical screen dimensions
         width: configuration.screenWidth
         height: configuration.screenHeight
