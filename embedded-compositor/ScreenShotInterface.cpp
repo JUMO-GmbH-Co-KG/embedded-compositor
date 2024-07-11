@@ -13,16 +13,15 @@
 #include <QImage>
 #include <QDateTime>
 #include <QDebug>
-#include <QQuickWindow>
 
 
 ScreenShotInterface::ScreenShotInterface(QQmlApplicationEngine *engine, QObject *parent)
     : DBusInterface(QStringLiteral("/screenshot"), parent),
     m_pEngine(engine),
     m_ImageQuality(50),
-    m_ImageFormat("PNG"),
-    m_FileExtension(".png"),
-    m_BaseFileName("screenshot_")
+    m_pImageFormat("PNG"),
+    m_FileExtension(QStringLiteral(".png")),
+    m_BaseFileName(QStringLiteral("screenshot_"))
 {
     new ScreenshotAdaptor(this);
 
@@ -46,33 +45,43 @@ QString ScreenShotInterface::generateFilename() const
     return concateFileName;
 }
 
-QString ScreenShotInterface::ScreenShot(const QString storePath)
+QQuickWindow* ScreenShotInterface::retieveQWindow() const
 {
-    QString fileSavePath = {};
     if (m_pEngine)
     {
-        QObject *rootObject = m_pEngine->rootObjects().first();
-        if (rootObject)
+        for (auto* pRootObject : m_pEngine->rootObjects())
         {
-            QQuickWindow* qmlQuickWindow = qobject_cast<QQuickWindow*>(
-                rootObject->findChild<QObject*>("compositorWindow") );
-            if (qmlQuickWindow)
+            if (pRootObject)
             {
-                QImage capturedWindowImage = qmlQuickWindow->grabWindow();   
-                fileSavePath = storePath + "/" + generateFilename();
-                if (false == capturedWindowImage.save(fileSavePath, m_ImageFormat, m_ImageQuality))
+                QQuickWindow* pQmlQuickWindow = qobject_cast<QQuickWindow*>(
+                    pRootObject->findChild<QObject*>("compositorWindow") );
+                if (pQmlQuickWindow)
                 {
-                    qDebug() << "Could not save Screenshot !";
-                    return {};
+                    return pQmlQuickWindow;
                 }
             }
-            else
-            {
-                qDebug() << "Could not retrieve QML window object !";
-            }
+        }
+    }
+
+    qDebug() << "Could not retrieve QML window object !";
+
+    return nullptr;
+}
+
+QString ScreenShotInterface::ScreenShot(const QString& storePath)
+{
+    QString fileSavePath;
+    QQuickWindow* pQuickWindow = retieveQWindow();
+    if (pQuickWindow)
+    {
+        QImage capturedWindowImage = pQuickWindow->grabWindow();
+        fileSavePath = storePath + "/" + generateFilename();
+        if (false == capturedWindowImage.save(fileSavePath, m_pImageFormat, m_ImageQuality))
+        {
+            qDebug() << "Could not save Screenshot !";
+            return QString();
         }
     }
 
     return fileSavePath;
 }
-

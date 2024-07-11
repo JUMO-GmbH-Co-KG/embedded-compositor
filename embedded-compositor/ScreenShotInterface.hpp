@@ -15,10 +15,13 @@
 
 #pragma once
 
+#include "dbusinterface.h"
+
 #include <QObject>
 #include <QQmlApplicationEngine>
+#include <QQuickWindow>
 #include <QString>
-#include "dbusinterface.h"
+
 
 class ScreenShotInterface : public DBusInterface
 {
@@ -28,16 +31,17 @@ public:
     explicit ScreenShotInterface(QQmlApplicationEngine *pEngine,  QObject *parent = 0);
     virtual ~ScreenShotInterface() = default;
 
-    QString ScreenShot(const QString storePath);
+    QString ScreenShot(const QString& storePath);
 
 private:
     QString getISODate() const;
     QString generateFilename() const;
+    QQuickWindow* retieveQWindow() const;
 
     QQmlApplicationEngine* m_pEngine;
 
     const int m_ImageQuality;
-    const char* m_ImageFormat;
+    const char* m_pImageFormat;
     const QString m_FileExtension;
     const QString m_BaseFileName;
 };
