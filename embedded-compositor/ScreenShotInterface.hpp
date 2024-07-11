@@ -28,7 +28,7 @@ public:
     explicit ScreenShotInterface(QQmlApplicationEngine *pEngine,  QObject *parent = 0);
     virtual ~ScreenShotInterface() = default;
 
-    QString ScreenShot();
+    QString ScreenShot(const QString storePath);
 
 private:
     QString getISODate() const;
@@ -40,7 +40,6 @@ private:
     const char* m_ImageFormat;
     const QString m_FileExtension;
     const QString m_BaseFileName;
-    QString m_FilePath;
 };
 
 

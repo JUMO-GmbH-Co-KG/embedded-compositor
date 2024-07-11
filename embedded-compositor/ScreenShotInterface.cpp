@@ -22,18 +22,12 @@ ScreenShotInterface::ScreenShotInterface(QQmlApplicationEngine *engine, QObject 
     m_ImageQuality(50),
     m_ImageFormat("PNG"),
     m_FileExtension(".png"),
-    m_BaseFileName("screenshot_"),
-    m_FilePath( QDir::currentPath() + "/" )
+    m_BaseFileName("screenshot_")
 {
     new ScreenshotAdaptor(this);
 
     // register object by dbus service name
     componentComplete();
-
-    if (m_FilePath.compare("//") == 0)
-    {
-        m_FilePath = "/jupiter/tmp/";
-    }
 }
 
 QString ScreenShotInterface::getISODate() const
@@ -52,9 +46,9 @@ QString ScreenShotInterface::generateFilename() const
     return concateFileName;
 }
 
-QString ScreenShotInterface::ScreenShot()
+QString ScreenShotInterface::ScreenShot(const QString storePath)
 {
-    QString filePath = {};
+    QString fileSavePath = {};
     if (m_pEngine)
     {
         QObject *rootObject = m_pEngine->rootObjects().first();
@@ -65,19 +59,20 @@ QString ScreenShotInterface::ScreenShot()
             if (qmlQuickWindow)
             {
                 QImage capturedWindowImage = qmlQuickWindow->grabWindow();   
-                QString fileSavePath = m_FilePath + generateFilename();
-                if (capturedWindowImage.save(fileSavePath, m_ImageFormat, m_ImageQuality))
-                {
-                    filePath = fileSavePath;
-                }
-                else
+                fileSavePath = storePath + "/" + generateFilename();
+                if (false == capturedWindowImage.save(fileSavePath, m_ImageFormat, m_ImageQuality))
                 {
                     qDebug() << "Could not save Screenshot !";
+                    return {};
                 }
+            }
+            else
+            {
+                qDebug() << "Could not retrieve QML window object !";
             }
         }
     }
 
-    return filePath;
+    return fileSavePath;
 }
 

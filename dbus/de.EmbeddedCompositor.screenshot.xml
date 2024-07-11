@@ -4,6 +4,7 @@
 <interface name="de.EmbeddedCompositor.screenshot">
 <method name="ScreenShot">
     <arg name="filepath" type="s" direction="out"/>
+    <arg name="storepath" type="s" direction="in"/>
 </method>
 </interface>
 </node>
