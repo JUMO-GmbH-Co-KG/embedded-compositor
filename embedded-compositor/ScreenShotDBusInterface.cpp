@@ -31,16 +31,15 @@ ScreenShotDBusInterface::ScreenShotDBusInterface(QQmlApplicationEngine *engine, 
 
 QString ScreenShotDBusInterface::getISODate() const
 {
-    QDateTime dateTime;
-    dateTime = QDateTime::currentDateTime();
-    QString strDateTime = dateTime.toString(Qt::ISODate);
+    const QDateTime dateTime = QDateTime::currentDateTime();
+    const QString strDateTime = dateTime.toString(Qt::ISODate);
 
     return strDateTime;
 }
 
 QString ScreenShotDBusInterface::generateFilename() const
 {
-    QString concateFileName = m_BaseFileName + getISODate() + m_FileExtension;
+    const QString concateFileName = m_BaseFileName + getISODate() + m_FileExtension;
 
     return concateFileName;
 }
