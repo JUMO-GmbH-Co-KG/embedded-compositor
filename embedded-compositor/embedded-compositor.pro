@@ -12,12 +12,14 @@ use_system_bus {
 }
 
 SOURCES +=  main.cpp \
+            ScreenShotDBusInterface.cpp \
             configurationhive.cpp \
             dbusinterface.cpp \
             embeddedshellextension.cpp \
             notificationmodel.cpp \
             sortfilterproxymodel.cpp
 HEADERS +=  embeddedshellextension.h \
+            ScreenShotDBusInterface.hpp \
             configurationhive.h \
             dbus-selector.h \
             dbusinterface.h \
@@ -28,7 +30,6 @@ OTHER_FILES += \
     qml/main.qml \
     qml/DefaultTaskSwitcher/TaskSwitcher.qml \
     qml/Notifications/Notifications.qml \
-    qml/Notifications/Notification.qml
 
 # NOTE There appears to be no easy way to specify the parent class of qdbusxml2cpp through QMake.
 globaloverlay_adaptor.files = ../dbus/de.EmbeddedCompositor.globaloverlay.xml
@@ -47,11 +48,16 @@ notifications_adaptor.files = ../dbus/org.freedesktop.Notifications.xml
 notifications_adaptor.header_flags = -l NotificationModel -i notificationmodel.h
 notifications_adaptor.source_flags = -l NotificationModel
 
+screenshot_adaptor.files = ../dbus/de.EmbeddedCompositor.screenshot.xml
+screenshot_adaptor.header_flags = -l ScreenShotDBusInterface -i ScreenShotDBusInterface.hpp
+screenshot_adaptor.source_flags = -l ScreenShotDBusInterface
+
 DBUS_ADAPTORS += \
     globaloverlay_adaptor \
     screen_adaptor \
     taskswitcher_adaptor \
-    notifications_adaptor
+    notifications_adaptor \
+    screenshot_adaptor
 
 RESOURCES += qml.qrc
 
