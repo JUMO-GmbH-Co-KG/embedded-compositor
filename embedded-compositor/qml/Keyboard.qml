@@ -33,14 +33,37 @@ Item {
     InputPanel {
         id: inputPanel
         visible: y < parent.height
-        y: active ? parent.height - height : parent.height
         anchors.left: parent.left
         anchors.right: parent.right
-        Behavior on y {
-            NumberAnimation { }
-        }
         onYChanged: Qt.callLater(keyboardContainer.updateTranslate)
         onHeightChanged: Qt.callLater(keyboardContainer.updateTranslate)
         onVisibleChanged: keyboardContainer.updateTranslate()
+
+        states: [
+            State {
+                name: "VISIBLE"
+                when: inputPanel.active
+                PropertyChanges {
+                    target: inputPanel
+                    y: inputPanel.parent.height - inputPanel.height
+                }
+            },
+            State {
+                name: "HIDDEN"
+                when: !inputPanel.active
+                PropertyChanges {
+                    target: inputPanel
+                    y: inputPanel.parent.height
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                NumberAnimation {
+                    property: "y"
+                }
+            }
+        ]
     }
 }
