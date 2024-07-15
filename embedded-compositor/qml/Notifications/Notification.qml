@@ -9,10 +9,10 @@ Rectangle {
     signal dismissed
     signal actionInvoked(string action)
 
-    required property string summary
-    required property string body
-    required property var actionNames
-    required property var actionLabels
+    property string summary
+    property string body
+    property var actionNames
+    property var actionLabels
 
     color: "#202040"
     Rectangle {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 import QtQuick 2.0
-import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 import de.EmbeddedCompositor.dbus 1.0
 import de.EmbeddedCompositor.utility 1.0
 
@@ -13,24 +13,37 @@ Rectangle {
         id: notifications
     }
 
-    StackLayout {
-        id: list
+    StackView {
+        id: stack
         anchors.fill: parent
         anchors.margins: 10
         Repeater {
             model: notifications
-            delegate: Notification {
-                required property int index
+            delegate: Loader{
+                id: notification
+                anchors.fill: parent
 
-                onDismissed: {
-                    const idx = notifications.index(index, 0);
-                    notifications.dismiss(idx);
-                }
-                onActionInvoked: (action) => {
-                    const idx = notifications.index(index, 0);
-                    notifications.invokeAction(idx, action);
+                source: "Notification.qml"
+
+                onLoaded: {
+                    if(item) {
+                        item.summary = summary
+                        item.body = body
+                        item.actionNames = actionNames
+                        item.actionLabels = actionLabels
+
+                        item.onDismissed.connect(function() {
+                            const idx = notifications.index(index, 0);
+                            notifications.dismiss(idx);
+                        });
+                        item.actionInvoked.connect(function(action) {
+                            const idx = notifications.index(index, 0);
+                            notifications.invokeAction(idx, action);
+                        });
+                    }
                 }
             }
         }
     }
 }
+
