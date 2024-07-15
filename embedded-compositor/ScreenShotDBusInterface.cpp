@@ -1,5 +1,5 @@
 /*!
- * @file   ScreenShotInterface.cpp
+ * @file   ScreenShotDBusInterface.cpp
  *
  * @date   10.07.2024
  *
@@ -7,7 +7,7 @@
  *
 */
 
-#include "ScreenShotInterface.hpp"
+#include "ScreenShotDBusInterface.hpp"
 #include "screenshot_adaptor.h"
 
 #include <QImage>
@@ -15,7 +15,7 @@
 #include <QDebug>
 
 
-ScreenShotInterface::ScreenShotInterface(QQmlApplicationEngine *engine, QObject *parent)
+ScreenShotDBusInterface::ScreenShotDBusInterface(QQmlApplicationEngine *engine, QObject *parent)
     : DBusInterface(QStringLiteral("/screenshot"), parent),
     m_pEngine(engine),
     m_ImageQuality(50),
@@ -29,7 +29,7 @@ ScreenShotInterface::ScreenShotInterface(QQmlApplicationEngine *engine, QObject 
     componentComplete();
 }
 
-QString ScreenShotInterface::getISODate() const
+QString ScreenShotDBusInterface::getISODate() const
 {
     QDateTime dateTime;
     dateTime = QDateTime::currentDateTime();
@@ -38,14 +38,14 @@ QString ScreenShotInterface::getISODate() const
     return strDateTime;
 }
 
-QString ScreenShotInterface::generateFilename() const
+QString ScreenShotDBusInterface::generateFilename() const
 {
     QString concateFileName = m_BaseFileName + getISODate() + m_FileExtension;
 
     return concateFileName;
 }
 
-QQuickWindow* ScreenShotInterface::retieveQWindow() const
+QQuickWindow* ScreenShotDBusInterface::retieveQWindow() const
 {
     if (m_pEngine)
     {
@@ -68,7 +68,7 @@ QQuickWindow* ScreenShotInterface::retieveQWindow() const
     return nullptr;
 }
 
-QString ScreenShotInterface::ScreenShot(const QString& storePath)
+QString ScreenShotDBusInterface::ScreenShot(const QString& storePath)
 {
     QString fileSavePath;
     QQuickWindow* pQuickWindow = retieveQWindow();

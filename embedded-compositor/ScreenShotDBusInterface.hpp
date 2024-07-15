@@ -1,7 +1,7 @@
 /*!
- * @file   ScreenShotInterface.hpp
+ * @file   ScreenShotDBusInterface.hpp
  *
- * @class  ScreenShotInterface
+ * @class  ScreenShotDBusInterface
  *
  * @brief  This class takes a screenshot of the current QML view.
  *         The image is stored locally with the current timestamp in the filename.
@@ -23,13 +23,13 @@
 #include <QString>
 
 
-class ScreenShotInterface : public DBusInterface
+class ScreenShotDBusInterface : public DBusInterface
 {
     Q_OBJECT
 
 public:
-    explicit ScreenShotInterface(QQmlApplicationEngine *pEngine,  QObject *parent = 0);
-    virtual ~ScreenShotInterface() = default;
+    explicit ScreenShotDBusInterface(QQmlApplicationEngine *pEngine,  QObject *parent = 0);
+    virtual ~ScreenShotDBusInterface() = default;
 
     QString ScreenShot(const QString& storePath);
 

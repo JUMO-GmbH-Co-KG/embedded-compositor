@@ -12,14 +12,14 @@ use_system_bus {
 }
 
 SOURCES +=  main.cpp \
-            ScreenShotInterface.cpp \
+            ScreenShotDBusInterface.cpp \
             configurationhive.cpp \
             dbusinterface.cpp \
             embeddedshellextension.cpp \
             notificationmodel.cpp \
             sortfilterproxymodel.cpp
 HEADERS +=  embeddedshellextension.h \
-            ScreenShotInterface.hpp \
+            ScreenShotDBusInterface.hpp \
             configurationhive.h \
             dbus-selector.h \
             dbusinterface.h \
@@ -49,8 +49,8 @@ notifications_adaptor.header_flags = -l NotificationModel -i notificationmodel.h
 notifications_adaptor.source_flags = -l NotificationModel
 
 screenshot_adaptor.files = ../dbus/de.EmbeddedCompositor.screenshot.xml
-screenshot_adaptor.header_flags = -l ScreenShotInterface -i ScreenShotInterface.hpp
-screenshot_adaptor.source_flags = -l ScreenShotInterface
+screenshot_adaptor.header_flags = -l ScreenShotDBusInterface -i ScreenShotDBusInterface.hpp
+screenshot_adaptor.source_flags = -l ScreenShotDBusInterface
 
 DBUS_ADAPTORS += \
     globaloverlay_adaptor \
