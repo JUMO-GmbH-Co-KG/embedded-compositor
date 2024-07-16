@@ -29,6 +29,7 @@ Rectangle {
                     if(item) {
                         item.summary = summary
                         item.body = body
+                        item.appIcon = appIcon
                         item.actionNames = actionNames
                         item.actionLabels = actionLabels
                         item.actionIcons = actionIcons

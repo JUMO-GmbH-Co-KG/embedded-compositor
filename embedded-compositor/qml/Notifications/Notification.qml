@@ -11,6 +11,7 @@ Rectangle {
 
     property string summary
     property string body
+    property string appIcon
     property var actionNames
     property var actionLabels
     property bool actionIcons
@@ -44,17 +45,30 @@ Rectangle {
             margins: 10
         }
 
-        Text {
-            font.pixelSize: 24
-            text: notificationRoot.body
-            color: "#d0d0d0"
+        Image {
+            id: appIcon
+            anchors.centerIn: parent
+            source: notificationRoot.appIcon
+            sourceSize.width: 64
+            sourceSize.height: 64
+        }
+
+        Item{
             anchors {
-                top: parent.top
+                margins: 10
+                top: appIcon.bottom
                 bottom:  buttons.top
-                left:parent.left
+                left: parent.left
                 right: parent.right
             }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 24
+                text: notificationRoot.body
+                color: "#d0d0d0"
+            }
         }
+
 
         Row {
             id: buttons
@@ -95,7 +109,6 @@ Rectangle {
                     Image {
                         id: icon
                         anchors.fill: parent
-                        //opacity: parent.pressed ? 0.6 : 1
                         source: notificationRoot.actionIcons ? notificationRoot.actionLabels[index] : ""
                         sourceSize.width: height
                         sourceSize.height: height

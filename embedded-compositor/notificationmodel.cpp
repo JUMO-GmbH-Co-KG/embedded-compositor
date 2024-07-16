@@ -74,6 +74,8 @@ QVariant NotificationModel::data(const QModelIndex &index, int role) const
         return notification.summary;
     case BodyRole:
         return notification.body;
+    case AppIconRole:
+        return notification.appIcon;
     case ActionNamesRole:
         return notification.actionNames;
     case ActionLabelsRole:
@@ -91,6 +93,7 @@ QHash<int, QByteArray> NotificationModel::roleNames() const
         {IdRole, QByteArrayLiteral("notificationId")}, // id is a reserved QML keyword.
         {SummaryRole, QByteArrayLiteral("summary")},
         {BodyRole, QByteArrayLiteral("body")},
+        {AppIconRole, QByteArrayLiteral("appIcon")},
         {ActionNamesRole, QByteArrayLiteral("actionNames")},
         {ActionLabelsRole, QByteArrayLiteral("actionLabels")},
         {ActionIconsRole, QByteArrayLiteral("actionIcons")},
@@ -137,6 +140,7 @@ uint NotificationModel::Notify(const QString &app_name, uint replaces_id, const 
 
     notification.summary = summary;
     notification.body = body;
+    notification.appIcon = app_icon;
 
     if (actions.count() % 2 != 0) {
         qCWarning(compositorNotification) << "Received an odd number of actions, this is a client bug:" << actions;

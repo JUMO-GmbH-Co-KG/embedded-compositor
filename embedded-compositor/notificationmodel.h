@@ -15,6 +15,7 @@ struct Notification
     uint id = 0;
     QString summary;
     QString body;
+    QString appIcon;
     QStringList actionNames;
     QStringList actionLabels;
     bool actionIcons;
@@ -37,6 +38,7 @@ public:
         SummaryRole = Qt::DisplayRole,
         IdRole = Qt::UserRole,
         BodyRole,
+        AppIconRole,
         ActionNamesRole,
         ActionLabelsRole,
         ActionIconsRole
