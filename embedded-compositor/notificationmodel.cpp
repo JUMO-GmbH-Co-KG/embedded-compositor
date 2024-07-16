@@ -12,6 +12,10 @@
 
 Q_LOGGING_CATEGORY(compositorNotification, "compositor.notification")
 
+namespace {
+    static const QString ACTION_ICONS_HINT = QStringLiteral("action-icons");
+}
+
 NotificationModel::NotificationModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -70,10 +74,14 @@ QVariant NotificationModel::data(const QModelIndex &index, int role) const
         return notification.summary;
     case BodyRole:
         return notification.body;
+    case AppIconRole:
+        return notification.appIcon;
     case ActionNamesRole:
         return notification.actionNames;
     case ActionLabelsRole:
         return notification.actionLabels;
+    case ActionIconsRole:
+        return notification.actionIcons;
     }
 
     return QVariant();
@@ -85,8 +93,10 @@ QHash<int, QByteArray> NotificationModel::roleNames() const
         {IdRole, QByteArrayLiteral("notificationId")}, // id is a reserved QML keyword.
         {SummaryRole, QByteArrayLiteral("summary")},
         {BodyRole, QByteArrayLiteral("body")},
+        {AppIconRole, QByteArrayLiteral("appIcon")},
         {ActionNamesRole, QByteArrayLiteral("actionNames")},
         {ActionLabelsRole, QByteArrayLiteral("actionLabels")},
+        {ActionIconsRole, QByteArrayLiteral("actionIcons")},
     };
 }
 
@@ -130,6 +140,7 @@ uint NotificationModel::Notify(const QString &app_name, uint replaces_id, const 
 
     notification.summary = summary;
     notification.body = body;
+    notification.appIcon = app_icon;
 
     if (actions.count() % 2 != 0) {
         qCWarning(compositorNotification) << "Received an odd number of actions, this is a client bug:" << actions;
@@ -162,6 +173,15 @@ uint NotificationModel::Notify(const QString &app_name, uint replaces_id, const 
             return notification.id;
         } else {
             qCWarning(compositorNotification) << "Don't know notification id" << replaces_id << "to replace, issuing new notification, this is a client bug.";
+        }
+    }
+
+    if (hints.contains(ACTION_ICONS_HINT)){
+        if(hints[ACTION_ICONS_HINT].canConvert<bool>()){
+            notification.actionIcons = hints[ACTION_ICONS_HINT].toBool();
+        }
+        else{
+            qCWarning(compositorNotification) << "Can't convert action-icons to bool! This is a client bug.";
         }
     }
 
@@ -202,11 +222,11 @@ QStringList NotificationModel::GetCapabilities() const
         // ignore them.
         QStringLiteral("body"), // Supports body text. Some implementations may only show the
                 // summary (for instance, onscreen displays, marquee/scrollers)
+        ACTION_ICONS_HINT, // Supports using icons instead of text for displaying
+                // actions. Using icons for actions must be enabled on a
+                // per-notification basis using the "action-icons" hint.
     };
     /*
-        "action-icons", // Supports using icons instead of text for displaying
-                        // actions. Using icons for actions must be enabled on a
-                        // per-notification basis using the "action-icons" hint.
         "body-hyperlinks", //	The server supports hyperlinks in the
                            //notifications.
         "body-images",     //	The server supports images in the notifications.

@@ -15,8 +15,10 @@ struct Notification
     uint id = 0;
     QString summary;
     QString body;
+    QString appIcon;
     QStringList actionNames;
     QStringList actionLabels;
+    bool actionIcons = false;
 };
 Q_DECLARE_TYPEINFO(Notification, Q_MOVABLE_TYPE);
 
@@ -36,8 +38,10 @@ public:
         SummaryRole = Qt::DisplayRole,
         IdRole = Qt::UserRole,
         BodyRole,
+        AppIconRole,
         ActionNamesRole,
-        ActionLabelsRole
+        ActionLabelsRole,
+        ActionIconsRole
     };
     Q_ENUM(Roles)
 

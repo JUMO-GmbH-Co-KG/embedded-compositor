@@ -9,10 +9,12 @@ Rectangle {
     signal dismissed
     signal actionInvoked(string action)
 
-    required property string summary
-    required property string body
-    required property var actionNames
-    required property var actionLabels
+    property string summary
+    property string body
+    property string appIcon
+    property var actionNames
+    property var actionLabels
+    property bool actionIcons
 
     color: "#202040"
     Rectangle {
@@ -43,17 +45,30 @@ Rectangle {
             margins: 10
         }
 
-        Text {
-            font.pixelSize: 24
-            text: notificationRoot.body
-            color: "#d0d0d0"
+        Image {
+            id: appIcon
+            anchors.centerIn: parent
+            source: notificationRoot.appIcon
+            sourceSize.width: 64
+            sourceSize.height: 64
+        }
+
+        Item{
             anchors {
-                top: parent.top
+                margins: 10
+                top: appIcon.bottom
                 bottom:  buttons.top
-                left:parent.left
+                left: parent.left
                 right: parent.right
             }
+            Text {
+                anchors.horizontalCenter: parent.horizontalCenter
+                font.pixelSize: 24
+                text: notificationRoot.body
+                color: "#d0d0d0"
+            }
         }
+
 
         Row {
             id: buttons
@@ -70,7 +85,7 @@ Rectangle {
                 id: actionsRepeater
                 model: notificationRoot.actionNames
                 delegate: MouseArea {
-                    width:200
+                    width:parent.height
                     height:parent.height
                     onPressed: {
                         notificationRoot.actionInvoked(modelData)
@@ -79,102 +94,28 @@ Rectangle {
                     Rectangle {
                         anchors.fill: parent
                         color: parent.pressed ? "lightsteelblue" : "white"
+                        visible: !notificationRoot.actionIcons
                     }
 
                     Text {
                         anchors {
-                            baseline: parent.verticalCenter
-                            baselineOffset: font.pixelSize/2
-                            horizontalCenter: parent.horizontalCenter
+                            centerIn: parent
                         }
                         text: notificationRoot.actionLabels[index]
                         font.pixelSize:32
+                        visible: !notificationRoot.actionIcons
                     }
-                }
-            }
-            MouseArea {
-                visible: actionsRepeater.count === 0
-                width:200
-                height:parent.height
-                onPressed: {
-                    notificationRoot.dismissed()
-                }
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: parent.pressed ? "lightsteelblue" : "white"
-                }
-
-                Text {
-                    anchors {
-                        baseline: parent.verticalCenter
-                        baselineOffset: font.pixelSize/2
-                        horizontalCenter: parent.horizontalCenter
+                    Image {
+                        id: icon
+                        anchors.fill: parent
+                        source: notificationRoot.actionIcons ? notificationRoot.actionLabels[index] : ""
+                        sourceSize.width: height
+                        sourceSize.height: height
+                        visible: notificationRoot.actionIcons
                     }
-                    text: "Ok"
-                    font.pixelSize:32
                 }
             }
         }
     }
-    state: "shade"
-    states: [
-        State {
-            name: "shade"
-            PropertyChanges {
-                target: notificationRoot
-                height: 40
-                opacity: 0.9
-            }
-            PropertyChanges {
-                target: body
-                visible: false
-                opacity: 0
-            }
-        },
-        State {
-            name:"expanded"
-            PropertyChanges {
-                target: notificationRoot
-                height: 300
-                opacity: 1.0
-                z: 10
-            }
-            PropertyChanges {
-                target: body
-                visible: true
-                opacity: 1
-            }
-        }
-    ]
-
-    transitions: [
-        Transition {
-            from: "shade"; to: "expanded"
-            SequentialAnimation {
-                PauseAnimation {
-                    duration: 500
-                }
-
-                PropertyAction {
-                    target: body
-                    property: "visible"
-                }
-                ParallelAnimation {
-                    PropertyAnimation {
-                        target: notificationRoot
-                        properties: "height"
-                        easing.type: Easing.InOutQuad
-                        duration: 500
-                    }
-                    PropertyAnimation {
-                        target: body
-                        property: "opacity"
-                        from: 0; to: 1
-                        duration: 500
-                    }
-                }
-            }
-        }
-    ]
 }
