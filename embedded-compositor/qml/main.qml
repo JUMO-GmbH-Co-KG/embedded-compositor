@@ -391,6 +391,7 @@ WaylandCompositor {
         property url taskSwitcherUrl: "DefaultTaskSwitcher/TaskSwitcher.qml"
         property url globalOverlayUrl: "DefaultGlobalOverlay/GlobalOverlay.qml"
         property url screenSaverUrl: "DefaultScreenSaver/ScreenSaver.qml"
+        property url notificationUrl: "Notifications/Notification.qml"
         property int screenSaverTimeoutSeconds: 6
         property bool screenSaverMouseHoverSupport: false
         property bool screenSaverEnabled: false

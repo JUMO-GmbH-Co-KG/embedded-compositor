@@ -23,7 +23,7 @@ Rectangle {
                 id: notification
                 anchors.fill: parent
 
-                source: "Notification.qml"
+                source: configuration.notificationUrl
 
                 onLoaded: {
                     if(item) {
