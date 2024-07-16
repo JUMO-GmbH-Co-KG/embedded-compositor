@@ -12,8 +12,8 @@
 
 Q_LOGGING_CATEGORY(compositorNotification, "compositor.notification")
 
-namespace{
-    constexpr char const* ACTION_ICONS_HINT = "action-icons";
+namespace {
+    static const QString ACTION_ICONS_HINT = QStringLiteral("action-icons");
 }
 
 NotificationModel::NotificationModel(QObject *parent)
@@ -176,10 +176,7 @@ uint NotificationModel::Notify(const QString &app_name, uint replaces_id, const 
         }
     }
 
-    notification.actionIcons = false;
-
     if (hints.contains(ACTION_ICONS_HINT)){
-
         if(hints[ACTION_ICONS_HINT].canConvert<bool>()){
             notification.actionIcons = hints[ACTION_ICONS_HINT].toBool();
         }

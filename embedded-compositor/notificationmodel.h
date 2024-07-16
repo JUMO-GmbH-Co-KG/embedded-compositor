@@ -18,7 +18,7 @@ struct Notification
     QString appIcon;
     QStringList actionNames;
     QStringList actionLabels;
-    bool actionIcons;
+    bool actionIcons = false;
 };
 Q_DECLARE_TYPEINFO(Notification, Q_MOVABLE_TYPE);
 
