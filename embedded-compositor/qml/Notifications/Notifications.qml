@@ -31,6 +31,7 @@ Rectangle {
                         item.body = body
                         item.actionNames = actionNames
                         item.actionLabels = actionLabels
+                        item.actionIcons = actionIcons
 
                         item.onDismissed.connect(function() {
                             const idx = notifications.index(index, 0);

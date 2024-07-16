@@ -13,6 +13,7 @@ Rectangle {
     property string body
     property var actionNames
     property var actionLabels
+    property bool actionIcons
 
     color: "#202040"
     Rectangle {
@@ -70,7 +71,7 @@ Rectangle {
                 id: actionsRepeater
                 model: notificationRoot.actionNames
                 delegate: MouseArea {
-                    width:200
+                    width:parent.height
                     height:parent.height
                     onPressed: {
                         notificationRoot.actionInvoked(modelData)
@@ -79,40 +80,27 @@ Rectangle {
                     Rectangle {
                         anchors.fill: parent
                         color: parent.pressed ? "lightsteelblue" : "white"
+                        visible: !notificationRoot.actionIcons
                     }
 
                     Text {
                         anchors {
-                            baseline: parent.verticalCenter
-                            baselineOffset: font.pixelSize/2
-                            horizontalCenter: parent.horizontalCenter
+                            centerIn: parent
                         }
                         text: notificationRoot.actionLabels[index]
                         font.pixelSize:32
+                        visible: !notificationRoot.actionIcons
                     }
-                }
-            }
-            MouseArea {
-                visible: actionsRepeater.count === 0
-                width:200
-                height:parent.height
-                onPressed: {
-                    notificationRoot.dismissed()
-                }
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: parent.pressed ? "lightsteelblue" : "white"
-                }
-
-                Text {
-                    anchors {
-                        baseline: parent.verticalCenter
-                        baselineOffset: font.pixelSize/2
-                        horizontalCenter: parent.horizontalCenter
+                    Image {
+                        id: icon
+                        anchors.fill: parent
+                        //opacity: parent.pressed ? 0.6 : 1
+                        source: notificationRoot.actionIcons ? notificationRoot.actionLabels[index] : ""
+                        sourceSize.width: height
+                        sourceSize.height: height
+                        visible: notificationRoot.actionIcons
                     }
-                    text: "Ok"
-                    font.pixelSize:32
                 }
             }
         }

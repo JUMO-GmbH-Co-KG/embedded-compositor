@@ -12,6 +12,10 @@
 
 Q_LOGGING_CATEGORY(compositorNotification, "compositor.notification")
 
+namespace{
+    constexpr char const* ACTION_ICONS_HINT = "action-icons";
+}
+
 NotificationModel::NotificationModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -74,6 +78,8 @@ QVariant NotificationModel::data(const QModelIndex &index, int role) const
         return notification.actionNames;
     case ActionLabelsRole:
         return notification.actionLabels;
+    case ActionIconsRole:
+        return notification.actionIcons;
     }
 
     return QVariant();
@@ -87,6 +93,7 @@ QHash<int, QByteArray> NotificationModel::roleNames() const
         {BodyRole, QByteArrayLiteral("body")},
         {ActionNamesRole, QByteArrayLiteral("actionNames")},
         {ActionLabelsRole, QByteArrayLiteral("actionLabels")},
+        {ActionIconsRole, QByteArrayLiteral("actionIcons")},
     };
 }
 
@@ -165,6 +172,18 @@ uint NotificationModel::Notify(const QString &app_name, uint replaces_id, const 
         }
     }
 
+    notification.actionIcons = false;
+
+    if (hints.contains(ACTION_ICONS_HINT)){
+
+        if(hints[ACTION_ICONS_HINT].canConvert<bool>()){
+            notification.actionIcons = hints[ACTION_ICONS_HINT].toBool();
+        }
+        else{
+            qCWarning(compositorNotification) << "Can't convert action-icons to bool! This is a client bug.";
+        }
+    }
+
     beginInsertRows(QModelIndex(), m_notifications.count(), m_notifications.count());
     m_notifications.append(notification);
     endInsertRows();
@@ -202,11 +221,11 @@ QStringList NotificationModel::GetCapabilities() const
         // ignore them.
         QStringLiteral("body"), // Supports body text. Some implementations may only show the
                 // summary (for instance, onscreen displays, marquee/scrollers)
+        ACTION_ICONS_HINT, // Supports using icons instead of text for displaying
+                // actions. Using icons for actions must be enabled on a
+                // per-notification basis using the "action-icons" hint.
     };
     /*
-        "action-icons", // Supports using icons instead of text for displaying
-                        // actions. Using icons for actions must be enabled on a
-                        // per-notification basis using the "action-icons" hint.
         "body-hyperlinks", //	The server supports hyperlinks in the
                            //notifications.
         "body-images",     //	The server supports images in the notifications.
