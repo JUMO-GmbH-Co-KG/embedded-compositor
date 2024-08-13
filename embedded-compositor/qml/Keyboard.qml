@@ -38,11 +38,11 @@ Item {
         onYChanged: Qt.callLater(keyboardContainer.updateTranslate)
         onHeightChanged: Qt.callLater(keyboardContainer.updateTranslate)
         onVisibleChanged: keyboardContainer.updateTranslate()
+        state: inputPanel.active ? "VISIBLE": "HIDDEN"
 
         states: [
             State {
                 name: "VISIBLE"
-                when: inputPanel.active
                 PropertyChanges {
                     target: inputPanel
                     y: inputPanel.parent.height - inputPanel.height
@@ -50,7 +50,6 @@ Item {
             },
             State {
                 name: "HIDDEN"
-                when: !inputPanel.active
                 PropertyChanges {
                     target: inputPanel
                     y: inputPanel.parent.height
