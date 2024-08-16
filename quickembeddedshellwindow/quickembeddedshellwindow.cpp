@@ -34,6 +34,12 @@ EmbeddedShellSurfaceView *QuickEmbeddedShellWindow::createView(const QString &ap
   return view;
 }
 
+EmbeddedShellSurfaceView* QuickEmbeddedShellWindow::createView(const QString& appId, const QString& appLabel, const QString& appIcon, const QString& label, const QString& icon, uint32_t sort_index){
+    auto view = m_surface->createView(appId, appLabel, appIcon, label, icon, sort_index);
+    qCDebug(quickShell) << __PRETTY_FUNCTION__ << appId << appLabel << appIcon << label << icon << view << sort_index;
+    return view;
+}
+
 void QuickEmbeddedShellWindow::classBegin() {
   qCDebug(quickShell) << __PRETTY_FUNCTION__;
 }
