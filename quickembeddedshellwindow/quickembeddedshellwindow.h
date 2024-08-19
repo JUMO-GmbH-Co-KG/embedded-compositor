@@ -43,6 +43,12 @@ public:
 
 public slots:
   EmbeddedShellSurfaceView *createView(const QString &appId, const QString &appLabel, const QString &label, unsigned int sort_index);
+  EmbeddedShellSurfaceView *createView(const QString &appId,
+                                       const QString &appLabel,
+                                       const QString &appIcon,
+                                       const QString &label,
+                                       const QString &icon,
+                                       uint32_t sort_index);
 
 signals:
   void anchorChanged(EmbeddedShellTypes::Anchor anchor);
