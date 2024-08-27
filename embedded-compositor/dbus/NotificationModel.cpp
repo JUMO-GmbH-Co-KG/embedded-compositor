@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-#include "notificationmodel.h"
+#include "NotificationModel.hpp"
 
 #include "dbus-selector.h"
 
@@ -43,7 +43,7 @@ void NotificationModel::componentComplete()
     }
 
     m_valid = true;
-    Q_EMIT validChanged();
+    emit validChanged();
 }
 
 bool NotificationModel::valid() const
@@ -61,27 +61,28 @@ int NotificationModel::rowCount(const QModelIndex &parent) const
 
 QVariant NotificationModel::data(const QModelIndex &index, int role) const
 {
-    if (!checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid)) {
+    if (!checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid))
+    {
         return QVariant();
     }
 
     const auto &notification = m_notifications.at(index.row());
 
     switch (role) {
-    case IdRole:
-        return notification.id;
-    case SummaryRole:
-        return notification.summary;
-    case BodyRole:
-        return notification.body;
-    case AppIconRole:
-        return notification.appIcon;
-    case ActionNamesRole:
-        return notification.actionNames;
-    case ActionLabelsRole:
-        return notification.actionLabels;
-    case ActionIconsRole:
-        return notification.actionIcons;
+        case IdRole:
+            return notification.id;
+        case SummaryRole:
+            return notification.summary;
+        case BodyRole:
+            return notification.body;
+        case AppIconRole:
+            return notification.appIcon;
+        case ActionNamesRole:
+            return notification.actionNames;
+        case ActionLabelsRole:
+            return notification.actionLabels;
+        case ActionIconsRole:
+            return notification.actionIcons;
     }
 
     return QVariant();
@@ -112,19 +113,20 @@ void NotificationModel::dismiss(const QModelIndex &index)
     m_notifications.removeAt(index.row());
     endRemoveRows();
 
-    Q_EMIT NotificationClosed(id, static_cast<uint>(CloseReason::Dismissed));
+    emit NotificationClosed(id, static_cast<uint>(CloseReason::Dismissed));
 }
 
 void NotificationModel::invokeAction(const QModelIndex &index, const QString &action)
 {
-    if (!checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid)) {
+    if (!checkIndex(index, QAbstractItemModel::CheckIndexOption::IndexIsValid))
+    {
         return;
     }
 
     const auto &notification = m_notifications.at(index.row());
     Q_ASSERT(notification.actionNames.contains(action));
 
-    Q_EMIT ActionInvoked(notification.id, action);
+    emit ActionInvoked(notification.id, action);
     dismiss(index);
 }
 
@@ -134,7 +136,8 @@ uint NotificationModel::Notify(const QString &app_name, uint replaces_id, const 
 
     Notification notification;
     notification.id = ++m_idCounter;
-    if (!notification.id) { // Never return zero from this call.
+    if (!notification.id)
+    { // Never return zero from this call.
         ++notification.id;
     }
 
@@ -142,7 +145,8 @@ uint NotificationModel::Notify(const QString &app_name, uint replaces_id, const 
     notification.body = body;
     notification.appIcon = app_icon;
 
-    if (actions.count() % 2 != 0) {
+    if (actions.count() % 2 != 0)
+    {
         qCWarning(compositorNotification) << "Received an odd number of actions, this is a client bug:" << actions;
     } else {
         notification.actionNames.reserve(actions.count() / 2);
@@ -156,22 +160,26 @@ uint NotificationModel::Notify(const QString &app_name, uint replaces_id, const 
         }
     }
 
-    if (replaces_id) {
+    if (replaces_id)
+    {
         auto it = std::find_if(m_notifications.cbegin(), m_notifications.cend(), [replaces_id](const Notification &notification) {
             return notification.id == replaces_id;
         });
 
-        if (it != m_notifications.cend()) {
+        if (it != m_notifications.cend())
+        {
             const auto row = std::distance(m_notifications.cbegin(), it);
 
             notification.id = replaces_id;
 
             m_notifications[row] = notification;
             const QModelIndex idx = index(row, 0);
-            Q_EMIT dataChanged(idx, idx);
+            emit dataChanged(idx, idx);
 
             return notification.id;
-        } else {
+        }
+        else
+        {
             qCWarning(compositorNotification) << "Don't know notification id" << replaces_id << "to replace, issuing new notification, this is a client bug.";
         }
     }
@@ -196,11 +204,13 @@ void NotificationModel::CloseNotification(uint id)
 {
     qCDebug(compositorNotification) << "Close notification requested for" << id;
 
-    auto it = std::find_if(m_notifications.cbegin(), m_notifications.cend(), [id](const Notification &notification) {
+    auto it = std::find_if(m_notifications.cbegin(), m_notifications.cend(), [id](const Notification &notification)
+                           {
         return notification.id == id;
     });
 
-    if (it == m_notifications.cend()) {
+    if (it == m_notifications.cend())
+    {
         return;
     }
 
@@ -210,7 +220,7 @@ void NotificationModel::CloseNotification(uint id)
     m_notifications.removeAt(row);
     endRemoveRows();
 
-    Q_EMIT NotificationClosed(it->id, static_cast<uint>(CloseReason::Revoked));
+    emit NotificationClosed(it->id, static_cast<uint>(CloseReason::Revoked));
 }
 
 QStringList NotificationModel::GetCapabilities() const

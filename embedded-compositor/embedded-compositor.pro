@@ -12,18 +12,13 @@ use_system_bus {
 }
 
 SOURCES +=  main.cpp \
-            ScreenShotDBusInterface.cpp \
             configurationhive.cpp \
-            dbusinterface.cpp \
             embeddedshellextension.cpp \
-            notificationmodel.cpp \
             sortfilterproxymodel.cpp
+
 HEADERS +=  embeddedshellextension.h \
-            ScreenShotDBusInterface.hpp \
             configurationhive.h \
             dbus-selector.h \
-            dbusinterface.h \
-            notificationmodel.h \
             sortfilterproxymodel.h
 
 OTHER_FILES += \
@@ -33,23 +28,23 @@ OTHER_FILES += \
 
 # NOTE There appears to be no easy way to specify the parent class of qdbusxml2cpp through QMake.
 globaloverlay_adaptor.files = ../dbus/de.EmbeddedCompositor.globaloverlay.xml
-globaloverlay_adaptor.header_flags = -l GlobalOverlayInterface -i dbusinterface.h
-globaloverlay_adaptor.source_flags = -l GlobalOverlayInterface
+globaloverlay_adaptor.header_flags = -l GlobalOverlayDBusInterface -i ./dbus/GlobalOverlayDBusInterface.hpp
+globaloverlay_adaptor.source_flags = -l GlobalOverlayDBusInterface
 
 screen_adaptor.files = ../dbus/de.EmbeddedCompositor.screen.xml
-screen_adaptor.header_flags = -l CompositorScreenInterface -i dbusinterface.h
-screen_adaptor.source_flags = -l CompositorScreenInterface
+screen_adaptor.header_flags = -l CompositorScreenDBusInterface -i ./dbus/CompositorScreenDBusInterface.hpp
+screen_adaptor.source_flags = -l CompositorScreenDBusInterface
 
 taskswitcher_adaptor.files = ../dbus/de.EmbeddedCompositor.taskswitcher.xml
-taskswitcher_adaptor.header_flags = -l TaskSwitcherInterface -i dbusinterface.h
-taskswitcher_adaptor.source_flags = -l TaskSwitcherInterface
+taskswitcher_adaptor.header_flags = -l TaskSwitcherDBusInterface -i ./dbus/TaskSwitcherDBusInterface.hpp
+taskswitcher_adaptor.source_flags = -l TaskSwitcherDBusInterface
 
 notifications_adaptor.files = ../dbus/org.freedesktop.Notifications.xml
-notifications_adaptor.header_flags = -l NotificationModel -i notificationmodel.h
+notifications_adaptor.header_flags = -l NotificationModel -i ./dbus/NotificationModel.hpp
 notifications_adaptor.source_flags = -l NotificationModel
 
 screenshot_adaptor.files = ../dbus/de.EmbeddedCompositor.screenshot.xml
-screenshot_adaptor.header_flags = -l ScreenShotDBusInterface -i ScreenShotDBusInterface.hpp
+screenshot_adaptor.header_flags = -l ScreenShotDBusInterface -i ./dbus/ScreenShotDBusInterface.hpp
 screenshot_adaptor.source_flags = -l ScreenShotDBusInterface
 
 DBUS_ADAPTORS += \
@@ -69,3 +64,5 @@ INCLUDEPATH += $$top_srcdir/embeddedplatform
 
 EMBEDDED_COMPOSITOR_VERSION = $$system(git describe --tags --always)
 DEFINES += EMBEDDED_COMPOSITOR_VERSION=\\\"$$EMBEDDED_COMPOSITOR_VERSION\\\"
+
+include(./dbus/dbus-interfaces.pri)

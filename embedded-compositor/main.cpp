@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
 #include "configurationhive.h"
-#include "dbusinterface.h"
+#include "DBusInterface.hpp"
 #include "embeddedshellextension.h"
-#include "notificationmodel.h"
+#include "NotificationModel.hpp"
 #include <QDBusMetaType>
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
@@ -12,6 +12,9 @@
 #include <QtQml/QQmlContext>
 #include <sortfilterproxymodel.h>
 #include "ScreenShotDBusInterface.hpp"
+#include "TaskSwitcherDBusInterface.hpp"
+#include "CompositorScreenDBusInterface.hpp"
+#include "GlobalOverlayDBusInterface.hpp"
 
 int main(int argc, char *argv[]) {
   qInfo() << "Version: " << QStringLiteral(EMBEDDED_COMPOSITOR_VERSION);
@@ -30,17 +33,17 @@ int main(int argc, char *argv[]) {
       "de.EmbeddedCompositor.embeddedshell", 1, 0, "QAbstractListModel",
       "only a property");
 
-  qmlRegisterType<TaskSwitcherInterface>("de.EmbeddedCompositor.dbus", 1, 0,
+  qmlRegisterType<TaskSwitcherDBusInterface>("de.EmbeddedCompositor.dbus", 1, 0,
                                          "TaskSwitcherInterface");
   qDBusRegisterMetaType<TaskSwitcherEntry>();
   qDBusRegisterMetaType<QList<TaskSwitcherEntry>>();
   qRegisterMetaType<TaskSwitcherEntry>("TaskSwitcherEntry");
   qRegisterMetaType<QList<TaskSwitcherEntry>>("QList<TaskSwitcherEntry>");
 
-  qmlRegisterType<GlobalOverlayInterface>("de.EmbeddedCompositor.dbus", 1, 0,
+  qmlRegisterType<GlobalOverlayDBusInterface>("de.EmbeddedCompositor.dbus", 1, 0,
                                           "GlobalOverlayInterface");
 
-  qmlRegisterType<CompositorScreenInterface>("de.EmbeddedCompositor.dbus", 1,
+  qmlRegisterType<CompositorScreenDBusInterface>("de.EmbeddedCompositor.dbus", 1,
                                              0, "CompositorScreenInterface");
   qmlRegisterType<NotificationModel>("de.EmbeddedCompositor.dbus", 1, 0,
                                      "NotificationModel");
