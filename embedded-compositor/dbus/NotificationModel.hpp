@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-#ifndef NOTIFICATIONMODEL_H
-#define NOTIFICATIONMODEL_H
+#pragma once
 
 #include <QAbstractListModel>
 #include <QLoggingCategory>
@@ -31,8 +30,8 @@ class NotificationModel : public QAbstractListModel, public QQmlParserStatus
     Q_PROPERTY(bool valid READ valid NOTIFY validChanged)
 
 public:
-    NotificationModel(QObject *parent = nullptr);
-    ~NotificationModel() override = default;
+    explicit NotificationModel(QObject *parent = nullptr);
+    virtual ~NotificationModel() override = default;
 
     enum Roles {
         SummaryRole = Qt::DisplayRole,
@@ -52,7 +51,6 @@ public:
     };
 
     bool valid() const;
-    Q_SIGNAL void validChanged();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -70,8 +68,9 @@ public:
     QStringList GetCapabilities() const;
     QString GetServerInformation(QString &vendor, QString &version, QString &spec_version) const;
 
-Q_SIGNALS:
+signals:
     void countChanged();
+    void validChanged();
 
     // DBus
     void ActionInvoked(uint id, const QString &action_key);
@@ -84,4 +83,3 @@ private:
     bool m_valid = false;
 };
 
-#endif // NOTIFICATIONMODEL_H

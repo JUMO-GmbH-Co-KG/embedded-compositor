@@ -9,12 +9,19 @@ SOURCES += \
     embeddedshell.cpp \
     embeddedshellsurface.cpp
 
-QDBUSXML2CPP_INTERFACE_HEADER_FLAGS = -i $$top_srcdir/embedded-compositor/dbusinterface.h
+QDBUSXML2CPP_INTERFACE_HEADER_FLAGS = -i $$top_srcdir/embedded-compositor/dbus/DBusInterface.hpp
+
+taskswitcher_interface.files = ../dbus/de.EmbeddedCompositor.taskswitcher.xml
+taskswitcher_interface.header_flags = \
+                                        -l TaskSwitcherDBusInterface -i $$top_srcdir/embedded-compositor/dbus/TaskSwitcherDBusInterface.hpp \
+                                        -i $$top_srcdir/embedded-compositor/dbus/TaskSwitcherEntry.hpp
+taskswitcher_interface.source_flags = -l TaskSwitcherDBusInterface
+
 DBUS_INTERFACES += \
     $$top_srcdir/dbus/de.EmbeddedCompositor.globaloverlay.xml \
     $$top_srcdir/dbus/de.EmbeddedCompositor.screen.xml \
-    $$top_srcdir/dbus/de.EmbeddedCompositor.taskswitcher.xml \
-    $$top_srcdir/dbus/org.freedesktop.Notifications.xml
+    $$top_srcdir/dbus/org.freedesktop.Notifications.xml \
+    taskswitcher_interface
 
 HEADERS += \
     embeddedcompositordbusclient.h \

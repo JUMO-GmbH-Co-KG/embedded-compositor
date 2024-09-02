@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include "dbusinterface.h"
+#include "DBusInterface.hpp"
 
 #include <QObject>
 #include <QQmlApplicationEngine>
