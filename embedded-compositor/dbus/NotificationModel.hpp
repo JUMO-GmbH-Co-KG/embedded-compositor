@@ -30,8 +30,8 @@ class NotificationModel : public QAbstractListModel, public QQmlParserStatus
     Q_PROPERTY(bool valid READ valid NOTIFY validChanged)
 
 public:
-    NotificationModel(QObject *parent = nullptr);
-    ~NotificationModel() override = default;
+    explicit NotificationModel(QObject *parent = nullptr);
+    virtual ~NotificationModel() override = default;
 
     enum Roles {
         SummaryRole = Qt::DisplayRole,

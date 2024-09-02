@@ -25,7 +25,7 @@ class DBusInterface : public QObject,
   Q_PROPERTY(bool valid READ valid NOTIFY validChanged)
 
 public:
-  ~DBusInterface() override = default;
+  virtual ~DBusInterface() override = default;
 
   QDBusConnection busConnection() const;
   QString interfaceName() const;

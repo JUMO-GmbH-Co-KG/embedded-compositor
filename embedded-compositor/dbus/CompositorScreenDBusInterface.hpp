@@ -23,8 +23,8 @@ class CompositorScreenDBusInterface : public DBusInterface
             setScreenSaverTimeoutSeconds NOTIFY screenSaverTimeoutSecondsChanged)
 
 public:
-    CompositorScreenDBusInterface(QObject *parent = nullptr);
-    ~CompositorScreenDBusInterface() override = default;
+    explicit CompositorScreenDBusInterface(QObject *parent = nullptr);
+    virtual ~CompositorScreenDBusInterface() override = default;
 
     QString orientation() const;
     void setOrientation(const QString &orientation);

@@ -16,8 +16,8 @@ class TaskSwitcherDBusInterface : public DBusInterface
     Q_OBJECT
 
 public:
-    TaskSwitcherDBusInterface(QObject *parent = nullptr);
-    ~TaskSwitcherDBusInterface() override = default;
+    explicit TaskSwitcherDBusInterface(QObject *parent = nullptr);
+    virtual ~TaskSwitcherDBusInterface() override = default;
 
     Q_PROPERTY(QString currentView READ currentView WRITE setCurrentView NOTIFY
                    currentViewChanged)

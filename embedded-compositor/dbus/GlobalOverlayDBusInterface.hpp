@@ -13,8 +13,8 @@ class GlobalOverlayDBusInterface : public DBusInterface
     Q_OBJECT
 
 public:
-    GlobalOverlayDBusInterface(QObject *parent = nullptr);
-    ~GlobalOverlayDBusInterface() override = default;
+    explicit GlobalOverlayDBusInterface(QObject *parent = nullptr);
+    virtual ~GlobalOverlayDBusInterface() override = default;
 
     // DBus
     void Show(const QString &message);
