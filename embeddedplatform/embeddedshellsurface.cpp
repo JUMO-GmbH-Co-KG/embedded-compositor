@@ -98,6 +98,10 @@ EmbeddedShellSurfaceViewPrivate::EmbeddedShellSurfaceViewPrivate(
     EmbeddedShellSurface *surf, const QString &label)
     : QObject(surf), QtWayland::surface_view(view), m_label(label), q_ptr(q) {}
 
+EmbeddedShellSurfaceViewPrivate::~EmbeddedShellSurfaceViewPrivate() {
+  destroy();
+}
+
 EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(::surface_view *view,
                                                    EmbeddedShellSurface *surf,
                                                    const QString &label)
