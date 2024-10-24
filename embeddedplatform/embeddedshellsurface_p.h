@@ -46,6 +46,7 @@ public:
                                   ::surface_view *view,
                                   EmbeddedShellSurface *surf,
                                   const QString &label);
+  ~EmbeddedShellSurfaceViewPrivate() override;
   void surface_view_selected() override {
     qDebug() << __PRETTY_FUNCTION__;
     Q_Q(EmbeddedShellSurfaceView);
