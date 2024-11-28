@@ -31,6 +31,10 @@ Makefile*
 *build-*
 *.qm
 *.prl
+qml_*_qml.*
+wayland-*
+qwayland-*
+*_wrapper.sh
 
 # Qt unit tests
 target_wrapper.*
