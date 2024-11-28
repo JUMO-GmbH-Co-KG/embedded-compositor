@@ -10,7 +10,6 @@ Item {
     property int keyboardMargin: 50
 
     rotation: parent.rotation
-
     state: "0"
 
     onRotationChanged: {
