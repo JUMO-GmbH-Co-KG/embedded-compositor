@@ -10,11 +10,7 @@ Item {
     property int keyboardMargin: 50
 
     rotation: parent.rotation
-    state: "0"
-
-    onRotationChanged: {
-        state = rotation
-    }
+    state: rotation
 
     // @TODO it is only when you switch from 90 to 270 or vice versa that the keyboard anchors get messy.
     // However, if you reboot the device, everything seems to be fine again.
