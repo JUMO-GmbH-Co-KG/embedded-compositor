@@ -22,6 +22,7 @@ HEADERS +=  embeddedshellextension.h \
             sortfilterproxymodel.h
 
 OTHER_FILES += \
+    main.qml \
     qml/main.qml \
     qml/DefaultTaskSwitcher/TaskSwitcher.qml \
     qml/Notifications/Notifications.qml \
