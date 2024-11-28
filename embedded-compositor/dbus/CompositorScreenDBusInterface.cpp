@@ -24,8 +24,6 @@ void CompositorScreenDBusInterface::setOrientation(const QString &orientation)
     }
 }
 
-
-
 bool CompositorScreenDBusInterface::screenSaverActive() const
 {
     return m_screenSaverActive;
@@ -71,4 +69,17 @@ void CompositorScreenDBusInterface::setScreenSaverTimeoutSeconds(
         return;
     m_screenSaverTimeoutSeconds = newScreenSaverTimeoutSeconds;
     emit screenSaverTimeoutSecondsChanged(m_screenSaverTimeoutSeconds);
+}
+
+void CompositorScreenDBusInterface::setFullScreen(bool value)
+{
+    if (m_fullScreen == value)
+        return;
+    m_fullScreen = value;
+    emit fullScreenChanged(m_fullScreen);
+}
+
+bool CompositorScreenDBusInterface::fullScreen() const
+{
+    return m_fullScreen;
 }
