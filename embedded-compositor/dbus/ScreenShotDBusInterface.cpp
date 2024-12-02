@@ -6,6 +6,8 @@
  * @date   10.07.2024
  *
  * @author Christian Happ
+ * 
+ * @copyright 2024 JUMO GmbH & Co. KG
  *
 */
 
