@@ -21,6 +21,8 @@ class CompositorScreenDBusInterface : public DBusInterface
     Q_PROPERTY(
         int screenSaverTimeoutSeconds READ screenSaverTimeoutSeconds WRITE
             setScreenSaverTimeoutSeconds NOTIFY screenSaverTimeoutSecondsChanged)
+    Q_PROPERTY(bool fullScreen READ fullScreen WRITE setFullScreen
+                   NOTIFY fullScreenChanged)
 
 public:
     explicit CompositorScreenDBusInterface(QObject *parent = nullptr);
@@ -38,6 +40,8 @@ public:
 
     int screenSaverTimeoutSeconds() const;
     void setScreenSaverTimeoutSeconds(int newScreenSaverTimeoutSeconds);
+    bool fullScreen() const;
+    void setFullScreen(bool fullScreen);
 
 signals:
     void orientationChanged(const QString &orientation);
@@ -45,9 +49,11 @@ signals:
     void showScreenSaver();
     void screenSaverEnabledChanged(bool screenSaverEnabled);
     void screenSaverTimeoutSecondsChanged(int screenSaverTimeoutSeconds);
+    void fullScreenChanged(bool fullScreen);
 
 private:
     QString m_orientation = QStringLiteral("0");
+    bool m_fullScreen;
     bool m_screenSaverActive;
     bool m_screenSaverEnabled;
     int m_screenSaverTimeoutSeconds;

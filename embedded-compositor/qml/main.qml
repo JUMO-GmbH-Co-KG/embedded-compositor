@@ -58,6 +58,7 @@ WaylandCompositor {
         RootTransformer {
             id: rootTransformItem
             state: dbusScreenInterface.orientation
+            fullScreen: dbusScreenInterface.fullScreen
 
             Item {
                 Keys.onPressed:
@@ -82,10 +83,10 @@ WaylandCompositor {
 
             Rectangle {
                 id: centerArea
-                anchors.top: topArea.bottom
-                anchors.left: leftArea.right
-                anchors.right: rightArea.left
-                anchors.bottom: bottomArea.top
+                anchors.top: !rootTransformItem.fullScreen ? topArea.bottom : rootTransformItem.top
+                anchors.left: !rootTransformItem.fullScreen ? leftArea.right : rootTransformItem.left
+                anchors.right: !rootTransformItem.fullScreen ? rightArea.left : rootTransformItem.right
+                anchors.bottom: !rootTransformItem.fullScreen ? bottomArea.top : rootTransformItem.bottom
 
                 transform: Translate {
                     y: keyboardLoader.contentYTranslate
@@ -130,6 +131,7 @@ WaylandCompositor {
                 anchors.left: parent.left
                 anchors.top: topArea.bottom
                 property Item surfaceItem
+                visible: !rootTransformItem.fullScreen
             }
             Item {
                 id:rightArea
@@ -138,6 +140,7 @@ WaylandCompositor {
                 anchors.right: parent.right
                 anchors.top: topArea.bottom
                 property Item surfaceItem
+                visible: !rootTransformItem.fullScreen
             }
             Item {
                 id: topArea
@@ -146,6 +149,7 @@ WaylandCompositor {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 property Item surfaceItem
+                visible: !rootTransformItem.fullScreen
             }
             Item {
                 id: bottomArea
@@ -154,6 +158,7 @@ WaylandCompositor {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 property Item surfaceItem
+                visible: !rootTransformItem.fullScreen
             }
 
             Loader {
@@ -388,6 +393,7 @@ WaylandCompositor {
         screenSaverEnabled: configuration.screenSaverEnabled
         screenSaverTimeoutSeconds: configuration.screenSaverTimeoutSeconds
         orientation: configuration.screenOrientation
+        fullScreen: configuration.fullScreen
     }
 
     ConfigurationHive {
@@ -408,5 +414,6 @@ WaylandCompositor {
         property real screenPhysicalHeight: 137
         // compositor controlled rotation, i.e. "0", "90", "180", "270"
         property string screenOrientation: "0"
+        property bool fullScreen: false
     }
 }

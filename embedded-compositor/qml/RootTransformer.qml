@@ -12,6 +12,7 @@ import "Notifications"
 
 Item {
     id: rootTransformItem
+    property bool fullScreen: false
 
     states: [
         State {
