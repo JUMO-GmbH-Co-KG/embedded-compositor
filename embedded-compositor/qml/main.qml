@@ -315,8 +315,8 @@ WaylandCompositor {
             visible: parent.surfaceItem === shellSurfaceItem
 
             onSurfaceDestroyed:  destroy()
-            onWidthChanged: handleResized()
-            onHeightChanged: handleResized()
+            onWidthChanged: Qt.callLater(handleResized)
+            onHeightChanged: Qt.callLater(handleResized)
             Component.onCompleted: {
                 handleAnchor();
             }
@@ -335,7 +335,7 @@ WaylandCompositor {
                 }
 
                 function onSizeChanged(size) {
-                    handleResized();
+                    Qt.callLater(handleResized);
                 }
 
                 function onCreateView(view) {
