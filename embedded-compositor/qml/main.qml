@@ -334,6 +334,10 @@ WaylandCompositor {
                     handleAnchor();
                 }
 
+                function onSizeChanged(size) {
+                    handleResized();
+                }
+
                 function onCreateView(view) {
                     centerApplicationViewModel.createView(shellSurface, view);
                 }
@@ -362,8 +366,33 @@ WaylandCompositor {
             }
 
             function handleResized() {
-                if(width <= 0 || height <=0) return;
-                shellSurface.sendConfigure(Qt.size(width, height));
+                let newWidth = width;
+                let newHeight = height;
+
+                // Only resize the side that is anchored, the other is taken from the client,
+                // otherwise there can be a race between the client changing its requested size
+                // and the compositor applying one, particularly when it comes to screen rotation.
+
+                const targetArea = anchorMap[shellSurface.anchor];
+                if (targetArea) {
+                    if (targetArea.anchors.left && targetArea.anchors.right
+                            && !targetArea.anchors.top && !targetArea.anchors.bottom) {
+                        // Horizontally constrained, take height from client,
+                        // or as fallback the current height.
+                        newHeight = shellSurface.size.height || implicitHeight;
+                    } else if (targetArea.anchors.top && targetArea.anchors.bottom
+                               && !targetArea.anchors.left && !targetArea.anchors.right) {
+                        // Vertically constrained, take width from client,
+                        // or as fallback the current width.
+                        newWidth = shellSurface.size.width || implicitWidth;
+                    }
+                }
+
+                if (newWidth <= 0 || newHeight <= 0) {
+                    return;
+                }
+
+                shellSurface.sendConfigure(Qt.size(newWidth, newHeight));
             }
         }
     }

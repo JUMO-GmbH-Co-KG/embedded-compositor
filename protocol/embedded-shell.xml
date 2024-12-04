@@ -16,6 +16,18 @@
 			<arg name="margin" type="int" />
 		</request>
 
+		<request name="set_size"><!-- TODO should probably be since="2" -->
+			<description summary="Sets the size of the surface">
+				Sets the size of the surface in surface-local coordinates. The compositor will display the surface
+				with respect to its anchors.
+
+				If you pass 0 for either value, the compositor will assign it and inform you of the assignment in the
+				configure event. You must set your anchor to opposite edges in the dimensions you omit.
+			</description>
+			<arg name="width" type="uint" />
+			<arg name="height" type="uint" />
+		</request>
+
 		<event name="configure">
 			<description summary="suggest resize">
 	    The configure event asks the client to resize its surface.
