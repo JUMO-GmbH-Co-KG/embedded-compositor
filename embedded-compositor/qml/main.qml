@@ -83,6 +83,7 @@ WaylandCompositor {
 
             Rectangle {
                 id: centerArea
+                objectName: "centerArea"
                 anchors.top: !rootTransformItem.fullScreen ? topArea.bottom : rootTransformItem.top
                 anchors.left: !rootTransformItem.fullScreen ? leftArea.right : rootTransformItem.left
                 anchors.right: !rootTransformItem.fullScreen ? rightArea.left : rootTransformItem.right
@@ -126,6 +127,7 @@ WaylandCompositor {
             }
             Item {
                 id:leftArea
+                objectName: "leftArea"
                 width: surfaceItem ? surfaceItem.margin:window.initialSize
                 anchors.bottom: bottomArea.top
                 anchors.left: parent.left
@@ -135,6 +137,7 @@ WaylandCompositor {
             }
             Item {
                 id:rightArea
+                objectName: "rightArea"
                 width: surfaceItem ? surfaceItem.margin :window.initialSize
                 anchors.bottom:bottomArea.top
                 anchors.right: parent.right
@@ -144,6 +147,7 @@ WaylandCompositor {
             }
             Item {
                 id: topArea
+                objectName: "topArea"
                 height: surfaceItem ? surfaceItem.margin : window.initialSize
                 anchors.top: parent.top
                 anchors.left: parent.left
@@ -153,6 +157,7 @@ WaylandCompositor {
             }
             Item {
                 id: bottomArea
+                objectName: "bottomArea"
                 height: surfaceItem ? surfaceItem.margin : window.initialSize
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
@@ -212,6 +217,7 @@ WaylandCompositor {
         }
         Item {
             id: limboArea
+            objectName: "limboArea"
             visible: false
         }
     }
