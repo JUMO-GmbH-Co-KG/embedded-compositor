@@ -67,7 +67,7 @@ EmbeddedShellSurface::EmbeddedShellSurface(EmbeddedShellExtension *ext,
                                            EmbeddedShellTypes::Anchor anchor,
                                            uint32_t margin, uint32_t sort_index)
     : QWaylandShellSurfaceTemplate<EmbeddedShellSurface>(this),
-      m_surface(surface), m_anchor(anchor), m_margin(margin),
+      m_surface(surface), m_size(QSize{0, 0}), m_anchor(anchor), m_margin(margin),
       m_sort_index(sort_index) {
   Q_UNUSED(ext)
   qCDebug(shellExt) << __PRETTY_FUNCTION__ << anchor
@@ -81,6 +81,14 @@ QWaylandQuickShellIntegration *
 EmbeddedShellSurface::createIntegration(QWaylandQuickShellSurfaceItem *item) {
   qCDebug(shellExt) << __PRETTY_FUNCTION__;
   return new QuickEmbeddedShellIntegration(item);
+}
+
+void EmbeddedShellSurface::setSize(const QSize &size) {
+    qCDebug(shellExt) << __PRETTY_FUNCTION__ << m_size << "->" << size;
+    if (m_size != size) {
+        m_size = size;
+        Q_EMIT sizeChanged(size);
+    }
 }
 
 void EmbeddedShellSurface::setMargin(int newMargin) {
@@ -134,6 +142,13 @@ void QuickEmbeddedShellIntegration::sendConfigure(const QSize size) {
 void QuickEmbeddedShellIntegration::handleEmbeddedShellSurfaceDestroyed() {
   qCDebug(shellExt) << __PRETTY_FUNCTION__;
   m_shellSurface = nullptr;
+}
+
+void EmbeddedShellSurface::embedded_shell_surface_set_size(Resource *resource,
+                                                           uint32_t width,
+                                                           uint32_t height) {
+    Q_UNUSED(resource)
+    setSize(QSize(width, height));
 }
 
 void EmbeddedShellSurface::embedded_shell_surface_set_anchor(Resource *resource,

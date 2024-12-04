@@ -27,10 +27,12 @@ class Q_DECL_EXPORT EmbeddedShellSurface : public QObject {
 public:
   EmbeddedShellSurface(struct ::embedded_shell_surface *shell_surface,
                        QtWaylandClient::QWaylandWindow *window,
+                       const QSize &size,
                        EmbeddedShellTypes::Anchor anchor, uint32_t margin,
                        uint32_t sort_index);
   ~EmbeddedShellSurface() override;
 
+  QSize getSize() const;
   EmbeddedShellTypes::Anchor getAnchor() const;
   unsigned int getSortIndex() const;
   EmbeddedShellSurfaceView *createView(const QString &label,
@@ -51,6 +53,7 @@ public:
 signals:
 
 public slots:
+  void sendSize(const QSize &size);
   void sendAnchor(EmbeddedShellTypes::Anchor anchor);
   void sendMargin(int margin);
   void sendSortIndex(unsigned int sortIndex);

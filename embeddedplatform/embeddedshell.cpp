@@ -22,8 +22,9 @@ EmbeddedShell::createSurface(QtWaylandClient::QWaylandWindow *window,
   auto surface = instance->surface_create(
       window->wlSurface(), static_cast<embedded_shell_anchor_border>(anchor),
       margin, sort_index);
+  const QSize size{0, 0};
   auto ess =
-      new EmbeddedShellSurface(surface, window, anchor, margin, sort_index);
+      new EmbeddedShellSurface(surface, window, size, anchor, margin, sort_index);
   return ess;
 }
 
