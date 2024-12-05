@@ -16,15 +16,18 @@ class EmbeddedShellSurfacePrivate
 public:
   EmbeddedShellSurfacePrivate(struct ::embedded_shell_surface *shell_surface,
                               QtWaylandClient::QWaylandWindow *window,
+                              const QSize &size,
                               EmbeddedShellTypes::Anchor anchor,
                               uint32_t margin, uint32_t sort_index);
   ~EmbeddedShellSurfacePrivate() override;
+  QSize getSize() const { return m_size; }
   EmbeddedShellTypes::Anchor getAnchor() const { return m_anchor; }
   uint32_t getMargin() const { return m_margin; }
 
   void applyConfigure() override;
 
 private:
+  QSize m_size;
   EmbeddedShellTypes::Anchor m_anchor;
   uint32_t m_margin = 0;
   uint32_t m_sort_index = 0;

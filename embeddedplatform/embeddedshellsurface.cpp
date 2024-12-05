@@ -8,22 +8,27 @@
 
 EmbeddedShellSurface::EmbeddedShellSurface(
     struct ::embedded_shell_surface *shell_surface,
-    QtWaylandClient::QWaylandWindow *window, EmbeddedShellTypes::Anchor anchor,
+    QtWaylandClient::QWaylandWindow *window, const QSize &size, EmbeddedShellTypes::Anchor anchor,
     uint32_t margin, uint32_t sort_index)
-    : d_ptr(new EmbeddedShellSurfacePrivate(shell_surface, window, anchor,
+    : d_ptr(new EmbeddedShellSurfacePrivate(shell_surface, window, size, anchor,
                                             margin, sort_index)) {}
 
 EmbeddedShellSurface::~EmbeddedShellSurface() {}
 
 EmbeddedShellSurfacePrivate::EmbeddedShellSurfacePrivate(
     struct ::embedded_shell_surface *shell_surface,
-    QtWaylandClient::QWaylandWindow *window, EmbeddedShellTypes::Anchor anchor,
+    QtWaylandClient::QWaylandWindow *window, const QSize &size, EmbeddedShellTypes::Anchor anchor,
     uint32_t margin, uint32_t sort_index)
     : QWaylandShellSurface(window), QtWayland::embedded_shell_surface(
                                         shell_surface),
-      m_anchor(anchor), m_margin(margin), m_sort_index(sort_index) {}
+      m_size(size), m_anchor(anchor), m_margin(margin), m_sort_index(sort_index) {}
 
 EmbeddedShellSurfacePrivate::~EmbeddedShellSurfacePrivate() {}
+
+QSize EmbeddedShellSurface::getSize() const {
+  Q_D(const EmbeddedShellSurface);
+  return d->m_size;
+}
 
 EmbeddedShellTypes::Anchor EmbeddedShellSurface::getAnchor() const {
   Q_D(const EmbeddedShellSurface);
@@ -76,6 +81,12 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &appId,
 
 QtWaylandClient::QWaylandShellSurface *EmbeddedShellSurface::shellSurface() {
   return d_ptr.data();
+}
+
+void EmbeddedShellSurface::sendSize(const QSize &size) {
+  Q_D(EmbeddedShellSurface);
+  // Check version here if it were versioned.
+  d->set_size(size.width(), size.height());
 }
 
 void EmbeddedShellSurface::sendAnchor(EmbeddedShellTypes::Anchor anchor) {
