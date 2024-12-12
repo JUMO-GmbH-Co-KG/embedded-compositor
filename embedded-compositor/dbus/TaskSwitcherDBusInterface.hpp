@@ -32,7 +32,7 @@ public:
     QString currentView() const;
     void setCurrentView(QString newCurrentView);
 
-    const QList<TaskSwitcherEntry> &views() const;
+    QList<TaskSwitcherEntry> views() const;
 
     QAbstractListModel *viewModel() const;
     void setViewModel(QAbstractListModel *newViewModel);
@@ -41,15 +41,14 @@ signals:
     void openRequested();
     void closeRequested();
     void currentViewChanged(QString CurrentView);
-    void viewsChanged(const QList<TaskSwitcherEntry> &views);
+    void viewsChanged();
 
     void viewModelChanged(QAbstractListModel *viewModel);
 
 private:
-    QString m_currentView;
-    QList<TaskSwitcherEntry> m_views = {};
-    QAbstractListModel *m_viewModel = nullptr;
+    void onViewsInserted(const QModelIndex &parent, int first, int last);
+    void onViewsAboutToBeRemoved(const QModelIndex &parent, int first, int last);
 
-private slots:
-    void publishViews();
+    QString m_currentView;
+    QAbstractListModel *m_viewModel = nullptr;
 };
