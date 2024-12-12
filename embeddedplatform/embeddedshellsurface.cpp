@@ -70,7 +70,14 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &appId,
   Q_D(EmbeddedShellSurface);
   auto view =
       d->view_create(d->embedded_shell_surface::object(), appId, appLabel, appIcon, label, icon, sort_index);
-  auto ret = new EmbeddedShellSurfaceView(view, this, label);
+  auto ret = new EmbeddedShellSurfaceView(view, this);
+
+  auto *viewPrivate = EmbeddedShellSurfaceViewPrivate::get(ret);
+  viewPrivate->m_appLabel = appLabel;
+  viewPrivate->m_appIcon = appIcon;
+  viewPrivate->m_label = label;
+  viewPrivate->m_icon = icon;
+
   return ret;
 }
 
@@ -95,29 +102,76 @@ void EmbeddedShellSurface::sendSortIndex(unsigned int sortIndex) {
 
 EmbeddedShellSurfaceViewPrivate::EmbeddedShellSurfaceViewPrivate(
     EmbeddedShellSurfaceView *q, ::surface_view *view,
-    EmbeddedShellSurface *surf, const QString &label)
-    : QObject(surf), QtWayland::surface_view(view), m_label(label), q_ptr(q) {}
+    EmbeddedShellSurface *surf)
+    : QObject(surf), QtWayland::surface_view(view), q_ptr(q) {}
 
 EmbeddedShellSurfaceViewPrivate::~EmbeddedShellSurfaceViewPrivate() {
   destroy();
 }
 
+EmbeddedShellSurfaceViewPrivate *EmbeddedShellSurfaceViewPrivate::get(EmbeddedShellSurfaceView *q)
+{
+    return q->d_func();
+}
+
 EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(::surface_view *view,
-                                                   EmbeddedShellSurface *surf,
-                                                   const QString &label)
-    : d_ptr(new EmbeddedShellSurfaceViewPrivate(this, view, surf, label)) {}
+                                                   EmbeddedShellSurface *surf)
+    : d_ptr(new EmbeddedShellSurfaceViewPrivate(this, view, surf)) {}
 
 EmbeddedShellSurfaceView::~EmbeddedShellSurfaceView() {}
 
-const QString &EmbeddedShellSurfaceView::label() const {
+QString EmbeddedShellSurfaceView::appLabel() const {
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_appLabel;
+}
+
+void EmbeddedShellSurfaceView::setAppLabel(const QString &appLabel) {
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_appLabel == appLabel)
+    return;
+  d->m_appLabel = appLabel;
+  d->set_app_label(appLabel);
+  Q_EMIT appLabelChanged(appLabel);
+}
+
+QString EmbeddedShellSurfaceView::appIcon() const {
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_appIcon;
+}
+
+void EmbeddedShellSurfaceView::setAppIcon(const QString &appIcon) {
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_appIcon == appIcon)
+      return;
+  d->m_appIcon = appIcon;
+  d->set_app_icon(appIcon);
+  Q_EMIT appIconChanged(appIcon);
+}
+
+QString EmbeddedShellSurfaceView::label() const {
   Q_D(const EmbeddedShellSurfaceView);
   return d->m_label;
 }
 
-void EmbeddedShellSurfaceView::setLabel(const QString &newLabel) {
+void EmbeddedShellSurfaceView::setLabel(const QString &label) {
   Q_D(EmbeddedShellSurfaceView);
-  if (d->m_label == newLabel)
+  if (d->m_label == label)
     return;
-  d->m_label = newLabel;
-  emit labelChanged();
+  d->m_label = label;
+  d->set_label(label);
+  Q_EMIT labelChanged(label);
+}
+
+QString EmbeddedShellSurfaceView::icon() const {
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_icon;
+}
+
+void EmbeddedShellSurfaceView::setIcon(const QString &icon) {
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_icon == icon)
+    return;
+  d->m_icon = icon;
+  d->set_icon(icon);
+  Q_EMIT iconChanged(icon);
 }

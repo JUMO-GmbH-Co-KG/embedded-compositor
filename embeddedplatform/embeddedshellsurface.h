@@ -63,16 +63,31 @@ class EmbeddedShellSurfaceView : public QObject {
   Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
 
 public:
-  EmbeddedShellSurfaceView(struct ::surface_view *view,
-                           EmbeddedShellSurface *surf, const QString &label);
   ~EmbeddedShellSurfaceView() override;
 
-  const QString &label() const;
-  void setLabel(const QString &newLabel);
+  QString appLabel() const;
+  void setAppLabel(const QString &appLabel);
+  Q_SIGNAL void appLabelChanged(const QString &appLabel);
+
+  QString appIcon() const;
+  void setAppIcon(const QString &appIcon);
+  Q_SIGNAL void appIconChanged(const QString &appIcon);
+
+  QString label() const;
+  void setLabel(const QString &label);
+  Q_SIGNAL void labelChanged(const QString &label);
+
+  QString icon() const;
+  void setIcon(const QString &icon);
+  Q_SIGNAL void iconChanged(const QString &icon);
 
 signals:
   void selected();
-  void labelChanged();
+
+private:
+  friend class EmbeddedShellSurface;
+  EmbeddedShellSurfaceView(struct ::surface_view *view,
+                           EmbeddedShellSurface *surf);
 };
 
 #endif // EMBEDDEDSHELLSURFACE_H
