@@ -54,6 +54,8 @@ DBUS_ADAPTORS += \
     notifications_adaptor \
     screenshot_adaptor
 
+LIBS += -L/usr/include -lvncgl
+
 RESOURCES += qml.qrc
 
 target.path = /usr/bin
