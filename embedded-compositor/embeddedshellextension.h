@@ -57,15 +57,18 @@ public:
 
   QWaylandSurface *surface() const { return m_surface; }
 
+  QSize getSize() const { return m_size; }
   EmbeddedShellTypes::Anchor getAnchor() { return m_anchor; }
   int getMargin() { return m_margin; }
   unsigned int sortIndex() { return m_sort_index; }
+  Q_PROPERTY(QSize size READ getSize NOTIFY sizeChanged)
   Q_PROPERTY(
       EmbeddedShellTypes::Anchor anchor READ getAnchor NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ getMargin NOTIFY marginChanged)
   Q_PROPERTY(unsigned int sortIndex READ sortIndex NOTIFY sortIndexChanged)
   Q_PROPERTY(QString uuid READ getUuid CONSTANT)
 
+  void setSize(const QSize &size);
   void setAnchor(embedded_shell_anchor_border newAnchor);
   void setMargin(int newMargin);
   void setSortIndex(unsigned int sort_index);
@@ -74,6 +77,7 @@ public:
   pid_t getClientPid() const;
 
 signals:
+  void sizeChanged(const QSize &size);
   void anchorChanged(EmbeddedShellTypes::Anchor anchor);
   void marginChanged(int margin);
   void sortIndexChanged(unsigned int sort_index);
@@ -81,6 +85,7 @@ signals:
 
 private:
   QWaylandSurface *m_surface;
+  QSize m_size;
   EmbeddedShellTypes::Anchor m_anchor = EmbeddedShellTypes::Anchor::Undefined;
   uint32_t m_margin = 0;
   uint32_t m_sort_index = 0;
@@ -88,6 +93,9 @@ private:
 
   // embedded_shell_surface interface
 protected:
+  void embedded_shell_surface_set_size(Resource *resource,
+                                       uint32_t width,
+                                       uint32_t height) override;
   void embedded_shell_surface_set_anchor(Resource *resource,
                                          uint32_t anchor) override;
   void embedded_shell_surface_view_create(Resource *resource,

@@ -83,6 +83,7 @@ WaylandCompositor {
 
             Rectangle {
                 id: centerArea
+                objectName: "centerArea"
                 anchors.top: !rootTransformItem.fullScreen ? topArea.bottom : rootTransformItem.top
                 anchors.left: !rootTransformItem.fullScreen ? leftArea.right : rootTransformItem.left
                 anchors.right: !rootTransformItem.fullScreen ? rightArea.left : rootTransformItem.right
@@ -126,6 +127,7 @@ WaylandCompositor {
             }
             Item {
                 id:leftArea
+                objectName: "leftArea"
                 width: surfaceItem ? surfaceItem.margin:window.initialSize
                 anchors.bottom: bottomArea.top
                 anchors.left: parent.left
@@ -135,6 +137,7 @@ WaylandCompositor {
             }
             Item {
                 id:rightArea
+                objectName: "rightArea"
                 width: surfaceItem ? surfaceItem.margin :window.initialSize
                 anchors.bottom:bottomArea.top
                 anchors.right: parent.right
@@ -144,6 +147,7 @@ WaylandCompositor {
             }
             Item {
                 id: topArea
+                objectName: "topArea"
                 height: surfaceItem ? surfaceItem.margin : window.initialSize
                 anchors.top: parent.top
                 anchors.left: parent.left
@@ -153,6 +157,7 @@ WaylandCompositor {
             }
             Item {
                 id: bottomArea
+                objectName: "bottomArea"
                 height: surfaceItem ? surfaceItem.margin : window.initialSize
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
@@ -212,6 +217,7 @@ WaylandCompositor {
         }
         Item {
             id: limboArea
+            objectName: "limboArea"
             visible: false
         }
     }
@@ -309,8 +315,8 @@ WaylandCompositor {
             visible: parent.surfaceItem === shellSurfaceItem
 
             onSurfaceDestroyed:  destroy()
-            onWidthChanged: handleResized()
-            onHeightChanged: handleResized()
+            onWidthChanged: Qt.callLater(handleResized)
+            onHeightChanged: Qt.callLater(handleResized)
             Component.onCompleted: {
                 handleAnchor();
             }
@@ -326,6 +332,10 @@ WaylandCompositor {
                 target: shellSurface
                 function onAnchorChanged() {
                     handleAnchor();
+                }
+
+                function onSizeChanged(size) {
+                    Qt.callLater(handleResized);
                 }
 
                 function onCreateView(view) {
@@ -356,8 +366,33 @@ WaylandCompositor {
             }
 
             function handleResized() {
-                if(width <= 0 || height <=0) return;
-                shellSurface.sendConfigure(Qt.size(width, height));
+                let newWidth = width;
+                let newHeight = height;
+
+                // Only resize the side that is anchored, the other is taken from the client,
+                // otherwise there can be a race between the client changing its requested size
+                // and the compositor applying one, particularly when it comes to screen rotation.
+
+                const targetArea = anchorMap[shellSurface.anchor];
+                if (targetArea) {
+                    if (targetArea.anchors.left && targetArea.anchors.right
+                            && !targetArea.anchors.top && !targetArea.anchors.bottom) {
+                        // Horizontally constrained, take height from client,
+                        // or as fallback the current height.
+                        newHeight = shellSurface.size.height || implicitHeight;
+                    } else if (targetArea.anchors.top && targetArea.anchors.bottom
+                               && !targetArea.anchors.left && !targetArea.anchors.right) {
+                        // Vertically constrained, take width from client,
+                        // or as fallback the current width.
+                        newWidth = shellSurface.size.width || implicitWidth;
+                    }
+                }
+
+                if (newWidth <= 0 || newHeight <= 0) {
+                    return;
+                }
+
+                shellSurface.sendConfigure(Qt.size(newWidth, newHeight));
             }
         }
     }

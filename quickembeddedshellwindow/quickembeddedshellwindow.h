@@ -23,6 +23,9 @@ public:
 
   QuickEmbeddedShellWindow(QWindow *parent = nullptr);
   ~QuickEmbeddedShellWindow() override;
+  // Changes "size" but using "implicit" API style to be consistent with what QtQuick usually does for "wanted size".
+  Q_PROPERTY(int implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY implicitWidthChanged)
+  Q_PROPERTY(int implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
   Q_PROPERTY(EmbeddedShellTypes::Anchor anchor READ anchor WRITE setAnchor
                  NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
@@ -36,6 +39,10 @@ public:
   void classBegin() override;
   void componentComplete() override;
 
+  int implicitWidth() const;
+  void setImplicitWidth(int implicitWidth);
+  int implicitHeight() const;
+  void setImplicitHeight(int implicitHeight);
   int margin() const;
   void setMargin(int newMargin);
   unsigned int sortIndex() const;
@@ -51,15 +58,19 @@ public slots:
                                        uint32_t sort_index);
 
 signals:
+  void implicitWidthChanged(int implicitWidth);
+  void implicitHeightChanged(int implicitHeight);
   void anchorChanged(EmbeddedShellTypes::Anchor anchor);
   void marginChanged(int margin);
   void sortIndexChanged(unsigned int sortIndex);
 
 private:
+  QSize m_size;
   EmbeddedShellTypes::Anchor m_anchor = EmbeddedShellTypes::Anchor::Undefined;
   EmbeddedShellSurface *m_surface = nullptr;
   int m_margin = -1;
   unsigned int m_sortIndex = 0;
+  bool m_componentComplete = false;
 };
 
 #endif // QUICKEMBEDDEDSHELLWINDOW_H
