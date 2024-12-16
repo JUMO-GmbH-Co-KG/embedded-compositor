@@ -42,19 +42,25 @@ class EmbeddedShellSurfaceViewPrivate : public QObject,
                                         public QtWayland::surface_view {
   Q_DECLARE_PUBLIC(EmbeddedShellSurfaceView)
   Q_OBJECT
-  QString m_label;
 
 public:
   EmbeddedShellSurfaceViewPrivate(EmbeddedShellSurfaceView *q,
                                   ::surface_view *view,
-                                  EmbeddedShellSurface *surf,
-                                  const QString &label);
+                                  EmbeddedShellSurface *surf);
   ~EmbeddedShellSurfaceViewPrivate() override;
+
+  static EmbeddedShellSurfaceViewPrivate *get(EmbeddedShellSurfaceView *q);
+
   void surface_view_selected() override {
     qDebug() << __PRETTY_FUNCTION__;
     Q_Q(EmbeddedShellSurfaceView);
     emit q->selected();
   }
   EmbeddedShellSurfaceView *q_ptr = nullptr;
+
+  QString m_appLabel;
+  QString m_appIcon;
+  QString m_label;
+  QString m_icon;
 };
 #endif // EMBEDDEDSHELLSURFACE_P_H

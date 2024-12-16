@@ -35,9 +35,34 @@ void TaskSwitcherDBusInterface::setCurrentView(QString newCurrentView)
     emit currentViewChanged(m_currentView);
 }
 
-const QList<TaskSwitcherEntry> &TaskSwitcherDBusInterface::views() const
+QList<TaskSwitcherEntry> TaskSwitcherDBusInterface::views() const
 {
-    return m_views;
+    QList<TaskSwitcherEntry> entries;
+
+    if (m_viewModel) {
+        entries.reserve(m_viewModel->rowCount());
+
+        for (auto i = 0; i < m_viewModel->rowCount(); i++) {
+            const auto &data = m_viewModel->index(i).data().toMap();
+
+            auto *surface = data.value(QStringLiteral("surface")).value<EmbeddedShellSurface *>();
+            auto *view = data.value(QStringLiteral("view")).value<EmbeddedShellSurfaceView *>();
+
+            entries.append({
+                view ? view->getUuid() : surface->getUuid(),
+                view ? view->appId() : QString(),
+                view ? view->appLabel() : QString(),
+                view ? view->appIcon() : QString(),
+                view ? view->label() : QStringLiteral("surface"),
+                view ? view->icon() : QString(),
+                uint32_t(surface->getClientPid()),
+                view ? uint32_t(view->sortIndex()) : 0,
+                QVariantMap(), //args
+            });
+        }
+    }
+
+    return entries;
 }
 
 QDBusArgument &operator<<(QDBusArgument &argument,
@@ -65,37 +90,58 @@ QAbstractListModel *TaskSwitcherDBusInterface::viewModel() const
 
 void TaskSwitcherDBusInterface::setViewModel(QAbstractListModel *newViewModel)
 {
-    if (m_viewModel == newViewModel)
+    if (m_viewModel == newViewModel) {
         return;
-    connect(newViewModel, &QAbstractItemModel::rowsInserted, this,
-            &TaskSwitcherDBusInterface::publishViews);
-    connect(newViewModel, &QAbstractItemModel::rowsRemoved, this,
-            &TaskSwitcherDBusInterface::publishViews);
+    }
+
+    if (m_viewModel) {
+        disconnect(m_viewModel, nullptr, this, nullptr);
+    }
+
     m_viewModel = newViewModel;
-    emit viewModelChanged(m_viewModel);
+
+    if (m_viewModel) {
+        connect(m_viewModel, &QAbstractItemModel::rowsInserted, this,
+                &TaskSwitcherDBusInterface::onViewsInserted);
+        connect(m_viewModel, &QAbstractItemModel::rowsAboutToBeRemoved, this,
+                &TaskSwitcherDBusInterface::onViewsAboutToBeRemoved);
+    }
+
+    Q_EMIT viewModelChanged(m_viewModel);
+
+    Q_EMIT viewsChanged();
 }
 
-void TaskSwitcherDBusInterface::publishViews()
+void TaskSwitcherDBusInterface::onViewsInserted(const QModelIndex &parent, int first, int last)
 {
-    QList<TaskSwitcherEntry> list;
-    for (auto i = 0; i < m_viewModel->rowCount(); i++)
-    {
-        auto d = m_viewModel->index(i).data().toMap();
-        auto surface = d["surface"].value<EmbeddedShellSurface *>();
-        auto view = d["view"].value<EmbeddedShellSurfaceView *>();
+    Q_ASSERT(!parent.isValid());
 
-        list.append({
-            view ? view->getUuid() : surface->getUuid(),
-            view ? view->appId() : QString(),
-            view ? view->appLabel() : QString(),
-            view ? view->appIcon() : QString(),
-            view ? view->label() : "surface",
-            view ? view->icon() : QString(),
-            uint32_t(surface->getClientPid()),
-            view ? uint32_t(view->sortIndex()) : 0,
-            QVariantMap(), //args
-        });
+    for (int i = first; i <= last; ++i) {
+        const auto &data = m_viewModel->index(i).data().toMap();
+
+        if (auto *view = data.value(QStringLiteral("view")).value<EmbeddedShellSurfaceView *>()) {
+            connect(view, &EmbeddedShellSurfaceView::appIdChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            connect(view, &EmbeddedShellSurfaceView::appLabelChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            connect(view, &EmbeddedShellSurfaceView::appIconChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            connect(view, &EmbeddedShellSurfaceView::labelChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            connect(view, &EmbeddedShellSurfaceView::iconChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+        }
     }
-    m_views = list;
-    emit viewsChanged(m_views);
+}
+
+void TaskSwitcherDBusInterface::onViewsAboutToBeRemoved(const QModelIndex &parent, int first, int last)
+{
+    Q_ASSERT(!parent.isValid());
+
+    for (int i = first; i <= last; ++i) {
+        const auto &data = m_viewModel->index(i).data().toMap();
+
+        if (auto *view = data.value(QStringLiteral("view")).value<EmbeddedShellSurfaceView *>()) {
+            disconnect(view, &EmbeddedShellSurfaceView::appIdChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            disconnect(view, &EmbeddedShellSurfaceView::appLabelChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            disconnect(view, &EmbeddedShellSurfaceView::appIconChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            disconnect(view, &EmbeddedShellSurfaceView::labelChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            disconnect(view, &EmbeddedShellSurfaceView::iconChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+        }
+    }
 }
