@@ -15,6 +15,7 @@
 #include "TaskSwitcherDBusInterface.hpp"
 #include "CompositorScreenDBusInterface.hpp"
 #include "GlobalOverlayDBusInterface.hpp"
+#include <VncNamespace.h>
 
 int main(int argc, char *argv[]) {
   qInfo() << "Version: " << QStringLiteral(EMBEDDED_COMPOSITOR_VERSION);
@@ -78,6 +79,26 @@ int main(int argc, char *argv[]) {
                      }
                    });
 
+
+
+
+
   appEngine.load(QUrl("qrc:///qml/main.qml"));
+
+
+      for (auto* pRootObject : appEngine.rootObjects())
+      {
+          if (pRootObject)
+          {
+              QQuickWindow* pQmlQuickWindow = qobject_cast<QQuickWindow*>(
+                  pRootObject->findChild<QObject*>("compositorWindow") );
+              if (pQmlQuickWindow)
+              {
+                qDebug() << "start VNC";
+                Vnc::startServer(pQmlQuickWindow, 5900);
+              }
+          }
+      }
+
   return app.exec();
 }
