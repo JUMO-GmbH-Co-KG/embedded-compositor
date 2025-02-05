@@ -373,13 +373,11 @@ WaylandCompositor {
 
                 const targetArea = anchorMap[shellSurface.anchor];
                 if (targetArea) {
-                    if (targetArea.anchors.left && targetArea.anchors.right
-                            && !targetArea.anchors.top && !targetArea.anchors.bottom) {
+                    if (targetArea === bottomArea || targetArea === topArea) {
                         // Horizontally constrained, take height from client,
                         // or as fallback the current height.
                         newHeight = shellSurface.size.height || implicitHeight;
-                    } else if (targetArea.anchors.top && targetArea.anchors.bottom
-                               && !targetArea.anchors.left && !targetArea.anchors.right) {
+                    } else if (targetArea === leftArea || targetArea === rightArea) {
                         // Vertically constrained, take width from client,
                         // or as fallback the current width.
                         newWidth = shellSurface.size.width || implicitWidth;
