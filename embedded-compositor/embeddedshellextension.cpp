@@ -102,6 +102,27 @@ void EmbeddedShellSurface::setSortIndex(unsigned int sort_index) {
   emit sortIndexChanged(sort_index);
 }
 
+void EmbeddedShellSurface::setAppId(const QString &appId) {
+  if (!m_appId.isEmpty()) {
+    return;
+  }
+  m_appId = appId;
+}
+
+void EmbeddedShellSurface::setAppLabel(const QString &appLabel) {
+  if (m_appLabel != appLabel) {
+    m_appLabel = appLabel;
+    Q_EMIT appLabelChanged(appLabel);
+  }
+}
+
+void EmbeddedShellSurface::setAppIcon(const QString &appIcon) {
+  if (m_appIcon != appIcon) {
+    m_appIcon = appIcon;
+    Q_EMIT appIconChanged(appIcon);
+  }
+}
+
 void EmbeddedShellSurface::sendConfigure(const QSize size) {
   qCDebug(shellExt) << __PRETTY_FUNCTION__ << size;
   send_configure(size.width(), size.height());
@@ -320,6 +341,27 @@ void EmbeddedShellSurface::embedded_shell_surface_set_sort_index(
   qCDebug(shellExt) << __PRETTY_FUNCTION__ << sort_index;
   Q_UNUSED(resource)
   setSortIndex(sort_index);
+}
+
+void EmbeddedShellSurface::embedded_shell_surface_set_app_id(
+    Resource *resource, const QString &appId) {
+    qCDebug(shellExt) << __PRETTY_FUNCTION__ << appId;
+    Q_UNUSED(resource)
+    setAppId(appId);
+}
+
+void EmbeddedShellSurface::embedded_shell_surface_set_app_label(
+    Resource *resource, const QString &appLabel) {
+    qCDebug(shellExt) << __PRETTY_FUNCTION__ << appLabel;
+    Q_UNUSED(resource)
+    setAppLabel(appLabel);
+}
+
+void EmbeddedShellSurface::embedded_shell_surface_set_app_icon(
+    Resource *resource, const QString &appIcon) {
+    qCDebug(shellExt) << __PRETTY_FUNCTION__ << appIcon;
+    Q_UNUSED(resource)
+    setAppIcon(appIcon);
 }
 
 unsigned int EmbeddedShellSurfaceView::sortIndex() const { return m_sortIndex; }

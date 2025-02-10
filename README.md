@@ -127,7 +127,7 @@ For convenience of QML applications, we also implement a QML interface to embedd
     }
 ```
 
-For third party Qt applications that can not be adapted to interface with the `embedded-shell` protocol, we provide a set of environment variables to choose a compositor slot, width and sort index:
+For third party Qt applications that can not be adapted to interface with the `embedded-shell` protocol, we provide a set of environment variables to choose a compositor slot, width, sort index, and label/icon:
 
 ```sh
     # possible values: center, top, bottom, left, right
@@ -136,6 +136,10 @@ For third party Qt applications that can not be adapted to interface with the `e
     export EMBEDDED_SHELL_SORT_INDEX=100
     # unsigned integer values
     export EMBEDDED_SHELL_MARGIN=32
+    # string
+    export EMBEDDED_SHELL_APP_LABEL="My App"
+    # string (path)
+    export EMBEDDED_SHELL_APP_ICON="file:/opt/myapp/icons/icon.svg"
     # sample application
     kcalc
 ```

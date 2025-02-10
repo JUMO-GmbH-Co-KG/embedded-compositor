@@ -74,6 +74,19 @@ EmbeddedShellIntegration::createShellSurface(
     return nullptr;
   }
 
+  const QString appId = qEnvironmentVariable("EMBEDDED_SHELL_APP_ID");
+  if (!appId.isEmpty()) {
+    ess->sendAppId(appId);
+  }
+  const QString appLabel = qEnvironmentVariable("EMBEDDED_SHELL_APP_LABEL");
+  if (!appLabel.isEmpty()) {
+    ess->sendAppLabel(appLabel);
+  }
+  const QString appIcon = qEnvironmentVariable("EMBEDDED_SHELL_APP_ICON");
+  if (!appIcon.isEmpty()) {
+    ess->sendAppIcon(appIcon);
+  }
+
   m_windows.insert(window, ess);
   emit EmbeddedPlatform::instance()->shellSurfaceCreated(ess, window->window());
   return ess->shellSurface();
