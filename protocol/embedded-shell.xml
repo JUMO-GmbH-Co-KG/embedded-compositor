@@ -15,6 +15,18 @@
 		<request name="set_margin">
 			<arg name="margin" type="int" />
 		</request>
+		<request name="set_app_id"><!-- TODO should probably be since="3" -->
+			<description summary="Set the application ID of the application"/>
+			<arg name="label" type="string"/>
+		</request>
+		<request name="set_app_label"><!-- TODO should probably be since="3" -->
+			<description summary="Set the user-visible name of the application"/>
+			<arg name="label" type="string"/>
+		</request>
+		<request name="set_app_icon"><!-- TODO should probably be since="3" -->
+			<description summary="Set the icon name of this application"/>
+			<arg name="icon" type="string"/>
+		</request>
 
 		<request name="set_size"><!-- TODO should probably be since="2" -->
 			<description summary="Sets the size of the surface">

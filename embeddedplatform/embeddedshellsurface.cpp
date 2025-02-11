@@ -111,6 +111,21 @@ void EmbeddedShellSurface::sendSortIndex(unsigned int sortIndex) {
   d->set_sort_index(sortIndex);
 }
 
+void EmbeddedShellSurface::sendAppId(const QString &appId) {
+  Q_D(EmbeddedShellSurface);
+  d->set_app_id(appId);
+}
+
+void EmbeddedShellSurface::sendAppLabel(const QString &appLabel) {
+  Q_D(EmbeddedShellSurface);
+  d->set_app_label(appLabel);
+}
+
+void EmbeddedShellSurface::sendAppIcon(const QString &appIcon) {
+  Q_D(EmbeddedShellSurface);
+  d->set_app_icon(appIcon);
+}
+
 EmbeddedShellSurfaceViewPrivate::EmbeddedShellSurfaceViewPrivate(
     EmbeddedShellSurfaceView *q, ::surface_view *view,
     EmbeddedShellSurface *surf)

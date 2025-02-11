@@ -61,17 +61,26 @@ public:
   EmbeddedShellTypes::Anchor getAnchor() { return m_anchor; }
   int getMargin() { return m_margin; }
   unsigned int sortIndex() { return m_sort_index; }
+  QString appId() const { return m_appId; }
+  QString appLabel() const { return m_appLabel; }
+  QString appIcon() const { return m_appIcon; }
   Q_PROPERTY(QSize size READ getSize NOTIFY sizeChanged)
   Q_PROPERTY(
       EmbeddedShellTypes::Anchor anchor READ getAnchor NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ getMargin NOTIFY marginChanged)
   Q_PROPERTY(unsigned int sortIndex READ sortIndex NOTIFY sortIndexChanged)
+  Q_PROPERTY(QString appId READ appId CONSTANT)
+  Q_PROPERTY(QString appLabel READ appLabel NOTIFY appLabelChanged)
+  Q_PROPERTY(QString appIcon READ appIcon NOTIFY appIconChanged)
   Q_PROPERTY(QString uuid READ getUuid CONSTANT)
 
   void setSize(const QSize &size);
   void setAnchor(embedded_shell_anchor_border newAnchor);
   void setMargin(int newMargin);
   void setSortIndex(unsigned int sort_index);
+  void setAppId(const QString &appId);
+  void setAppLabel(const QString &appLabel);
+  void setAppIcon(const QString &appIcon);
   Q_INVOKABLE void sendConfigure(const QSize size);
   QString getUuid() const;
   pid_t getClientPid() const;
@@ -81,6 +90,8 @@ signals:
   void anchorChanged(EmbeddedShellTypes::Anchor anchor);
   void marginChanged(int margin);
   void sortIndexChanged(unsigned int sort_index);
+  void appIconChanged(const QString &appIcon);
+  void appLabelChanged(const QString &appLabel);
   void createView(EmbeddedShellSurfaceView *view);
 
 private:
@@ -89,6 +100,9 @@ private:
   EmbeddedShellTypes::Anchor m_anchor = EmbeddedShellTypes::Anchor::Undefined;
   uint32_t m_margin = 0;
   uint32_t m_sort_index = 0;
+  QString m_appId;
+  QString m_appLabel;
+  QString m_appIcon;
   QUuid m_uuid = QUuid::createUuid();
 
   // embedded_shell_surface interface
@@ -107,6 +121,12 @@ protected:
                                          int32_t margin) override;
   void embedded_shell_surface_set_sort_index(Resource *resource,
                                              uint32_t sort_index) override;
+  void embedded_shell_surface_set_app_id(Resource *resource,
+                                         const QString &appId) override;
+  void embedded_shell_surface_set_app_label(Resource *resource,
+                                            const QString &label) override;
+  void embedded_shell_surface_set_app_icon(Resource *resource,
+                                           const QString &icon) override;
 };
 
 class EmbeddedShellSurfaceView : public QObject,

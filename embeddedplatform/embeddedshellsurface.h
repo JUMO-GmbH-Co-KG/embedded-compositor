@@ -57,6 +57,9 @@ public slots:
   void sendAnchor(EmbeddedShellTypes::Anchor anchor);
   void sendMargin(int margin);
   void sendSortIndex(unsigned int sortIndex);
+  void sendAppId(const QString &appId);
+  void sendAppLabel(const QString &appLabe);
+  void sendAppIcon(const QString &appIcon);
 };
 
 class EmbeddedShellSurfaceView : public QObject {

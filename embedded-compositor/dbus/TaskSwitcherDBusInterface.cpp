@@ -48,12 +48,27 @@ QList<TaskSwitcherEntry> TaskSwitcherDBusInterface::views() const
             auto *surface = data.value(QStringLiteral("surface")).value<EmbeddedShellSurface *>();
             auto *view = data.value(QStringLiteral("view")).value<EmbeddedShellSurfaceView *>();
 
+            QString appId = surface->appId();
+            if (view && !view->appId().isEmpty()) {
+                appId = view->appId();
+            }
+
+            QString appLabel = surface->appLabel();
+            if (view && !view->appLabel().isEmpty()) {
+                appLabel = view->appLabel();
+            }
+
+            QString appIcon = surface->appIcon();
+            if (view && !view->appIcon().isEmpty()) {
+                appIcon = view->appIcon();
+            }
+
             entries.append({
                 view ? view->getUuid() : surface->getUuid(),
-                view ? view->appId() : QString(),
-                view ? view->appLabel() : QString(),
-                view ? view->appIcon() : QString(),
-                view ? view->label() : QStringLiteral("surface"),
+                appId,
+                appLabel,
+                appIcon,
+                view ? view->label() : QString(),
                 view ? view->icon() : QString(),
                 uint32_t(surface->getClientPid()),
                 view ? uint32_t(view->sortIndex()) : 0,
