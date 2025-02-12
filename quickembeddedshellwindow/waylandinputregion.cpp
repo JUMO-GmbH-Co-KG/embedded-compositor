@@ -34,10 +34,10 @@ void WaylandInputRegion::itemChange(ItemChange c, const ItemChangeData& d) {
     QQuickItem::itemChange(c,d);
 }
 
-void WaylandInputRegion::geometryChanged(const QRectF &newGeometry,
+void WaylandInputRegion::geometryChange(const QRectF &newGeometry,
                                          const QRectF &oldGeometry) {
-  QQuickItem::geometryChanged(newGeometry, oldGeometry);
-  updateRegion();
+    QQuickItem::geometryChange(newGeometry, oldGeometry);
+    updateRegion();
 }
 
 void WaylandInputRegion::SetImage(QVariant image, QRect sceneRect)
