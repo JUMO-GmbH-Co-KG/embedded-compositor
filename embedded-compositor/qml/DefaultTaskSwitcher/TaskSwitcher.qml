@@ -3,7 +3,7 @@
 import QtQuick 2.0
 import QtWayland.Compositor 1.0
 import de.EmbeddedCompositor.embeddedshell 1.0
-import QtGraphicalEffects 1.12
+import QtQuick.Effects
 import de.EmbeddedCompositor.utility 1.0
 
 Rectangle {
@@ -82,11 +82,11 @@ Rectangle {
                 bufferLocked: !taskSwitchComponentRoot.ListView.isCurrentItem
             }
 
-            FastBlur {
+            MultiEffect {
                 anchors.fill:parent
                 source: sItem
-                radius: 64
-                cached: sItem.bufferLocked
+                blurEnabled: true
+                blurMax: 64
             }
 
             Text {
