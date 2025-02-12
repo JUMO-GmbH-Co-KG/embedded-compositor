@@ -18,15 +18,9 @@ public:
 QtWaylandClient::QWaylandShellIntegration *
 EmbeddedShellIntegrationPlugin::create(const QString &key,
                                        const QStringList &paramList) {
-  auto v = new EmbeddedShellIntegration();
-  // there is a queued connection in QWaylandClientExtension
-  // that will not fire unless we process the event loop
-  while (!v->isActive()) {
-    QCoreApplication::processEvents();
-  }
   Q_UNUSED(key)
   Q_UNUSED(paramList)
-  return v;
+  return new EmbeddedShellIntegration();
 }
 
 #include "main.moc"
