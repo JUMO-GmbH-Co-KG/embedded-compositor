@@ -19,18 +19,15 @@ namespace QtWaylandClient {
 class QWaylandWindow;
 }
 
-class EmbeddedShell : QWaylandClientExtension {
-  Q_OBJECT
-  QtWayland::embedded_shell *instance;
-
+class EmbeddedShell {
 public:
-  bool isActive() { return QWaylandClientExtension::isActive(); }
-  EmbeddedShell();
+  explicit EmbeddedShell(QtWayland::embedded_shell *embeddedShell);
   EmbeddedShellSurface *createSurface(QtWaylandClient::QWaylandWindow *window,
                                       EmbeddedShellTypes::Anchor anchor,
                                       uint32_t margin, unsigned int sort_index);
-  const struct wl_interface *extensionInterface() const override;
-  void bind(struct ::wl_registry *registry, int id, int ver) override;
+
+private:
+  QtWayland::embedded_shell *m_embeddedShell;
 };
 
 #endif // EMBEDDEDSHELL_H

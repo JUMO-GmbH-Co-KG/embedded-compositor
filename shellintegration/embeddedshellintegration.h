@@ -4,8 +4,9 @@
 #define EMBEDDEDSHELLINTEGRATION_H
 
 #include <QScopedPointer>
-#include <QtWaylandClient/private/qwaylandclientextension_p.h>
 #include <QtWaylandClient/private/qwaylandshellintegration_p.h>
+
+#include "qwayland-embedded-shell.h"
 
 class EmbeddedShellSurface;
 class EmbeddedShell;
@@ -16,20 +17,21 @@ Q_WAYLAND_CLIENT_EXPORT
 #else
 Q_WAYLANDCLIENT_EXPORT
 #endif
-        EmbeddedShellIntegration
-    : public QtWaylandClient::QWaylandShellIntegration {
-  QMap<QtWaylandClient::QWaylandWindow *, EmbeddedShellSurface *> m_windows;
-  QScopedPointer<EmbeddedShell> m_shell;
-
+EmbeddedShellIntegration
+  : public QtWaylandClient::QWaylandShellIntegrationTemplate<EmbeddedShellIntegration>
+  , public QtWayland::embedded_shell
+{
 public:
-  bool isActive() const;
   EmbeddedShellIntegration();
   QtWaylandClient::QWaylandShellSurface *
   createShellSurface(QtWaylandClient::QWaylandWindow *window) override;
-  bool initialize(QtWaylandClient::QWaylandDisplay *display) override;
   // QWaylandShellIntegration interface
   void *nativeResourceForWindow(const QByteArray &resource,
                                 QWindow *window) override;
+
+private:
+  QScopedPointer<EmbeddedShell> m_shell;
+  QMap<QtWaylandClient::QWaylandWindow *, EmbeddedShellSurface *> m_windows;
 };
 
 #endif // EMBEDDEDSHELLINTEGRATION_H

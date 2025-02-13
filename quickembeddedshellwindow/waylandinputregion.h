@@ -28,7 +28,7 @@ public:
 
 protected:
     void itemChange(ItemChange, const ItemChangeData &) override;
-    void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;
+    void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
 public slots:
     void SetImage(QVariant image, QRect position);

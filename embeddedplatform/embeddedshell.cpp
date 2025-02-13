@@ -6,45 +6,22 @@
 
 Q_LOGGING_CATEGORY(shellExt, "embeddedshell.client")
 
-EmbeddedShell::EmbeddedShell()
-    : QWaylandClientExtension(/*version=*/1),
-      instance(new QtWayland::embedded_shell()) {
-  qCDebug(shellExt) << __PRETTY_FUNCTION__ << isActive();
+EmbeddedShell::EmbeddedShell(QtWayland::embedded_shell *embeddedShell)
+  : m_embeddedShell(embeddedShell)
+{
+  qCDebug(shellExt) << __PRETTY_FUNCTION__;
 }
 
 EmbeddedShellSurface *
 EmbeddedShell::createSurface(QtWaylandClient::QWaylandWindow *window,
                              EmbeddedShellTypes::Anchor anchor, uint32_t margin,
                              unsigned int sort_index) {
-  qCDebug(shellExt) << __PRETTY_FUNCTION__ << isActive() << anchor << margin;
-  if (!isActive())
-    return nullptr;
-  auto surface = instance->surface_create(
+  qCDebug(shellExt) << __PRETTY_FUNCTION__ << anchor << margin;
+  auto surface = m_embeddedShell->surface_create(
       window->wlSurface(), static_cast<embedded_shell_anchor_border>(anchor),
       margin, sort_index);
   const QSize size{0, 0};
   auto ess =
       new EmbeddedShellSurface(surface, window, size, anchor, margin, sort_index);
   return ess;
-}
-
-const wl_interface *EmbeddedShell::extensionInterface() const {
-  return instance->interface();
-}
-
-void EmbeddedShell::bind(wl_registry *registry, int id, int ver) {
-  // Make sure lowest version is used of the supplied version from the
-  // developer and the version specified in the protocol and also the
-  // compositor version.
-  if (this->version() > QtWayland::embedded_shell::interface()->version) {
-    qCWarning(shellExt)
-        << "Supplied protocol version to QWaylandClientExtensionTemplate is "
-           "higher than the version of the protocol, using protocol version "
-           "instead.";
-  }
-  int minVersion =
-      qMin(ver, qMin(QtWayland::embedded_shell::interface()->version,
-                     this->version()));
-  setVersion(minVersion);
-  instance->init(registry, id, minVersion);
 }

@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import QtQuick 2.15
-import QtWayland.Compositor 1.15
-import QtQuick.Window 2.2
-import QtQml.Models 2.1
+import QtQuick
+import QtWayland.Compositor
+import QtWayland.Compositor.XdgShell
+
+import QtQuick.Window
+import QtQml.Models
 
 import de.EmbeddedCompositor.dbus 1.0
 import de.EmbeddedCompositor.embeddedshell 1.0
