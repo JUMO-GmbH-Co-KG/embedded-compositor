@@ -5,10 +5,17 @@
 #include "embeddedshell.h"
 #include "embeddedshellsurface.h"
 
-bool EmbeddedShellIntegration::isActive() const { return m_shell->isActive(); }
-
 EmbeddedShellIntegration::EmbeddedShellIntegration()
-    : m_shell(new EmbeddedShell()) {}
+  : QtWaylandClient::QWaylandShellIntegrationTemplate<EmbeddedShellIntegration>(/*version*/ 1)
+{
+  connect(this, &QWaylandShellIntegrationTemplate::activeChanged, this, [this] {
+    if (isActive()) {
+      m_shell.reset(new EmbeddedShell(this));
+    } else {
+      m_shell.reset();
+    }
+  });
+}
 
 QtWaylandClient::QWaylandShellSurface *
 EmbeddedShellIntegration::createShellSurface(
@@ -90,16 +97,6 @@ EmbeddedShellIntegration::createShellSurface(
   m_windows.insert(window, ess);
   emit EmbeddedPlatform::instance()->shellSurfaceCreated(ess, window->window());
   return ess->shellSurface();
-}
-
-bool EmbeddedShellIntegration::initialize(
-    QtWaylandClient::QWaylandDisplay *display) {
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QWaylandShellIntegration::initialize(display);
-#else
-    Q_UNUSED(display);
-#endif
-  return m_shell->isActive();
 }
 
 void *
