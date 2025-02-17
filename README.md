@@ -2,7 +2,7 @@
 
 This project implements a wayland-based compositor suited for industrial HMIs. It aims to provide
 good out of the box defaults for this kind of application. Internally the implementation makes
-use of the [Qt Wayland module](https://doc.qt.io/qt-5/qtwaylandcompositor-index.html).
+use of the [Qt Wayland module](https://doc.qt.io/qt-6/qtwaylandcompositor-index.html).
 
 ## Layouting and general behavior
 
@@ -156,7 +156,7 @@ We require surfaces to bind to `embedded_shell` and to specify their anchor edge
 It has proven tricky to provide our custom surface properties anchor, margin or sort_index early enough to be able to provide them with the initial binding of the embedded_shell_surface to the plain wl_surface through Qt's wayland integration.
 Therefore we need to rely on setting these properties after the interface has been bound with initial undefined or zero values through the set_* requests also defined in the protocol.
 
-We provide logging through [Qt's logging framework](https://doc.qt.io/qt-5/qloggingcategory.html) and define logging categories which can be enabled as follows.
+We provide logging through [Qt's logging framework](https://doc.qt.io/qt-6/qloggingcategory.html) and define logging categories which can be enabled as follows.
 
 ```sh
     export QT_LOGGING_RULES="embeddedshell.compositor.debug=true;embeddedshell.quick=true"
@@ -203,7 +203,7 @@ Building is straight forward through qmake and make or Qt creator. The generated
 ~/src/build-compositor $ make
 ```
 
-Dependencies are Qt 5.15, configured with DBus, wayland and QtQuick.
+Dependencies are Qt 6, configured with DBus, wayland and QtQuick.
 
 The project can be developed and tested on a Linux workstation and the provided run.sh file tries to start the compositor and some test clients as well as an isolated DBus instance as to not confuse the hosts system.
 
