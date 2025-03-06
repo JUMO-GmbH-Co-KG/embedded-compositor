@@ -69,3 +69,6 @@ rightclient
 leftclient
 bottomclient
 quickcenterclient
+/embedded-compositor/embedded-compositor
+/qt5build/
+/qt6build/
