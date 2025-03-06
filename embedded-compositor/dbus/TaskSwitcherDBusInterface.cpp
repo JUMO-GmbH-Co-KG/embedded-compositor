@@ -120,6 +120,10 @@ void TaskSwitcherDBusInterface::setViewModel(QAbstractListModel *newViewModel)
                 &TaskSwitcherDBusInterface::onViewsInserted);
         connect(m_viewModel, &QAbstractItemModel::rowsAboutToBeRemoved, this,
                 &TaskSwitcherDBusInterface::onViewsAboutToBeRemoved);
+        connect(m_viewModel, &QAbstractItemModel::rowsInserted, this,
+                &TaskSwitcherDBusInterface::viewsChanged);
+        connect(m_viewModel, &QAbstractItemModel::rowsAboutToBeRemoved, this,
+                &TaskSwitcherDBusInterface::viewsChanged);
     }
 
     Q_EMIT viewModelChanged(m_viewModel);
