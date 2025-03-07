@@ -1,3 +1,5 @@
+[![build embedded compositor](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
+
 # Embedded-compositor
 
 This project implements a wayland-based compositor suited for industrial HMIs. It aims to provide
