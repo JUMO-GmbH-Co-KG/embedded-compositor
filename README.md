@@ -7,6 +7,7 @@ use of the [Qt Wayland module](https://doc.qt.io/qt-6/qtwaylandcompositor-index.
 ## Status
 ### Qt6 on the **main** branch
 [![build embedded compositor main](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor/badge)](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor)
 
 ### Qt5 on the **qt5** branch
 [![build embedded compositor qt5](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=qt5)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
