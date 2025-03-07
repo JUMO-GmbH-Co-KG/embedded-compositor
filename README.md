@@ -1,4 +1,6 @@
-[![build embedded compositor](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
+[![build embedded compositor main](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
+
+[![build embedded compositor qt5](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=qt5)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
 
 # Embedded-compositor
 
