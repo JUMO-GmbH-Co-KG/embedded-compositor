@@ -1,0 +1,32 @@
+name: build embedded compositor
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Install dependencies (linux)
+        run: sudo apt install ninja-build wayland-protocols wayland-scanner++ libwayland-dev
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.2'
+          install-deps: 'true'
+          modules: 'qtwaylandcompositor qtvirtualkeyboard'
+      - uses: actions/checkout@v4
+      
+      - name: build
+        run: |
+          mkdir -p build 
+          cd build
+          qmake ../ 
+          make -j
+      
