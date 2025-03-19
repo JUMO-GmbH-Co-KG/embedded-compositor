@@ -1,12 +1,18 @@
-[![build embedded compositor main](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
-
-[![build embedded compositor qt5](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=qt5)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
-
 # Embedded-compositor
 
 This project implements a wayland-based compositor suited for industrial HMIs. It aims to provide
 good out of the box defaults for this kind of application. Internally the implementation makes
 use of the [Qt Wayland module](https://doc.qt.io/qt-6/qtwaylandcompositor-index.html).
+
+## Status
+### Qt6 on the **main** branch
+[![build embedded compositor main](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor/badge)](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor)
+
+### Qt5 on the **qt5** branch
+[![build embedded compositor qt5](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=qt5)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor/badge/qt5)](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor/overview/qt5)
+
 
 ## Layouting and general behavior
 
