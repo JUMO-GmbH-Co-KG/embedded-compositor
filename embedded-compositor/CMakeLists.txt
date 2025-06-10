@@ -1,0 +1,98 @@
+qt_add_executable(embedded-compositor WIN32 MACOSX_BUNDLE
+    configurationhive.cpp configurationhive.h
+    dbus-selector.h
+    dbus/CompositorScreenDBusInterface.cpp dbus/CompositorScreenDBusInterface.hpp
+    dbus/DBusInterface.cpp dbus/DBusInterface.hpp
+    dbus/GlobalOverlayDBusInterface.cpp dbus/GlobalOverlayDBusInterface.hpp
+    dbus/NotificationModel.cpp dbus/NotificationModel.hpp
+    dbus/ScreenShotDBusInterface.cpp dbus/ScreenShotDBusInterface.hpp
+    dbus/TaskSwitcherDBusInterface.cpp dbus/TaskSwitcherDBusInterface.hpp
+    dbus/TaskSwitcherEntry.hpp
+    embeddedshellextension.cpp embeddedshellextension.h
+    main.cpp
+    sortfilterproxymodel.cpp sortfilterproxymodel.h
+    taskswitcher_adaptor.cpp taskswitcher_adaptor.h
+    wayland-embedded-shell-server-protocol.h 
+    wayland-embedded-shell-protocol.c
+    screenshot_adaptor.cpp screenshot_adaptor.h
+    qwayland-server-embedded-shell.cpp qwayland-server-embedded-shell.h
+    screen_adaptor.cpp screen_adaptor.h
+    dbus-selector.h
+    configurationhive.cpp configurationhive.h
+    globaloverlay_adaptor.cpp globaloverlay_adaptor.h
+    notifications_adaptor.cpp notifications_adaptor.h
+)
+
+qt6_generate_wayland_protocol_server_sources(embedded-compositor
+    FILES
+        ${CMAKE_CURRENT_SOURCE_DIR}/../protocol/embedded-shell.xml
+)
+target_include_directories(embedded-compositor PRIVATE
+    dbus
+)
+
+execute_process(
+    COMMAND git describe --tags --always
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_DESCRIBE
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+target_compile_definitions(embedded-compositor PRIVATE
+    EMBEDDED_COMPOSITOR_VERSION="${GIT_DESCRIBE}"
+)
+
+message(STATUS "Version: ${GIT_DESCRIBE}")
+
+target_link_libraries(embedded-compositor PRIVATE
+    Qt::Core
+    Qt::CorePrivate
+    Qt::DBus
+    Qt::Gui
+    Qt::GuiPrivate
+    Qt::Quick
+    Qt::Svg
+    Qt::VirtualKeyboard
+    Qt::WaylandCompositor
+    Qt::WaylandCompositorPrivate
+    embeddedplatform
+)
+
+
+# Resources:
+set(qml_resource_files
+    "qml/DefaultGlobalOverlay/GlobalOverlay.qml"
+    "qml/DefaultScreenSaver/ScreenSaver.qml"
+    "qml/DefaultTaskSwitcher/TaskSwitcher.qml"
+    "qml/Keyboard.qml"
+    "qml/Notifications/Notification.qml"
+    "qml/Notifications/Notifications.qml"
+    "qml/RootTransformer.qml"
+    "qml/ScreenSaverController.qml"
+    "qml/main.qml"
+)
+
+qt_add_resources(embedded-compositor "qml"
+    PREFIX
+        "/"
+    FILES
+        ${qml_resource_files}
+)
+
+if(use_system_bus)
+    target_compile_definitions(embedded-compositor PRIVATE
+        USE_SYSTEM_BUS=1
+    )
+endif()
+
+install(TARGETS embedded-compositor
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+qt_generate_deploy_app_script(
+    TARGET embedded-compositor
+    FILENAME_VARIABLE deploy_script
+    NO_UNSUPPORTED_PLATFORM_ERROR
+)
+install(SCRIPT ${deploy_script})
