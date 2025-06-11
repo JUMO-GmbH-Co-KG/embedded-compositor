@@ -22,8 +22,6 @@ qt_add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE
     screenshot_adaptor.cpp screenshot_adaptor.h
     qwayland-server-embedded-shell.cpp qwayland-server-embedded-shell.h
     screen_adaptor.cpp screen_adaptor.h
-    dbus-selector.h
-    configurationhive.cpp configurationhive.h
     globaloverlay_adaptor.cpp globaloverlay_adaptor.h
     notifications_adaptor.cpp notifications_adaptor.h
 )
