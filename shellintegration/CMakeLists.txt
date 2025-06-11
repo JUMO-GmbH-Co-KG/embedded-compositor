@@ -10,13 +10,16 @@ target_sources(shellintegration PRIVATE
     embeddedshellintegration.cpp embeddedshellintegration.h
     main.cpp
 )
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    VERSION 1.0.0
+    VERSION 1.0
+    SOVERSION 1
+)
+
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     EMBEDDEDSHELLINTEGRATION_LIBRARY
 )
-
-# target_include_directories(${PROJECT_NAME} PUBLIC
-#     ${CMAKE_CURRENT_SOURCE_DIR}
-# )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::Core
@@ -28,7 +31,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 install(TARGETS shellintegration
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/plugins/wayland-shell-integration
 )

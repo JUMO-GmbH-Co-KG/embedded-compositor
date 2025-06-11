@@ -91,13 +91,6 @@ if(use_system_bus)
 endif()
 
 install(TARGETS ${PROJECT_NAME}
-    BUNDLE DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    COMPONENT Runtime
 )
-
-qt_generate_deploy_app_script(
-    TARGET ${PROJECT_NAME}
-    FILENAME_VARIABLE deploy_script
-    NO_UNSUPPORTED_PLATFORM_ERROR
-)
-install(SCRIPT ${deploy_script})
