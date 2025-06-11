@@ -27,6 +27,6 @@ jobs:
         run: |
           mkdir -p build 
           cd build
-          qmake ../ 
+          cmake ../ 
           make -j
       
