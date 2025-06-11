@@ -3,8 +3,7 @@ cmake_minimum_required (VERSION 3.22)
 project(shellintegration LANGUAGES CXX)
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
-find_package(Qt6 REQUIRED COMPONENTS DBus Gui Quick Svg VirtualKeyboard WaylandClient WaylandCompositor Widgets)
-find_package(Wayland)
+find_package(Qt6 REQUIRED COMPONENTS DBus Gui Quick WaylandClient)
 
 qt_add_plugin(${PROJECT_NAME})
 target_sources(shellintegration PRIVATE

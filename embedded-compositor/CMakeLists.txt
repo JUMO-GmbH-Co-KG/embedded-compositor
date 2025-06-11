@@ -1,4 +1,9 @@
-qt_add_executable(embedded-compositor WIN32 MACOSX_BUNDLE
+cmake_minimum_required (VERSION 3.22)
+
+project(embedded-compositor LANGUAGES CXX)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick)
+
+qt_add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE
     configurationhive.cpp configurationhive.h
     dbus-selector.h
     dbus/CompositorScreenDBusInterface.cpp dbus/CompositorScreenDBusInterface.hpp
@@ -23,11 +28,11 @@ qt_add_executable(embedded-compositor WIN32 MACOSX_BUNDLE
     notifications_adaptor.cpp notifications_adaptor.h
 )
 
-qt6_generate_wayland_protocol_server_sources(embedded-compositor
+qt6_generate_wayland_protocol_server_sources(${PROJECT_NAME}
     FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/../protocol/embedded-shell.xml
 )
-target_include_directories(embedded-compositor PRIVATE
+target_include_directories(${PROJECT_NAME} PRIVATE
     dbus
 )
 
@@ -38,13 +43,13 @@ execute_process(
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
-target_compile_definitions(embedded-compositor PRIVATE
+target_compile_definitions(${PROJECT_NAME} PRIVATE
     EMBEDDED_COMPOSITOR_VERSION="${GIT_DESCRIBE}"
 )
 
 message(STATUS "Version: ${GIT_DESCRIBE}")
 
-target_link_libraries(embedded-compositor PRIVATE
+target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt::Core
     Qt::CorePrivate
     Qt::DBus
@@ -72,7 +77,7 @@ set(qml_resource_files
     "qml/main.qml"
 )
 
-qt_add_resources(embedded-compositor "qml"
+qt_add_resources(${PROJECT_NAME} "qml"
     PREFIX
         "/"
     FILES
@@ -80,18 +85,18 @@ qt_add_resources(embedded-compositor "qml"
 )
 
 if(use_system_bus)
-    target_compile_definitions(embedded-compositor PRIVATE
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
         USE_SYSTEM_BUS=1
     )
 endif()
 
-install(TARGETS embedded-compositor
+install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 qt_generate_deploy_app_script(
-    TARGET embedded-compositor
+    TARGET ${PROJECT_NAME}
     FILENAME_VARIABLE deploy_script
     NO_UNSUPPORTED_PLATFORM_ERROR
 )

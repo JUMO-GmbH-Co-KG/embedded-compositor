@@ -11,6 +11,12 @@ qt_add_library(${PROJECT_NAME}
     embeddedshell.cpp embeddedshell.h
     embeddedshellanchor.h
     embeddedshellsurface.cpp embeddedshellsurface.h embeddedshellsurface_p.h
+    taskswitcher_interface.cpp taskswitcher_interface.h
+    notifications_interface.cpp notifications_interface.h
+    globaloverlay_interface.cpp globaloverlay_interface.h
+    screen_interface.cpp screen_interface.h
+    wayland-embedded-shell-protocol.c wayland-embedded-shell-client-protocol.h
+    qwayland-embedded-shell.cpp qwayland-embedded-shell.h
 )
 
 qt6_generate_wayland_protocol_client_sources(${PROJECT_NAME}
