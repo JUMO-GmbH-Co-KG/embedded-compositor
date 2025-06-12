@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.22)
 project(embedded-compositor LANGUAGES CXX)
 find_package(Qt6 REQUIRED COMPONENTS Core Quick)
 
-qt_add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE
+qt_add_executable(${PROJECT_NAME}
     configurationhive.cpp configurationhive.h
     dbus-selector.h
     dbus/CompositorScreenDBusInterface.cpp dbus/CompositorScreenDBusInterface.hpp
@@ -14,22 +14,56 @@ qt_add_executable(${PROJECT_NAME} WIN32 MACOSX_BUNDLE
     dbus/TaskSwitcherDBusInterface.cpp dbus/TaskSwitcherDBusInterface.hpp
     dbus/TaskSwitcherEntry.hpp
     embeddedshellextension.cpp embeddedshellextension.h
-    main.cpp
     sortfilterproxymodel.cpp sortfilterproxymodel.h
-    taskswitcher_adaptor.cpp taskswitcher_adaptor.h
-    wayland-embedded-shell-server-protocol.h 
-    wayland-embedded-shell-protocol.c
-    screenshot_adaptor.cpp screenshot_adaptor.h
-    qwayland-server-embedded-shell.cpp qwayland-server-embedded-shell.h
-    screen_adaptor.cpp screen_adaptor.h
-    globaloverlay_adaptor.cpp globaloverlay_adaptor.h
-    notifications_adaptor.cpp notifications_adaptor.h
+    main.cpp
 )
 
 qt6_generate_wayland_protocol_server_sources(${PROJECT_NAME}
     FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/../protocol/embedded-shell.xml
 )
+
+qt_add_dbus_adaptor(DBUS_ADAPTER_SRC 
+    ../dbus/de.EmbeddedCompositor.globaloverlay.xml 
+    ./dbus/GlobalOverlayDBusInterface.hpp 
+    GlobalOverlayDBusInterface
+    globaloverlay_adaptor
+)
+
+qt_add_dbus_adaptor(DBUS_ADAPTER_SRC 
+    ../dbus/de.EmbeddedCompositor.screen.xml
+    ./dbus/CompositorScreenDBusInterface.hpp
+    CompositorScreenDBusInterface
+    screen_adaptor
+)
+
+qt_add_dbus_adaptor(DBUS_ADAPTER_SRC 
+    ../dbus/org.freedesktop.Notifications.xml
+    ./dbus/NotificationModel.hpp 
+    NotificationModel
+    notifications_adaptor
+)
+
+qt_add_dbus_adaptor(DBUS_ADAPTER_SRC 
+    ../dbus/de.EmbeddedCompositor.screenshot.xml
+    ./dbus/ScreenShotDBusInterface.hpp
+    ScreenShotDBusInterface
+    screenshot_adaptor
+)
+
+qt_add_dbus_adaptor(DBUS_ADAPTER_SRC 
+    ../dbus/de.EmbeddedCompositor.taskswitcher.xml
+    ./dbus/TaskSwitcherDBusInterface.hpp
+    TaskSwitcherDBusInterface
+    taskswitcher_adaptor    
+)
+
+target_sources(${PROJECT_NAME} PRIVATE
+    ${DBUS_ADAPTER_SRC}
+)
+
+message(STATUS ${GLOBALOVERLAY_SRC})
+
 target_include_directories(${PROJECT_NAME} PRIVATE
     dbus
 )
