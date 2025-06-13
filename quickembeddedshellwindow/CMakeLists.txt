@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.22)
 
-project(quickembeddedshellwindow LANGUAGES CXX)
+project(quickembeddedshellwindow VERSION 1.0.0 LANGUAGES CXX)
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core)
@@ -13,9 +13,8 @@ qt_add_library(${PROJECT_NAME}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    VERSION 1.0.0
-    VERSION 1.0
-    SOVERSION 1
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC

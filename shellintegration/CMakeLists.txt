@@ -11,12 +11,6 @@ target_sources(shellintegration PRIVATE
     main.cpp
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-    VERSION 1.0.0
-    VERSION 1.0
-    SOVERSION 1
-)
-
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     EMBEDDEDSHELLINTEGRATION_LIBRARY
 )

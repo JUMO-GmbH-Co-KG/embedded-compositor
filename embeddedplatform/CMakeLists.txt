@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
 
-project(embeddedplatform LANGUAGES CXX)
+project(embeddedplatform VERSION 1.0.0 LANGUAGES CXX)
 
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core DBus)
@@ -14,9 +14,8 @@ qt_add_library(${PROJECT_NAME}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    VERSION 1.0.0
-    VERSION 1.0
-    SOVERSION 1
+    VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
 qt_add_dbus_interface(DBUS_INTERFACE_SCR
