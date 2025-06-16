@@ -62,13 +62,20 @@ compile_commands.json
 *_adaptor.*
 *_interface.*
 
+#Cmake stuff
+CMakeFiles/
+.qt/
+cmake_install.cmake
+
+*_autogen/
+
 # demo client binaries
-widgetcenterclient
-topclient
-rightclient
-leftclient
-bottomclient
-quickcenterclient
+**/widgetcenterclient/widgetcenterclient
+**/topclient/topclient
+**/rightclient/rightclient
+**/leftclient/leftclient
+**/bottomclient/bottomclient
+**/quickcenterclient/quickcenterclient
 /embedded-compositor/embedded-compositor
 /qt5build/
 /qt6build/

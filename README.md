@@ -204,13 +204,14 @@ other QML Objects can then just bind their properties to the properties of the c
 
 ## Building
 
-Building is straight forward through qmake and make or Qt creator. The generated makefiles should allow you to install the project on a target device.
+Building is straight forward through cmake and make or Qt creator. The generated makefiles should allow you to install the project on a target device.
 
 ```sh
-~/src/compositor $ mkdir ../build-compositor
-~/src/compositor $ cd ../build-compositor
-~/src/build-compositor $ qmake ../compositor
-~/src/build-compositor $ make
+$ mkdir build
+$ cd build
+$ cmake ../
+$ make -j
+$ make install DESTDIR=/your/path
 ```
 
 Dependencies are Qt 6, configured with DBus, wayland and QtQuick.
