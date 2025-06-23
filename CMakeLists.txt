@@ -9,6 +9,7 @@ find_package(Wayland)
 
 qt_standard_project_setup()
 
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 add_subdirectory(shellintegration)
 add_subdirectory(embedded-compositor)
