@@ -35,7 +35,7 @@ qt_add_dbus_interface(DBUS_INTERFACE_SCR
 
 set_source_files_properties(../dbus/de.EmbeddedCompositor.taskswitcher.xml
     PROPERTIES
-        INCLUDE ${CMAKE_SOURCE_DIR}/embedded-compositor/dbus/TaskSwitcherEntry.hpp
+    INCLUDE ${CMAKE_SOURCE_DIR}/embedded-compositor/dbus/TaskSwitcherEntry.hpp
 )
 
 qt_add_dbus_interface(DBUS_INTERFACE_SCR
