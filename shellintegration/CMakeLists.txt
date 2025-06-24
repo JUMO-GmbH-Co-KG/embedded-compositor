@@ -5,6 +5,8 @@ project(shellintegration LANGUAGES CXX)
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS DBus Gui Quick WaylandClient)
 
+set(CMAKE_INSTALL_RPATH "$ORIGIN/../../")
+
 qt_add_plugin(${PROJECT_NAME})
 target_sources(shellintegration PRIVATE
     embeddedshellintegration.cpp embeddedshellintegration.h
