@@ -8,6 +8,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
 qt_add_library(${PROJECT_NAME}
     quickembeddedshell.cpp quickembeddedshell.h
     quickembeddedshellwindow.cpp quickembeddedshellwindow.h
+    quickembeddedshellview.cpp quickembeddedshellview.h
     quickembeddedshellwindow_global.h
     waylandinputregion.cpp waylandinputregion.h
 )

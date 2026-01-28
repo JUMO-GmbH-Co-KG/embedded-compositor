@@ -2,7 +2,7 @@
 <protocol name="embedded_shell">
 	<copyright>
 	FIXME
-    </copyright>
+	</copyright>
 
 	<interface name="embedded_shell_surface" version="1">
 		<request name="destroy" type="destructor"></request>
@@ -42,7 +42,7 @@
 
 		<event name="configure">
 			<description summary="suggest resize">
-	    The configure event asks the client to resize its surface.
+		The configure event asks the client to resize its surface.
 		The width and height arguments specify the size of the window
 		in surface local coordinates.
 		</description>

@@ -87,8 +87,13 @@ public:
   void setIcon(const QString &icon);
   Q_SIGNAL void iconChanged(const QString &icon);
 
+  int sortIndex() const;
+  void setSortIndex(int sortIndex);
+  Q_SIGNAL void sortIndexChanged(int sortIndex);
+
 signals:
   void selected();
+  void deselected();
 
 private:
   friend class EmbeddedShellSurface;

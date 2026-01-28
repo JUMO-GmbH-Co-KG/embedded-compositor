@@ -128,7 +128,7 @@ WaylandCompositor {
                 }
             }
             Item {
-                id:leftArea
+                id: leftArea
                 objectName: "leftArea"
                 width: surfaceItem ? surfaceItem.margin:window.initialSize
                 anchors.bottom: bottomArea.top
@@ -138,7 +138,7 @@ WaylandCompositor {
                 visible: !rootTransformItem.fullScreen
             }
             Item {
-                id:rightArea
+                id: rightArea
                 objectName: "rightArea"
                 width: surfaceItem ? surfaceItem.margin :window.initialSize
                 anchors.bottom:bottomArea.top
@@ -169,7 +169,7 @@ WaylandCompositor {
             }
 
             Loader {
-                id:taskSwitcherLoader
+                id: taskSwitcherLoader
                 anchors.fill:parent
                 source: configuration.taskSwitcherUrl
                 active: true
@@ -290,6 +290,30 @@ WaylandCompositor {
                 return;
             }
 
+            view.aboutToBeDestroyed.connect(function() {
+                for (var i = 0; i< count; i++) {
+                    var data = get(i).data
+                    if (data.view === view) {
+                        var surface = data.surface;
+                        remove(i);
+
+                        // Fall back to uuid of surface
+                        if (taskSwitcherInterface.currentView === view.uuid) {
+                            taskSwitcherInterface.currentView = data.surface.uuid;
+                        }
+
+                        var entry = surfaces[shellSurface];
+                        var index = entry.views.indexOf(view)
+                        if (index >= 0)
+                        {
+                            entry.views.splice(index, 1);
+                        }
+
+                        break;
+                    }
+                }
+            });
+
             append({data: {view: view, surface: shellSurface}});
         }
 
@@ -304,7 +328,6 @@ WaylandCompositor {
                 }
             }
         }
-
     }
 
     Component {
@@ -399,6 +422,7 @@ WaylandCompositor {
     EmbeddedShell {
         onSurfaceAdded: chromeComponent.createObject(limboArea, { "shellSurface": surface } );
     }
+
     TaskSwitcherInterface {
         id: taskSwitcherInterface
         onOpenRequested: taskSwitcherLoader.item.open();
@@ -409,6 +433,7 @@ WaylandCompositor {
             centerArea.selectSurface(entry.surface, entry.view);
         }
     }
+
     GlobalOverlayInterface {
         onShowRequested: (message) => {
             globalOverlayLoader.item.show(message);

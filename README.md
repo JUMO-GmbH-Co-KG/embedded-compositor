@@ -121,9 +121,9 @@ For convenience of QML applications, we also implement a QML interface to embedd
 ```qml
     import EmbeddedShell 1.0
     Window {
-        id: window
+        id: myWindow
         visible: true
-        title: qsTr("Hello from CenterCLient")
+        title: qsTr("Hello from CenterClient")
         anchor: Window.Anchor.Center
         color: "darkgray"
         width: 200
@@ -131,9 +131,40 @@ For convenience of QML applications, we also implement a QML interface to embedd
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                var view = window.createView("view name", 42);
-                view.selected.connect(function(){ console.log("view "+ view.label +" was selected"); })
+                var appId = "MyApp"
+                var appLabel = "My App"
+                var label = "My View"
+                var sortIndex = 0
+                var view = myWindow.createView(appId, appLabel, label, sortIndex);
+                view.selected.connect(function(){ console.log("view", view.label, "was selected"); })
             }
+        }
+    }
+```
+
+A declarative QML interface to embedded_shell_surface_view is also available (see [.h](/quickembeddedshellwindow/quickembeddedshellview.h), [.cpp](quickembeddedshellwindow/quickembeddedshellview.cpp))
+
+```qml
+    import EmbeddedShell 1.0
+    Window {
+        id: myWindow
+        visible: true
+        title: qsTr("Hello from CenterClient")
+        anchor: Window.Anchor.Center
+        color: "darkgray"
+        width: 200
+        height:200
+        
+        View {
+            id: myView
+            window: myWindow
+            appId: "MyApp"
+            appLabel: "My App"
+            label: "My View"
+            sortIndex: 0
+            
+            Text { text: myView.label }
+        }
     }
 ```
 

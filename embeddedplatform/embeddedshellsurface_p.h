@@ -6,6 +6,7 @@
 #include "embeddedshellsurface.h"
 #include "qwayland-embedded-shell.h"
 #include <QDebug>
+#include <QPointer>
 #include <QtWaylandClient/private/qwaylandshellsurface_p.h>
 
 class EmbeddedShellSurfacePrivate
@@ -32,6 +33,7 @@ private:
   uint32_t m_margin = 0;
   uint32_t m_sort_index = 0;
   QSize m_pendingSize = {0, 0};
+  QPointer<EmbeddedShellSurfaceView> m_selectedView;
   EmbeddedShellSurface *q_ptr = nullptr;
 
 protected:
@@ -47,20 +49,20 @@ public:
   EmbeddedShellSurfaceViewPrivate(EmbeddedShellSurfaceView *q,
                                   ::surface_view *view,
                                   EmbeddedShellSurface *surf);
+
   ~EmbeddedShellSurfaceViewPrivate() override;
 
   static EmbeddedShellSurfaceViewPrivate *get(EmbeddedShellSurfaceView *q);
 
-  void surface_view_selected() override {
-    qDebug() << __PRETTY_FUNCTION__;
-    Q_Q(EmbeddedShellSurfaceView);
-    emit q->selected();
-  }
+  void surface_view_selected() override;
+
   EmbeddedShellSurfaceView *q_ptr = nullptr;
 
+  QString m_appId;
   QString m_appLabel;
   QString m_appIcon;
   QString m_label;
   QString m_icon;
+  int m_sortIndex;
 };
 #endif // EMBEDDEDSHELLSURFACE_P_H

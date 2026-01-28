@@ -28,7 +28,8 @@ Q_ENUM_NS(Anchor)
 
 class EmbeddedShellExtension
     : public QWaylandShellTemplate<EmbeddedShellExtension>,
-      public QtWaylandServer::embedded_shell {
+      public QtWaylandServer::embedded_shell
+{
   Q_OBJECT
 public:
   explicit EmbeddedShellExtension(QWaylandCompositor *compositor);
@@ -45,7 +46,8 @@ signals:
 
 class EmbeddedShellSurface
     : public QWaylandShellSurfaceTemplate<EmbeddedShellSurface>,
-      public QtWaylandServer::embedded_shell_surface {
+      public QtWaylandServer::embedded_shell_surface
+{
   Q_OBJECT
 public:
   EmbeddedShellSurface(EmbeddedShellExtension *ext, QWaylandSurface *surface,
@@ -145,6 +147,7 @@ public:
   EmbeddedShellSurfaceView(const QString &appId, const QString &appLabel, const QString &appIcon,
                            const QString &label, const QString &icon, uint32_t sort_index,
                            wl_client *client, int id, int version);
+  ~EmbeddedShellSurfaceView();
 
   QString appId() const;
   void setAppId(const QString &appId);
@@ -173,8 +176,10 @@ public:
 
 public slots:
   void select() { surface_view::send_selected(); }
+
 signals:
   void sortIndexChanged(unsigned int index);
+  void aboutToBeDestroyed();
 
 protected:
   void surface_view_set_app_label(Resource *resource, const QString &label) override;
@@ -183,6 +188,7 @@ protected:
   void surface_view_set_icon(Resource *resource, const QString &icon) override;
   void surface_view_set_sort_index(Resource *resource,
                                    uint32_t sort_index) override;
+  void surface_view_destroy(Resource *resource) override;
 
 private:
   QUuid m_uuid = QUuid::createUuid();
@@ -194,7 +200,8 @@ private:
   uint32_t m_sortIndex = 0;
 };
 
-class QuickEmbeddedShellIntegration : public QWaylandQuickShellIntegration {
+class QuickEmbeddedShellIntegration : public QWaylandQuickShellIntegration
+{
   Q_OBJECT
 public:
   QuickEmbeddedShellIntegration(QWaylandQuickShellSurfaceItem *item);
