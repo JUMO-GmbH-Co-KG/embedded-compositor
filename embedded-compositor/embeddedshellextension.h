@@ -147,7 +147,6 @@ public:
   EmbeddedShellSurfaceView(const QString &appId, const QString &appLabel, const QString &appIcon,
                            const QString &label, const QString &icon, uint32_t sort_index,
                            wl_client *client, int id, int version);
-  ~EmbeddedShellSurfaceView();
 
   QString appId() const;
   void setAppId(const QString &appId);

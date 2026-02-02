@@ -2,7 +2,8 @@
 
 #include "sortfilterproxymodel.h"
 
-SortFilterProxyModel::SortFilterProxyModel() {
+SortFilterProxyModel::SortFilterProxyModel()
+{
   setDynamicSortFilter(true);
   QSortFilterProxyModel::sort(0);
   connect(this, &QSortFilterProxyModel::rowsInserted, this,
@@ -11,7 +12,8 @@ SortFilterProxyModel::SortFilterProxyModel() {
           &SortFilterProxyModel::countChanged);
 }
 
-void SortFilterProxyModel::setSourceModel(QAbstractItemModel *newSourceModel) {
+void SortFilterProxyModel::setSourceModel(QAbstractItemModel *newSourceModel)
+{
   if (sourceModel() == newSourceModel)
     return;
   QSortFilterProxyModel::setSourceModel(newSourceModel);
@@ -32,16 +34,19 @@ void SortFilterProxyModel::initRoles() {
   resetInternalData();
 }
 
-QHash<int, QByteArray> SortFilterProxyModel::roleNames() const {
+QHash<int, QByteArray> SortFilterProxyModel::roleNames() const
+{
   return sourceModel() != nullptr ? sourceModel()->roleNames()
                                   : QHash<int, QByteArray>();
 }
 
-const QString &SortFilterProxyModel::sortFunction() const {
+const QString &SortFilterProxyModel::sortFunction() const
+{
   return m_sortFunction;
 }
 
-void SortFilterProxyModel::setSortFunction(const QString &newSortFunction) {
+void SortFilterProxyModel::setSortFunction(const QString &newSortFunction)
+{
   if (m_sortFunction == newSortFunction)
     return;
   m_sortFunction = newSortFunction;
@@ -49,11 +54,13 @@ void SortFilterProxyModel::setSortFunction(const QString &newSortFunction) {
   emit sortFunctionChanged(m_sortFunction);
 }
 
-const QString &SortFilterProxyModel::acceptFunction() const {
+const QString &SortFilterProxyModel::acceptFunction() const
+{
   return m_acceptFunction;
 }
 
-void SortFilterProxyModel::setAcceptFunction(const QString &newAcceptFunction) {
+void SortFilterProxyModel::setAcceptFunction(const QString &newAcceptFunction)
+{
   if (m_acceptFunction == newAcceptFunction)
     return;
   m_acceptFunction = newAcceptFunction;
@@ -64,7 +71,8 @@ void SortFilterProxyModel::setAcceptFunction(const QString &newAcceptFunction) {
 int SortFilterProxyModel::count() const { return rowCount(); }
 
 bool SortFilterProxyModel::lessThan(const QModelIndex &left,
-                                    const QModelIndex &right) const {
+                                    const QModelIndex &right) const
+{
   QVariant leftData = sourceModel()->data(left);
   QVariant rightData = sourceModel()->data(right);
   QVariant returnedValue;
@@ -77,20 +85,20 @@ bool SortFilterProxyModel::lessThan(const QModelIndex &left,
 }
 
 bool SortFilterProxyModel::filterAcceptsRow(
-    int sourceRow, const QModelIndex &sourceParent) const {
-
+    int sourceRow, const QModelIndex &sourceParent) const
+{
   if (m_acceptFunction.isEmpty()) {
     return true;
   }
 
   QModelIndex index0 = sourceModel()->index(sourceRow, 0, sourceParent);
-  QObject *item = sourceModel()->data(index0).value<QObject *>();
+  QVariant data = sourceModel()->data(index0);
   bool accepts = false;
   QVariant returnedValue;
   QMetaObject::invokeMethod(const_cast<SortFilterProxyModel *>(this),
                             m_acceptFunction.toUtf8().constData(),
                             Q_RETURN_ARG(QVariant, returnedValue),
-                            Q_ARG(QVariant, QVariant::fromValue(item)));
+                            Q_ARG(QVariant, data));
   accepts = returnedValue.toBool();
   return accepts;
 }

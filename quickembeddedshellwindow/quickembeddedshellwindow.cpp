@@ -34,9 +34,14 @@ EmbeddedShellSurfaceView *QuickEmbeddedShellWindow::createView(const QString &ap
                                                                const QString &label,
                                                                unsigned int sort_index)
 {
-  auto view = m_surface->createView(appId, appLabel, label, sort_index);
-  qCDebug(quickShell) << __PRETTY_FUNCTION__ << appId << appLabel << view << label;
-  return view;
+  if (m_surface) {
+    auto view = m_surface->createView(appId, appLabel, label, sort_index);
+    qCDebug(quickShell) << __PRETTY_FUNCTION__ << appId << appLabel << view << label;
+    return view;
+  } else {
+    qCDebug(quickShell) << __PRETTY_FUNCTION__ << "Surface has not been created yet!";
+    return nullptr;
+  }
 }
 
 EmbeddedShellSurfaceView* QuickEmbeddedShellWindow::createView(const QString& appId,
@@ -46,9 +51,14 @@ EmbeddedShellSurfaceView* QuickEmbeddedShellWindow::createView(const QString& ap
                                                                const QString& icon,
                                                                uint32_t sort_index)
 {
-  auto view = m_surface->createView(appId, appLabel, appIcon, label, icon, sort_index);
-  qCDebug(quickShell) << __PRETTY_FUNCTION__ << appId << appLabel << appIcon << label << icon << view << sort_index;
-  return view;
+  if (m_surface) {
+    auto view = m_surface->createView(appId, appLabel, appIcon, label, icon, sort_index);
+    qCDebug(quickShell) << __PRETTY_FUNCTION__ << appId << appLabel << appIcon << label << icon << view << sort_index;
+    return view;
+  } else {
+    qCDebug(quickShell) << __PRETTY_FUNCTION__ << "Surface has not been created yet!";
+    return nullptr;
+  }
 }
 
 void QuickEmbeddedShellWindow::classBegin()
@@ -60,7 +70,7 @@ void QuickEmbeddedShellWindow::componentComplete()
 {
   m_surface = EmbeddedPlatform::shellSurfaceForWindow(this);
 
-  if (m_surface != nullptr) {
+  if (m_surface) {
     m_surface->sendAnchor(m_anchor);
     m_surface->sendMargin(m_margin);
     if (m_size.isValid()) {

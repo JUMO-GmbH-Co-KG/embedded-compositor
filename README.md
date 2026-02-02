@@ -116,7 +116,7 @@ There is an alternative method to detect shell surface creation which is waiting
 
 ```
 
-For convenience of QML applications, we also implement a QML interface to embedded_shell_surface, which is implemented in the sub project "quickembeddedshellwindow" (see [.h](/quickembeddedshellwindow/quickembeddedshellwindow.h), [.cpp](quickembeddedshellwindow/quickembeddedshellwindow.cpp))
+For convenience of QML applications, we also implement a QML interface to embedded_shell_surface, which is implemented in the sub project "quickembeddedshellwindow" (see [.h](/quickembeddedshellwindow/quickembeddedshellwindow.h), [.cpp](/quickembeddedshellwindow/quickembeddedshellwindow.cpp))
 
 ```qml
     import EmbeddedShell 1.0
@@ -142,7 +142,7 @@ For convenience of QML applications, we also implement a QML interface to embedd
     }
 ```
 
-A declarative QML interface to embedded_shell_surface_view is also available (see [.h](/quickembeddedshellwindow/quickembeddedshellview.h), [.cpp](quickembeddedshellwindow/quickembeddedshellview.cpp))
+A declarative QML interface to embedded_shell_surface_view is also available (see [.h](/quickembeddedshellwindow/quickembeddedshellview.h), [.cpp](/quickembeddedshellwindow/quickembeddedshellview.cpp))
 
 ```qml
     import EmbeddedShell 1.0
@@ -157,7 +157,7 @@ A declarative QML interface to embedded_shell_surface_view is also available (se
         
         View {
             id: myView
-            window: myWindow
+            embeddedShellWindow: myWindow
             appId: "MyApp"
             appLabel: "My App"
             label: "My View"

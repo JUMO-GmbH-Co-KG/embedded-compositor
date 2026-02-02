@@ -225,10 +225,6 @@ EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(const QString &appId,
 {
 }
 
-EmbeddedShellSurfaceView::~EmbeddedShellSurfaceView()
-{
-}
-
 QString EmbeddedShellSurfaceView::appId() const
 {
     return m_appId;
@@ -390,5 +386,6 @@ void EmbeddedShellSurfaceView::surface_view_set_sort_index(Resource *resource,
 void EmbeddedShellSurfaceView::surface_view_destroy(Resource *resource) {
     Q_UNUSED(resource)
     emit aboutToBeDestroyed();
+    QtWaylandServer::surface_view::surface_view_destroy(resource);
     deleteLater();
 }

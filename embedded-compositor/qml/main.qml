@@ -83,7 +83,7 @@ WaylandCompositor {
                 focus: true
             }
 
-            Rectangle {
+            Item {
                 id: centerArea
                 objectName: "centerArea"
                 anchors.top: !rootTransformItem.fullScreen ? topArea.bottom : rootTransformItem.top
@@ -95,10 +95,6 @@ WaylandCompositor {
                     y: keyboardLoader.contentYTranslate
                 }
 
-                border {
-                    width: 1
-                    color:"red"
-                }
                 property Item surfaceItem
                 onSurfaceItemChanged: {
                     if(surfaceItem == null) {
@@ -112,11 +108,11 @@ WaylandCompositor {
                         taskSwitcherInterface.currentView = surfaceItem.uuid
                     }
                 }
+
                 property ShellSurface surface
-                function selectSurface(shellSurface, view)
-                {
-                    for(var i =0; i < children.length; i++)
-                    {
+
+                function selectSurface(shellSurface, view) {
+                    for (var i = 0; i < children.length; i++) {
                         var window = children[i];
                         if(window.shellSurface === shellSurface) {
                             window.currentView = view;
@@ -127,6 +123,7 @@ WaylandCompositor {
                     }
                 }
             }
+
             Item {
                 id: leftArea
                 objectName: "leftArea"
@@ -137,6 +134,7 @@ WaylandCompositor {
                 property Item surfaceItem
                 visible: !rootTransformItem.fullScreen
             }
+
             Item {
                 id: rightArea
                 objectName: "rightArea"
@@ -147,6 +145,7 @@ WaylandCompositor {
                 property Item surfaceItem
                 visible: !rootTransformItem.fullScreen
             }
+
             Item {
                 id: topArea
                 objectName: "topArea"
@@ -157,6 +156,7 @@ WaylandCompositor {
                 property Item surfaceItem
                 visible: !rootTransformItem.fullScreen
             }
+
             Item {
                 id: bottomArea
                 objectName: "bottomArea"
@@ -235,10 +235,8 @@ WaylandCompositor {
         id: centerApplicationViewModel
         property var surfaces: ({});
 
-        function addSurface(shellSurface, shellSurfaceItem)
-        {
-            if(surfaces.hasOwnProperty(shellSurface))
-            {
+        function addSurface(shellSurface, shellSurfaceItem) {
+            if(surfaces.hasOwnProperty(shellSurface)) {
                 console.debug("application model: duplicate key! "+shellSurface.uuid);
                 return;
             }
@@ -256,31 +254,24 @@ WaylandCompositor {
             });
         }
 
-        function removeSurface(shellSurface)
-        {
-            for(var i = count - 1; i >= 0; i--)
-            {
-                if(get(i).data.surface === shellSurface)
-                {
+        function removeSurface(shellSurface) {
+            for (var i = count - 1; i >= 0; i--) {
+                if(get(i).data.surface === shellSurface) {
                     remove(i);
                 }
             }
             delete surfaces[shellSurface]
         }
 
-        function createView(shellSurface, view)
-        {
+        function createView(shellSurface, view) {
             var entry = surfaces[shellSurface];
             console.log("compositor: create view! "+ view +" have entry "+entry);
-            if(entry.views.length === 0)
-            {
+            if(entry.views.length === 0) {
                 console.log("setting first view!");
                 entry.views.push(view);
                 append({data: {view: view, surface: shellSurface}});
-                for(var i = 0; i<count; i++)
-                {
-                    if(get(i).data.surface === shellSurface)
-                    {
+                for (var i = 0; i < count; i++) {
+                    if(get(i).data.surface === shellSurface) {
                         remove(i);
                         break;
                     }
@@ -291,8 +282,8 @@ WaylandCompositor {
             }
 
             view.aboutToBeDestroyed.connect(function() {
-                for (var i = 0; i< count; i++) {
-                    var data = get(i).data
+                for (var i = 0; i < count; i++) {
+                    var data = get(i).data;
                     if (data.view === view) {
                         var surface = data.surface;
                         remove(i);
@@ -303,9 +294,8 @@ WaylandCompositor {
                         }
 
                         var entry = surfaces[shellSurface];
-                        var index = entry.views.indexOf(view)
-                        if (index >= 0)
-                        {
+                        var index = entry.views.indexOf(view);
+                        if (index >= 0) {
                             entry.views.splice(index, 1);
                         }
 
@@ -317,13 +307,10 @@ WaylandCompositor {
             append({data: {view: view, surface: shellSurface}});
         }
 
-        function findByUuid(uuid)
-        {
-            for(var i = 0; i<count; i++)
-            {
+        function findByUuid(uuid) {
+            for (var i = 0; i < count; i++) {
                 var entry = get(i).data;
-                if (entry.surface.uuid === uuid || entry.view !== null && entry.view.uuid === uuid)
-                {
+                if (entry.surface.uuid === uuid || entry.view !== null && entry.view.uuid === uuid) {
                     return entry
                 }
             }
@@ -332,6 +319,7 @@ WaylandCompositor {
 
     Component {
         id: chromeComponent
+
         ShellSurfaceItem {
             id: shellSurfaceItem
 
@@ -417,7 +405,6 @@ WaylandCompositor {
             }
         }
     }
-
 
     EmbeddedShell {
         onSurfaceAdded: chromeComponent.createObject(limboArea, { "shellSurface": surface } );

@@ -3,147 +3,152 @@
 
 QuickEmbeddedShellView::QuickEmbeddedShellView(QQuickItem *parent)
     : QQuickItem(parent)
-    , m_Window(nullptr)
-    , m_IsCurrentView(false)
-    , m_SortIndex(0)
-    , m_Completed(false)
+    , m_embeddedShellWindow(nullptr)
+    , m_isCurrentView(false)
+    , m_sortIndex(0)
+    , m_completed(false)
 {
 }
 
 void QuickEmbeddedShellView::componentComplete()
 {
-  Q_ASSERT(m_Window);
+  Q_ASSERT(m_embeddedShellWindow);
 
-  if (m_Window->completed()) {
-    auto view = m_Window->createView(m_AppId, m_AppLabel, m_AppIcon, m_Label, m_Icon, m_SortIndex);
-    Q_ASSERT(view);
-
-    connect(view, &EmbeddedShellSurfaceView::selected, this, [view, this]() {
-      setIsCurrentView(true);
-    });
-    connect(view, &EmbeddedShellSurfaceView::deselected, this, [view, this]() {
-      setIsCurrentView(false);
-    });
-    connect(this, &QuickEmbeddedShellView::appLabelChanged, view, &EmbeddedShellSurfaceView::setAppLabel);
-    connect(this, &QuickEmbeddedShellView::appIconChanged, view, &EmbeddedShellSurfaceView::setAppIcon);
-    connect(this, &QuickEmbeddedShellView::labelChanged, view, &EmbeddedShellSurfaceView::setLabel);
-    connect(this, &QuickEmbeddedShellView::iconChanged, view, &EmbeddedShellSurfaceView::setIcon);
-    connect(this, &QuickEmbeddedShellView::sortIndexChanged, view, &EmbeddedShellSurfaceView::setSortIndex);
-    connect(this, &QObject::destroyed, view, &QObject::deleteLater);
-
-    m_Completed = true;
+  if (m_embeddedShellWindow->completed()) {
+    createView();
   } else {
-    connect(m_Window, &QuickEmbeddedShellWindow::completedChanged, this, &QuickEmbeddedShellView::componentComplete, Qt::SingleShotConnection);
+    connect(m_embeddedShellWindow, &QuickEmbeddedShellWindow::completedChanged, this, &QuickEmbeddedShellView::createView, Qt::SingleShotConnection);
   }
 
   QQuickItem::componentComplete();
 }
 
-QuickEmbeddedShellWindow *QuickEmbeddedShellView::window() const
+QuickEmbeddedShellWindow *QuickEmbeddedShellView::embeddedShellWindow() const
 {
-  return m_Window;
+  return m_embeddedShellWindow;
 }
 
-void QuickEmbeddedShellView::setWindow(QuickEmbeddedShellWindow *window)
+void QuickEmbeddedShellView::setEmbeddedShellWindow(QuickEmbeddedShellWindow *embeddedShellWindow)
 {
-  if (!m_Window && window) {
-    m_Window = window;
-    Q_EMIT quickEmbeddedShellWindowChanged(window);
+  if (!m_embeddedShellWindow && embeddedShellWindow) {
+    m_embeddedShellWindow = embeddedShellWindow;
+    Q_EMIT embeddedShellWindowChanged(embeddedShellWindow);
   }
 }
 
 bool QuickEmbeddedShellView::isCurrentView() const
 {
-  return m_IsCurrentView;
+  return m_isCurrentView;
 }
 
 void QuickEmbeddedShellView::setIsCurrentView(bool isCurrentView)
 {
-  if (m_IsCurrentView != isCurrentView) {
-    m_IsCurrentView = isCurrentView;
+  if (m_isCurrentView != isCurrentView) {
+    m_isCurrentView = isCurrentView;
     Q_EMIT isCurrentViewChanged(isCurrentView);
   }
 }
 
+void QuickEmbeddedShellView::createView()
+{
+  auto view = m_embeddedShellWindow->createView(m_appId, m_appLabel, m_appIcon, m_label, m_icon, m_sortIndex);
+  Q_ASSERT(view);
+
+  connect(view, &EmbeddedShellSurfaceView::selected, this, [view, this]() {
+    setIsCurrentView(true);
+  });
+  connect(view, &EmbeddedShellSurfaceView::deselected, this, [view, this]() {
+    setIsCurrentView(false);
+  });
+  connect(this, &QuickEmbeddedShellView::appLabelChanged, view, &EmbeddedShellSurfaceView::setAppLabel);
+  connect(this, &QuickEmbeddedShellView::appIconChanged, view, &EmbeddedShellSurfaceView::setAppIcon);
+  connect(this, &QuickEmbeddedShellView::labelChanged, view, &EmbeddedShellSurfaceView::setLabel);
+  connect(this, &QuickEmbeddedShellView::iconChanged, view, &EmbeddedShellSurfaceView::setIcon);
+  connect(this, &QuickEmbeddedShellView::sortIndexChanged, view, &EmbeddedShellSurfaceView::setSortIndex);
+  connect(this, &QObject::destroyed, view, &QObject::deleteLater);
+
+  m_completed = true;
+}
+
 QString QuickEmbeddedShellView::appId() const
 {
-  return m_AppId;
+  return m_appId;
 }
 
 void QuickEmbeddedShellView::setAppId(const QString &appId)
 {
-  if (m_Completed) {
+  if (m_completed) {
     qCWarning(quickShell) << __PRETTY_FUNCTION__ << "AppId cannot be changed after the component has been completed!";
     return;
   }
 
-  if (m_AppId != appId) {
-    m_AppId = appId;
+  if (m_appId != appId) {
+    m_appId = appId;
     Q_EMIT appIdChanged(appId);
   }
 }
 
 QString QuickEmbeddedShellView::appLabel() const
 {
-  return m_AppLabel;
+  return m_appLabel;
 }
 
 void QuickEmbeddedShellView::setAppLabel(const QString &appLabel)
 {
-  if (m_AppLabel != appLabel) {
-    m_AppLabel = appLabel;
+  if (m_appLabel != appLabel) {
+    m_appLabel = appLabel;
     Q_EMIT appLabelChanged(appLabel);
   }
 }
 
 QString QuickEmbeddedShellView::appIcon() const
 {
-  return m_AppIcon;
+  return m_appIcon;
 }
 
 void QuickEmbeddedShellView::setAppIcon(const QString &appIcon)
 {
-  if (m_AppIcon != appIcon) {
-    m_AppIcon = appIcon;
+  if (m_appIcon != appIcon) {
+    m_appIcon = appIcon;
     Q_EMIT appIconChanged(appIcon);
   }
 }
 
 QString QuickEmbeddedShellView::label() const
 {
-  return m_Label;
+  return m_label;
 }
 
 void QuickEmbeddedShellView::setLabel(const QString &label)
 {
-  if (m_Label != label) {
-    m_Label = label;
+  if (m_label != label) {
+    m_label = label;
     Q_EMIT labelChanged(label);
   }
 }
 
 QString QuickEmbeddedShellView::icon() const
 {
-  return m_Icon;
+  return m_icon;
 }
 
 void QuickEmbeddedShellView::setIcon(const QString &icon)
 {
-  if (m_Icon != icon) {
-    m_Icon = icon;
+  if (m_icon != icon) {
+    m_icon = icon;
     Q_EMIT iconChanged(icon);
   }
 }
 
 quint32 QuickEmbeddedShellView::sortIndex() const
 {
-  return m_SortIndex;
+  return m_sortIndex;
 }
 
 void QuickEmbeddedShellView::setSortIndex(quint32 sortIndex)
 {
-  if (m_SortIndex != sortIndex) {
-    m_SortIndex = sortIndex;
+  if (m_sortIndex != sortIndex) {
+    m_sortIndex = sortIndex;
     Q_EMIT sortIndexChanged(sortIndex);
   }
 }

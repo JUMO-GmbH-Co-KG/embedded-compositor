@@ -63,6 +63,6 @@ public:
   QString m_appIcon;
   QString m_label;
   QString m_icon;
-  int m_sortIndex;
+  uint32_t m_sortIndex;
 };
 #endif // EMBEDDEDSHELLSURFACE_P_H

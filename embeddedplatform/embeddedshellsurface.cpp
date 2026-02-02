@@ -21,10 +21,6 @@ EmbeddedShellSurface::EmbeddedShellSurface(struct ::embedded_shell_surface *shel
 {
 }
 
-EmbeddedShellSurface::~EmbeddedShellSurface()
-{
-}
-
 EmbeddedShellSurfacePrivate::EmbeddedShellSurfacePrivate(struct ::embedded_shell_surface *shell_surface,
                                                          QtWaylandClient::QWaylandWindow *window,
                                                          const QSize &size,
@@ -210,10 +206,6 @@ EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(::surface_view *view,
 {
 }
 
-EmbeddedShellSurfaceView::~EmbeddedShellSurfaceView()
-{
-}
-
 QString EmbeddedShellSurfaceView::appLabel() const
 {
   Q_D(const EmbeddedShellSurfaceView);
@@ -278,12 +270,13 @@ void EmbeddedShellSurfaceView::setIcon(const QString &icon)
   Q_EMIT iconChanged(icon);
 }
 
-int EmbeddedShellSurfaceView::sortIndex() const
+unsigned int EmbeddedShellSurfaceView::sortIndex() const
 {
   Q_D(const EmbeddedShellSurfaceView);
   return d->m_sortIndex;
 }
-void EmbeddedShellSurfaceView::setSortIndex(int sortIndex)
+
+void EmbeddedShellSurfaceView::setSortIndex(unsigned int sortIndex)
 {
   Q_D(EmbeddedShellSurfaceView);
   if (d->m_sortIndex == sortIndex)
