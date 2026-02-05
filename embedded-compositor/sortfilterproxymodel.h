@@ -5,7 +5,8 @@
 
 #include <QSortFilterProxyModel>
 
-class SortFilterProxyModel : public QSortFilterProxyModel {
+class SortFilterProxyModel : public QSortFilterProxyModel
+{
   Q_OBJECT
   Q_PROPERTY(QAbstractItemModel *sourceModel READ sourceModel WRITE
                  setSourceModel NOTIFY sourceModelChanged)
@@ -15,6 +16,7 @@ class SortFilterProxyModel : public QSortFilterProxyModel {
   Q_PROPERTY(QString acceptFunction READ acceptFunction WRITE setAcceptFunction
                  NOTIFY acceptFunctionChanged)
   Q_PROPERTY(int count READ count NOTIFY countChanged)
+
 public:
   SortFilterProxyModel();
   void setSourceModel(QAbstractItemModel *newSourceModel) override;
@@ -30,6 +32,7 @@ public:
     return QModelIndex();
   }
   QHash<int, QByteArray> roleNames() const override;
+
 signals:
   void sourceModelChanged(QAbstractItemModel *sourceModel);
   void sortFunctionChanged(const QString &sortFunction);

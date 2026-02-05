@@ -30,7 +30,8 @@ public:
                  NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
   Q_PROPERTY(
-     unsigned int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
+      unsigned int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
+  Q_PROPERTY(bool completed READ completed NOTIFY completedChanged)
 
   EmbeddedShellTypes::Anchor anchor() const;
   void setAnchor(EmbeddedShellTypes::Anchor newAnchor);
@@ -47,6 +48,7 @@ public:
   void setMargin(int newMargin);
   unsigned int sortIndex() const;
   void setSortIndex(unsigned int sortIndex);
+  bool completed() const;
 
 public slots:
   EmbeddedShellSurfaceView *createView(const QString &appId, const QString &appLabel, const QString &label, unsigned int sort_index);
@@ -63,6 +65,7 @@ signals:
   void anchorChanged(EmbeddedShellTypes::Anchor anchor);
   void marginChanged(int margin);
   void sortIndexChanged(unsigned int sortIndex);
+  void completedChanged(bool completed);
 
 private:
   QSize m_size;

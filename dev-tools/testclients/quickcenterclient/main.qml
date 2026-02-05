@@ -6,7 +6,7 @@ import EmbeddedShell 1.0 as EmbeddedShell
 EmbeddedShell.Window {
     id: window
     visible: true
-    title: qsTr("Hello from CenterCLient")
+    title: qsTr("Hello from CenterClient")
     anchor: EmbeddedShell.Window.Anchor.Center
     color: "darkgray"
     width: 200

@@ -30,7 +30,6 @@ public:
                        const QSize &size,
                        EmbeddedShellTypes::Anchor anchor, uint32_t margin,
                        uint32_t sort_index);
-  ~EmbeddedShellSurface() override;
 
   QSize getSize() const;
   EmbeddedShellTypes::Anchor getAnchor() const;
@@ -69,8 +68,6 @@ class EmbeddedShellSurfaceView : public QObject {
   Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
 
 public:
-  ~EmbeddedShellSurfaceView() override;
-
   QString appLabel() const;
   void setAppLabel(const QString &appLabel);
   Q_SIGNAL void appLabelChanged(const QString &appLabel);
@@ -87,8 +84,13 @@ public:
   void setIcon(const QString &icon);
   Q_SIGNAL void iconChanged(const QString &icon);
 
+  unsigned int sortIndex() const;
+  void setSortIndex(unsigned int sortIndex);
+  Q_SIGNAL void sortIndexChanged(unsigned int sortIndex);
+
 signals:
   void selected();
+  void deselected();
 
 private:
   friend class EmbeddedShellSurface;
