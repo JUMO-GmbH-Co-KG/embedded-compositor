@@ -10,6 +10,7 @@ qt_add_library(${PROJECT_NAME}
     embeddedplatform.cpp embeddedplatform.h
     embeddedshell.cpp embeddedshell.h
     embeddedshellanchor.h
+    embeddedshelltypes.h
     embeddedshellsurface.cpp embeddedshellsurface.h embeddedshellsurface_p.h
 )
 
@@ -66,7 +67,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     Qt::DBus
     Qt::Gui
     Qt::GuiPrivate
-    Qt::Quick
     Qt::WaylandClientPrivate
     Wayland::Client
 )
@@ -77,6 +77,7 @@ install(TARGETS ${PROJECT_NAME}
 
 set(INTERFACE_HEADERS
     embeddedplatform.h
+    embeddedshelltypes.h
     embeddedshellanchor.h
     embeddedshellsurface.h
     embeddedcompositordbusclient.h)

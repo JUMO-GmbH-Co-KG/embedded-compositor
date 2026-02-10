@@ -5,6 +5,7 @@
 
 #include "embeddedplatform.h"
 #include "quickembeddedshellwindow_global.h"
+
 #include <QLoggingCategory>
 #include <QQuickWindow>
 
@@ -15,8 +16,10 @@ Q_DECLARE_LOGGING_CATEGORY(quickShell)
 
 class EMBEDDEDSHELLWINDOW_EXPORT QuickEmbeddedShellWindow
     : public QQuickWindow,
-      public QQmlParserStatus {
+      public QQmlParserStatus
+{
   Q_OBJECT
+  QML_NAMED_ELEMENT(Window)
 
 public:
   Q_INTERFACES(QQmlParserStatus)

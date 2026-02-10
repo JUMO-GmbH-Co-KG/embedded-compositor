@@ -8,11 +8,21 @@
 
 EmbeddedPlatform *EmbeddedPlatform::s_instance = nullptr;
 
-EmbeddedPlatform::EmbeddedPlatform() { qDebug() << __PRETTY_FUNCTION__; }
+EmbeddedPlatform::EmbeddedPlatform()
+{
+  qDebug() << __PRETTY_FUNCTION__;
+}
 
-EmbeddedPlatform::~EmbeddedPlatform() {}
+EmbeddedPlatform *EmbeddedPlatform::instance()
+{
+  if (s_instance == nullptr) {
+    s_instance = new EmbeddedPlatform();
+  }
+  return s_instance;
+}
 
-EmbeddedShellSurface *EmbeddedPlatform::shellSurfaceForWindow(QWindow *window) {
+EmbeddedShellSurface *EmbeddedPlatform::shellSurfaceForWindow(QWindow *window)
+{
   if (window == nullptr)
     return nullptr;
   auto pni = QGuiApplication::platformNativeInterface();
