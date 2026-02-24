@@ -116,18 +116,18 @@ There is an alternative method to detect shell surface creation which is waiting
 
 ```
 
-For convenience of QML applications, we also implement a QML interface to embedded_shell_surface, which is implemented in the sub project "quickembeddedshellwindow" (see [.h](/quickembeddedshellwindow/quickembeddedshellwindow.h), [.cpp](/quickembeddedshellwindow/quickembeddedshellwindow.cpp))
+For convenience of QML applications, we also implement a QML interface to embedded_shell_surface, which is implemented in the sub project "quickembeddedshellwindow" (see [.h](/quickembeddedshellwindow/quickembeddedshellwindow.h), [.cpp](/quickembeddedshellwindow/quickembeddedshellwindow.cpp)).
 
 ```qml
-    import EmbeddedShell 1.0
+    import EmbeddedShell
     Window {
         id: myWindow
         visible: true
         title: qsTr("Hello from CenterClient")
-        anchor: Window.Anchor.Center
+        surface.anchor: Surface.Anchor.Center
         color: "darkgray"
         width: 200
-        height:200
+        height: 200
         MouseArea {
             anchors.fill: parent
             onClicked: {
@@ -135,29 +135,50 @@ For convenience of QML applications, we also implement a QML interface to embedd
                 var appLabel = "My App"
                 var label = "My View"
                 var sortIndex = 0
-                var view = myWindow.createView(appId, appLabel, label, sortIndex);
+                var view = myWindow.surface.createView(appId, appLabel, label, sortIndex);
                 view.selected.connect(function(){ console.log("view", view.label, "was selected"); })
             }
         }
     }
 ```
 
-A declarative QML interface to embedded_shell_surface_view is also available (see [.h](/quickembeddedshellwindow/quickembeddedshellview.h), [.cpp](/quickembeddedshellwindow/quickembeddedshellview.cpp))
+If a different QWindow-based class is needed (for example, from Qt Quick Controls), the surface can also be creted using a dedicated QML interface provided by the "quickembeddedshellwindow" subproject (see [.h](/quickembeddedshellwindow/quickembeddedshellsurface.h), [.cpp](/quickembeddedshellwindow/quickembeddedshellsurface.cpp)).
 
 ```qml
-    import EmbeddedShell 1.0
+    import QtQuick.Controls
+    import EmbeddedShell
+    ApplicationWindow {
+        id: myWindow
+        visible: true
+        title: qsTr("Hello from CenterClient")
+        
+        Surface {
+            window: myWindow
+            anchor: Surface.Anchor.Center
+        }
+        
+        color: "darkgray"
+        width: 200
+        height: 200
+    }
+```
+
+A declarative QML interface to embedded_shell_surface_view is also available (see [.h](/quickembeddedshellwindow/quickembeddedshellview.h), [.cpp](/quickembeddedshellwindow/quickembeddedshellview.cpp)).
+
+```qml
+    import EmbeddedShell
     Window {
         id: myWindow
         visible: true
         title: qsTr("Hello from CenterClient")
-        anchor: Window.Anchor.Center
+        surface.anchor: Surface.Anchor.Center
         color: "darkgray"
         width: 200
-        height:200
+        height: 200
         
         View {
             id: myView
-            embeddedShellWindow: myWindow
+            surface: myWindow.surface
             appId: "MyApp"
             appLabel: "My App"
             label: "My View"

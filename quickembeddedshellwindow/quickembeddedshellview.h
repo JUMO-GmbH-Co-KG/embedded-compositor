@@ -3,7 +3,7 @@
 #ifndef QUICKEMBEDDEDSHELLVIEW_H
 #define QUICKEMBEDDEDSHELLVIEW_H
 
-#include "quickembeddedshellwindow.h"
+#include "quickembeddedshellsurface.h"
 #include "quickembeddedshellwindow_global.h"
 
 #include <QQuickItem>
@@ -13,7 +13,7 @@ class EMBEDDEDSHELLWINDOW_EXPORT QuickEmbeddedShellView : public QQuickItem
   Q_OBJECT
   QML_NAMED_ELEMENT(View)
 
-  Q_PROPERTY(QuickEmbeddedShellWindow *embeddedShellWindow READ embeddedShellWindow WRITE setEmbeddedShellWindow NOTIFY embeddedShellWindowChanged)
+  Q_PROPERTY(QuickEmbeddedShellSurface *surface READ surface WRITE setSurface NOTIFY surfaceChanged)
   Q_PROPERTY(bool isCurrentView READ isCurrentView NOTIFY isCurrentViewChanged)
 
   Q_PROPERTY(QString appId READ appId WRITE setAppId NOTIFY appIdChanged)
@@ -28,8 +28,8 @@ public:
 
   void componentComplete() override;
 
-  QuickEmbeddedShellWindow *embeddedShellWindow() const;
-  void setEmbeddedShellWindow(QuickEmbeddedShellWindow *embeddedShellWindow);
+  QuickEmbeddedShellSurface *surface() const;
+  void setSurface(QuickEmbeddedShellSurface *surface);
 
   bool isCurrentView() const;
 
@@ -52,7 +52,7 @@ public:
   void setSortIndex(quint32 sortIndex);
 
 signals:
-  void embeddedShellWindowChanged(QuickEmbeddedShellWindow *embeddedShellWindow);
+  void surfaceChanged(QuickEmbeddedShellSurface *surface);
   void isCurrentViewChanged(bool isCurrentView);
   void appIdChanged(const QString &appId);
   void appLabelChanged(const QString &appLabel);
@@ -65,7 +65,7 @@ private:
   void setIsCurrentView(bool isCurrentView);
   void createView();
 
-  QuickEmbeddedShellWindow *m_embeddedShellWindow;
+  QuickEmbeddedShellSurface *m_surface;
   bool m_isCurrentView;
 
   QString m_appId;

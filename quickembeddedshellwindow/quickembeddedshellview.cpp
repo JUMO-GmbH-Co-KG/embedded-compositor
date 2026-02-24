@@ -3,7 +3,7 @@
 
 QuickEmbeddedShellView::QuickEmbeddedShellView(QQuickItem *parent)
     : QQuickItem(parent)
-    , m_embeddedShellWindow(nullptr)
+    , m_surface(nullptr)
     , m_isCurrentView(false)
     , m_sortIndex(0)
     , m_completed(false)
@@ -12,27 +12,27 @@ QuickEmbeddedShellView::QuickEmbeddedShellView(QQuickItem *parent)
 
 void QuickEmbeddedShellView::componentComplete()
 {
-  Q_ASSERT(m_embeddedShellWindow);
+  Q_ASSERT(m_surface);
 
-  if (m_embeddedShellWindow->completed()) {
+  if (m_surface->completed()) {
     createView();
   } else {
-    connect(m_embeddedShellWindow, &QuickEmbeddedShellWindow::completedChanged, this, &QuickEmbeddedShellView::createView, Qt::SingleShotConnection);
+    connect(m_surface, &QuickEmbeddedShellSurface::completedChanged, this, &QuickEmbeddedShellView::createView, Qt::SingleShotConnection);
   }
 
   QQuickItem::componentComplete();
 }
 
-QuickEmbeddedShellWindow *QuickEmbeddedShellView::embeddedShellWindow() const
+QuickEmbeddedShellSurface *QuickEmbeddedShellView::surface() const
 {
-  return m_embeddedShellWindow;
+  return m_surface;
 }
 
-void QuickEmbeddedShellView::setEmbeddedShellWindow(QuickEmbeddedShellWindow *embeddedShellWindow)
+void QuickEmbeddedShellView::setSurface(QuickEmbeddedShellSurface *surface)
 {
-  if (!m_embeddedShellWindow && embeddedShellWindow) {
-    m_embeddedShellWindow = embeddedShellWindow;
-    Q_EMIT embeddedShellWindowChanged(embeddedShellWindow);
+  if (!m_surface && surface) {
+    m_surface = surface;
+    Q_EMIT surfaceChanged(surface);
   }
 }
 
@@ -51,7 +51,7 @@ void QuickEmbeddedShellView::setIsCurrentView(bool isCurrentView)
 
 void QuickEmbeddedShellView::createView()
 {
-  auto view = m_embeddedShellWindow->createView(m_appId, m_appLabel, m_appIcon, m_label, m_icon, m_sortIndex);
+  auto view = m_surface->createView(m_appId, m_appLabel, m_appIcon, m_label, m_icon, m_sortIndex);
   Q_ASSERT(view);
 
   connect(view, &EmbeddedShellSurfaceView::selected, this, [view, this]() {

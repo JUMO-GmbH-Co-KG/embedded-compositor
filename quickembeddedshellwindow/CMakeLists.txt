@@ -11,6 +11,7 @@ qt_add_qml_module(${PROJECT_NAME}
     SOURCES
         quickembeddedshellwindow.cpp quickembeddedshellwindow.h
         quickembeddedshellview.cpp quickembeddedshellview.h
+        quickembeddedshellsurface.cpp quickembeddedshellsurface.h
         quickembeddedshellwindow_global.h
         quickembeddedshelltypes.h
         waylandinputregion.cpp waylandinputregion.h

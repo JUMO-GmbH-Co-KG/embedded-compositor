@@ -407,7 +407,9 @@ WaylandCompositor {
     }
 
     EmbeddedShell {
-        onSurfaceAdded: chromeComponent.createObject(limboArea, { "shellSurface": surface } );
+        onSurfaceAdded: (surface) => {
+            chromeComponent.createObject(limboArea, { "shellSurface": surface } );
+        }
     }
 
     TaskSwitcherInterface {
