@@ -11,6 +11,7 @@
 class EMBEDDEDSHELLWINDOW_EXPORT QuickEmbeddedShellView : public QQuickItem
 {
   Q_OBJECT
+  QML_NAMED_ELEMENT(View)
 
   Q_PROPERTY(QuickEmbeddedShellWindow *embeddedShellWindow READ embeddedShellWindow WRITE setEmbeddedShellWindow NOTIFY embeddedShellWindowChanged)
   Q_PROPERTY(bool isCurrentView READ isCurrentView NOTIFY isCurrentViewChanged)

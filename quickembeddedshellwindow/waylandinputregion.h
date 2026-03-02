@@ -15,6 +15,8 @@ Currently only one InputRegion Item per window is supported.
 class WaylandInputRegion : public QQuickItem
 {
     Q_OBJECT
+    QML_ELEMENT
+
 public:
     explicit WaylandInputRegion(QQuickItem *parent = nullptr);
     Q_PROPERTY(bool pixelMask READ pixelMask WRITE setPixelMask NOTIFY pixelMaskChanged)

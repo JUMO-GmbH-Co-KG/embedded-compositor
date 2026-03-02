@@ -5,12 +5,17 @@ project(quickembeddedshellwindow VERSION 1.0.0 LANGUAGES CXX)
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 
-qt_add_library(${PROJECT_NAME}
-    quickembeddedshell.cpp quickembeddedshell.h
-    quickembeddedshellwindow.cpp quickembeddedshellwindow.h
-    quickembeddedshellview.cpp quickembeddedshellview.h
-    quickembeddedshellwindow_global.h
-    waylandinputregion.cpp waylandinputregion.h
+qt_add_qml_module(${PROJECT_NAME}
+    URI EmbeddedShell
+    VERSION 1.0
+    SOURCES
+        quickembeddedshellwindow.cpp quickembeddedshellwindow.h
+        quickembeddedshellview.cpp quickembeddedshellview.h
+        quickembeddedshellwindow_global.h
+        quickembeddedshelltypes.h
+        waylandinputregion.cpp waylandinputregion.h
+    PLUGIN_TARGET
+        ${PROJECT_NAME}
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -35,6 +40,8 @@ install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION ${INSTALL_PATH}
 )
 
-install(FILES qmldir
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/qmldir
+    ${CMAKE_CURRENT_BINARY_DIR}/quickembeddedshellwindow.qmltypes
     DESTINATION ${INSTALL_PATH}
 )

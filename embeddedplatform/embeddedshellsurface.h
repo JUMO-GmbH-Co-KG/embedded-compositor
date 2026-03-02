@@ -3,7 +3,8 @@
 #ifndef EMBEDDEDSHELLSURFACE_H
 #define EMBEDDEDSHELLSURFACE_H
 
-#include "embeddedplatform.h"
+#include "embeddedshelltypes.h"
+
 #include <QObject>
 
 class EmbeddedShellSurfaceView;
@@ -19,7 +20,8 @@ class QWaylandWindow;
 class QWaylandShellSurface;
 } // namespace QtWaylandClient
 
-class Q_DECL_EXPORT EmbeddedShellSurface : public QObject {
+class Q_DECL_EXPORT EmbeddedShellSurface : public QObject
+{
   Q_OBJECT
   Q_DECLARE_PRIVATE(EmbeddedShellSurface)
   QScopedPointer<EmbeddedShellSurfacePrivate> d_ptr;
@@ -61,7 +63,8 @@ public slots:
   void sendAppIcon(const QString &appIcon);
 };
 
-class EmbeddedShellSurfaceView : public QObject {
+class EmbeddedShellSurfaceView : public QObject
+{
   Q_OBJECT
   Q_DECLARE_PRIVATE(EmbeddedShellSurfaceView)
   QScopedPointer<EmbeddedShellSurfaceViewPrivate> d_ptr;

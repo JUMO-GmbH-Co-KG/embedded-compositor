@@ -4,6 +4,7 @@
 #include "QtWaylandClient/private/qwaylandwindow_p.h"
 #include "embeddedshell.h"
 #include "embeddedshellsurface.h"
+#include "embeddedplatform.h"
 
 EmbeddedShellIntegration::EmbeddedShellIntegration()
   : QtWaylandClient::QWaylandShellIntegrationTemplate<EmbeddedShellIntegration>(/*version*/ 1)
