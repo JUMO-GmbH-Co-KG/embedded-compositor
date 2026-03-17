@@ -233,6 +233,7 @@ WaylandCompositor {
 
     ListModel {
         id: centerApplicationViewModel
+
         property var surfaces: ({});
 
         function addSurface(shellSurface, shellSurfaceItem) {
@@ -266,20 +267,6 @@ WaylandCompositor {
         function createView(shellSurface, view) {
             var entry = surfaces[shellSurface];
             console.log("compositor: create view! "+ view +" have entry "+entry);
-            if(entry.views.length === 0) {
-                console.log("setting first view!");
-                entry.views.push(view);
-                append({data: {view: view, surface: shellSurface}});
-                for (var i = 0; i < count; i++) {
-                    if(get(i).data.surface === shellSurface) {
-                        remove(i);
-                        break;
-                    }
-                }
-                if (centerArea.surfaceItem.shellSurface === shellSurface)
-                    centerArea.selectSurface(shellSurface, view);
-                return;
-            }
 
             view.aboutToBeDestroyed.connect(function() {
                 for (var i = 0; i < count; i++) {
@@ -299,12 +286,30 @@ WaylandCompositor {
                             entry.views.splice(index, 1);
                         }
 
-                        break;
+                        return;
                     }
                 }
+
+                console.warn("view", view, "not found in view model!")
             });
 
             append({data: {view: view, surface: shellSurface}});
+
+            if(entry.views.length === 0) {
+                console.log("setting first view!");
+                entry.views.push(view);
+
+                for (var i = 0; i < count; i++) {
+                    if(get(i).data.surface === shellSurface && !get(i).data.view) {
+                        remove(i);
+                        break;
+                    }
+                }
+
+                if (centerArea.surfaceItem.shellSurface === shellSurface) {
+                    centerArea.selectSurface(shellSurface, view);
+                }
+            }
         }
 
         function findByUuid(uuid) {
@@ -419,7 +424,12 @@ WaylandCompositor {
         viewModel: centerApplicationViewModel
         onCurrentViewChanged: {
             var entry = centerApplicationViewModel.findByUuid(currentView);
-            centerArea.selectSurface(entry.surface, entry.view);
+
+            if (entry) {
+                centerArea.selectSurface(entry.surface, entry.view);
+            } else {
+                console.warn("Could not find", currentView, "in centerApplicationViewModel!");
+            }
         }
     }
 
