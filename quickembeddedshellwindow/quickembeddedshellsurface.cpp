@@ -57,11 +57,15 @@ void QuickEmbeddedShellSurface::componentComplete()
   else
   {
     m_surface = surface;
-    m_surface->sendAnchor(m_anchor);
-    m_surface->sendMargin(m_margin);
     if (m_size.isValid()) {
       m_surface->sendSize(m_size);
     }
+    m_surface->sendAnchor(m_anchor);
+    m_surface->sendMargin(m_margin);
+    m_surface->sendSortIndex(m_sortIndex);
+    m_surface->sendAppId(m_appId);
+    m_surface->sendAppLabel(m_appLabel);
+    m_surface->sendAppIcon(m_appIcon);
 
     m_componentComplete = true;
     Q_EMIT completedChanged(m_componentComplete);
@@ -91,8 +95,9 @@ EmbeddedShellTypes::Anchor QuickEmbeddedShellSurface::anchor() const
 
 void QuickEmbeddedShellSurface::setAnchor(EmbeddedShellTypes::Anchor newAnchor)
 {
-  if (m_anchor == newAnchor)
+  if (m_anchor == newAnchor) {
     return;
+  }
 
   qCDebug(quickShell) << __PRETTY_FUNCTION__ << m_anchor << "->" << newAnchor;
 
@@ -157,8 +162,9 @@ int QuickEmbeddedShellSurface::margin() const
 
 void QuickEmbeddedShellSurface::setMargin(int newMargin)
 {
-  if (m_margin == newMargin)
+  if (m_margin == newMargin) {
     return;
+  }
 
   qCDebug(quickShell) << __PRETTY_FUNCTION__ << newMargin;
 
@@ -177,8 +183,9 @@ unsigned int QuickEmbeddedShellSurface::sortIndex() const
 
 void QuickEmbeddedShellSurface::setSortIndex(unsigned int sortIndex)
 {
-  if (m_sortIndex == sortIndex)
+  if (m_sortIndex == sortIndex) {
     return;
+  }
 
   qCDebug(quickShell) << __PRETTY_FUNCTION__ << sortIndex;
 
@@ -187,6 +194,70 @@ void QuickEmbeddedShellSurface::setSortIndex(unsigned int sortIndex)
 
   if (m_componentComplete && m_surface) {
     m_surface->sendSortIndex(m_sortIndex);
+  }
+}
+
+QString QuickEmbeddedShellSurface::appId() const
+{
+  return m_appId;
+}
+
+void QuickEmbeddedShellSurface::setAppId(const QString &appId)
+{
+  if (m_componentComplete) {
+    qCWarning(quickShell) << __PRETTY_FUNCTION__ << "AppId cannot be changed after the component has been completed!";
+    return;
+  }
+
+  if (m_appId == appId) {
+    return;
+  }
+
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << appId;
+
+  m_appId = appId;
+  Q_EMIT appIdChanged(appId);
+}
+
+QString QuickEmbeddedShellSurface::appLabel() const
+{
+  return m_appLabel;
+}
+
+void QuickEmbeddedShellSurface::setAppLabel(const QString &appLabel)
+{
+  if (m_appLabel == appLabel) {
+    return;
+  }
+
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << appLabel;
+
+  m_appLabel = appLabel;
+  Q_EMIT appLabelChanged(appLabel);
+
+  if (m_componentComplete && m_surface) {
+    m_surface->sendAppLabel(m_appLabel);
+  }
+}
+
+QString QuickEmbeddedShellSurface::appIcon() const
+{
+  return m_appIcon;
+}
+
+void QuickEmbeddedShellSurface::setAppIcon(const QString &appIcon)
+{
+  if (m_appIcon == appIcon) {
+    return;
+  }
+
+  qCDebug(quickShell) << __PRETTY_FUNCTION__ << appIcon;
+
+  m_appIcon = appIcon;
+  Q_EMIT appIconChanged(appIcon);
+
+  if (m_componentComplete && m_surface) {
+    m_surface->sendAppIcon(m_appIcon);
   }
 }
 

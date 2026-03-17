@@ -266,7 +266,7 @@ WaylandCompositor {
 
         function createView(shellSurface, view) {
             var entry = surfaces[shellSurface];
-            console.log("compositor: create view! "+ view +" have entry "+entry);
+            console.log("compositor: create view", view , "with entry", entry);
 
             view.aboutToBeDestroyed.connect(function() {
                 for (var i = 0; i < count; i++) {
@@ -274,6 +274,10 @@ WaylandCompositor {
                     if (data.view === view) {
                         var surface = data.surface;
                         remove(i);
+
+                        if (!findByUuid(data.surface.uuid)) {
+                            append({data: {view: null, surface: shellSurface}});
+                        }
 
                         // Fall back to uuid of surface
                         if (taskSwitcherInterface.currentView === view.uuid) {
@@ -300,7 +304,8 @@ WaylandCompositor {
                 entry.views.push(view);
 
                 for (var i = 0; i < count; i++) {
-                    if(get(i).data.surface === shellSurface && !get(i).data.view) {
+                    var data = get(i).data
+                    if(data.surface === shellSurface && !data.view) {
                         remove(i);
                         break;
                     }

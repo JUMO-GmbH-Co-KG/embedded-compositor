@@ -33,6 +33,9 @@ public:
   Q_PROPERTY(EmbeddedShellTypes::Anchor anchor READ anchor WRITE setAnchor NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
   Q_PROPERTY(unsigned int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
+  Q_PROPERTY(QString appId READ appId WRITE setAppId NOTIFY appIdChanged)
+  Q_PROPERTY(QString appLabel READ appLabel WRITE setAppLabel NOTIFY appLabelChanged)
+  Q_PROPERTY(QString appIcon READ appIcon WRITE setAppIcon NOTIFY appIconChanged)
   Q_PROPERTY(bool completed READ completed NOTIFY completedChanged)
 
   void classBegin() override;
@@ -56,6 +59,15 @@ public:
   unsigned int sortIndex() const;
   void setSortIndex(unsigned int sortIndex);
 
+  QString appId() const;
+  void setAppId(const QString &appId);
+
+  QString appLabel() const;
+  void setAppLabel(const QString &appLabel);
+
+  QString appIcon() const;
+  void setAppIcon(const QString &appIcon);
+
   bool completed() const;
 
   Q_INVOKABLE EmbeddedShellSurfaceView *createView(const QString &appId,
@@ -77,6 +89,9 @@ signals:
   void anchorChanged(EmbeddedShellTypes::Anchor anchor);
   void marginChanged(int margin);
   void sortIndexChanged(unsigned int sortIndex);
+  void appIdChanged(const QString &appId);
+  void appLabelChanged(const QString &appLabel);
+  void appIconChanged(const QString &appIcon);
   void completedChanged(bool completed);
 
 private:
@@ -86,6 +101,9 @@ private:
   EmbeddedShellSurface *m_surface;
   int m_margin;
   unsigned int m_sortIndex;
+  QString m_appId;
+  QString m_appLabel;
+  QString m_appIcon;
   bool m_componentComplete;
 };
 

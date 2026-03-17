@@ -145,6 +145,15 @@ void TaskSwitcherDBusInterface::onViewsInserted(const QModelIndex &parent, int f
             connect(view, &EmbeddedShellSurfaceView::labelChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
             connect(view, &EmbeddedShellSurfaceView::iconChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
         }
+
+        if (auto *surface = data.value(QStringLiteral("surface")).value<EmbeddedShellSurface *>()) {
+            if (m_ConnectedEmbeddedShellSurfaces[surface] == 0) {
+                connect(surface, &EmbeddedShellSurface::appLabelChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+                connect(surface, &EmbeddedShellSurface::appIconChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            }
+
+            m_ConnectedEmbeddedShellSurfaces[surface]++;
+        }
     }
 }
 
@@ -161,6 +170,15 @@ void TaskSwitcherDBusInterface::onViewsAboutToBeRemoved(const QModelIndex &paren
             disconnect(view, &EmbeddedShellSurfaceView::appIconChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
             disconnect(view, &EmbeddedShellSurfaceView::labelChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
             disconnect(view, &EmbeddedShellSurfaceView::iconChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+        }
+
+        if (auto *surface = data.value(QStringLiteral("surface")).value<EmbeddedShellSurface *>()) {
+          m_ConnectedEmbeddedShellSurfaces[surface]--;
+
+          if (m_ConnectedEmbeddedShellSurfaces[surface] == 0) {
+            disconnect(surface, &EmbeddedShellSurface::appLabelChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+            disconnect(surface, &EmbeddedShellSurface::appIconChanged, this, &TaskSwitcherDBusInterface::viewsChanged);
+          }
         }
     }
 }
