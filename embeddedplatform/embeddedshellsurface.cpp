@@ -12,7 +12,8 @@ EmbeddedShellSurface::EmbeddedShellSurface(struct ::embedded_shell_surface *shel
                                            EmbeddedShellTypes::Anchor anchor,
                                            uint32_t margin,
                                            uint32_t sort_index)
-    : d_ptr(new EmbeddedShellSurfacePrivate(shell_surface,
+    : d_ptr(new EmbeddedShellSurfacePrivate(this,
+                                            shell_surface,
                                             window,
                                             size,
                                             anchor,
@@ -21,7 +22,8 @@ EmbeddedShellSurface::EmbeddedShellSurface(struct ::embedded_shell_surface *shel
 {
 }
 
-EmbeddedShellSurfacePrivate::EmbeddedShellSurfacePrivate(struct ::embedded_shell_surface *shell_surface,
+EmbeddedShellSurfacePrivate::EmbeddedShellSurfacePrivate(EmbeddedShellSurface *q,
+                                                         struct ::embedded_shell_surface *shell_surface,
                                                          QtWaylandClient::QWaylandWindow *window,
                                                          const QSize &size,
                                                          EmbeddedShellTypes::Anchor anchor,
@@ -33,6 +35,7 @@ EmbeddedShellSurfacePrivate::EmbeddedShellSurfacePrivate(struct ::embedded_shell
     , m_anchor(anchor)
     , m_margin(margin)
     , m_sort_index(sort_index)
+    , q_ptr(q)
 {
 }
 
@@ -58,6 +61,12 @@ unsigned int EmbeddedShellSurface::getSortIndex() const
   return d->m_sort_index;
 }
 
+bool EmbeddedShellSurface::getVisible()
+{
+  Q_D(const EmbeddedShellSurface);
+  return d->m_visible;
+}
+
 void EmbeddedShellSurfacePrivate::applyConfigure()
 {
   window()->resizeFromApplyConfigure(m_pendingSize);
@@ -68,6 +77,16 @@ void EmbeddedShellSurfacePrivate::embedded_shell_surface_configure(int32_t width
 {
   m_pendingSize = {width, height};
   window()->applyConfigureWhenPossible();
+}
+
+void EmbeddedShellSurfacePrivate::embedded_shell_surface_visible_changed(int32_t visible)
+{
+  Q_Q(EmbeddedShellSurface);
+  auto bVisible = static_cast<bool>(visible);
+  if (m_visible != bVisible) {
+    m_visible = bVisible;
+    emit q->visibleChanged(bVisible);
+  }
 }
 
 EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,

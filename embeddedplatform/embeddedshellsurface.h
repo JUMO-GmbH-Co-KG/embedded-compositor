@@ -36,6 +36,8 @@ public:
   QSize getSize() const;
   EmbeddedShellTypes::Anchor getAnchor() const;
   unsigned int getSortIndex() const;
+  bool getVisible();
+
   EmbeddedShellSurfaceView *createView(const QString &label,
                                        const QString &icon,
                                        uint32_t sort_index);
@@ -51,7 +53,9 @@ public:
                                        uint32_t sort_index);
 
   QtWaylandClient::QWaylandShellSurface *shellSurface();
+
 signals:
+  void visibleChanged(bool visible);
 
 public slots:
   void sendSize(const QSize &size);
@@ -68,7 +72,11 @@ class EmbeddedShellSurfaceView : public QObject
   Q_OBJECT
   Q_DECLARE_PRIVATE(EmbeddedShellSurfaceView)
   QScopedPointer<EmbeddedShellSurfaceViewPrivate> d_ptr;
+  Q_PROPERTY(QString appLabel READ appLabel WRITE setAppLabel NOTIFY appLabelChanged)
+  Q_PROPERTY(QString appIcon READ appIcon WRITE setAppIcon NOTIFY appIconChanged)
   Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
+  Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
+  Q_PROPERTY(int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
 
 public:
   QString appLabel() const;

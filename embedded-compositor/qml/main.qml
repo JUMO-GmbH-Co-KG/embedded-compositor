@@ -333,21 +333,30 @@ WaylandCompositor {
         ShellSurfaceItem {
             id: shellSurfaceItem
 
-            visible: parent.surfaceItem === shellSurfaceItem
+            property bool isCurrentSurface: parent.surfaceItem === shellSurfaceItem
+            visible: isCurrentSurface
 
             onSurfaceDestroyed:  destroy()
             onWidthChanged: Qt.callLater(handleResized)
             onHeightChanged: Qt.callLater(handleResized)
             Component.onCompleted: {
                 handleAnchor();
+                updateVisibility();
             }
 
             property int margin: shellSurface.margin
             property string uuid: currentView ? currentView.uuid : shellSurface.uuid
             property var currentView: null
 
-            onCurrentViewChanged: if(currentView != null) currentView.select();
+            onCurrentViewChanged: {
+                if(currentView != null) {
+                    currentView.select();
+                }
+            }
 
+            onIsCurrentSurfaceChanged: {
+                updateVisibility();
+            }
 
             Connections {
                 target: shellSurface
@@ -361,6 +370,12 @@ WaylandCompositor {
 
                 function onCreateView(view) {
                     centerApplicationViewModel.createView(shellSurface, view);
+                }
+            }
+
+            function updateVisibility() {
+                if (shellSurface) {
+                    shellSurface.sendVisibleChanged(isCurrentSurface);
                 }
             }
 

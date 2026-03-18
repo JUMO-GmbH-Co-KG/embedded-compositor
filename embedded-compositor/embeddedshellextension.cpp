@@ -128,6 +128,11 @@ void EmbeddedShellSurface::sendConfigure(const QSize size) {
   send_configure(size.width(), size.height());
 }
 
+void EmbeddedShellSurface::sendVisibleChanged(bool visible) {
+  qCDebug(shellExt) << __PRETTY_FUNCTION__ << visible;
+  send_visible_changed(visible);
+}
+
 QString EmbeddedShellSurface::getUuid() const {
   return m_uuid.toString(QUuid::WithoutBraces);
 }

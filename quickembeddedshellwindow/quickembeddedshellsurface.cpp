@@ -18,6 +18,7 @@ QuickEmbeddedShellSurface::QuickEmbeddedShellSurface(QObject *parent)
     , m_margin(-1)
     , m_sortIndex(0)
     , m_componentComplete(false)
+    , m_visible(false)
 {
 }
 
@@ -66,6 +67,13 @@ void QuickEmbeddedShellSurface::componentComplete()
     m_surface->sendAppId(m_appId);
     m_surface->sendAppLabel(m_appLabel);
     m_surface->sendAppIcon(m_appIcon);
+
+    connect(m_surface, &EmbeddedShellSurface::visibleChanged, this, &QuickEmbeddedShellSurface::visibleChanged);
+
+    if (m_surface->getVisible())
+    {
+      emit visibleChanged(true);
+    }
 
     m_componentComplete = true;
     Q_EMIT completedChanged(m_componentComplete);
@@ -264,6 +272,11 @@ void QuickEmbeddedShellSurface::setAppIcon(const QString &appIcon)
 bool QuickEmbeddedShellSurface::completed() const
 {
   return m_componentComplete;
+}
+
+bool QuickEmbeddedShellSurface::visible() const
+{
+  return m_surface && m_surface->getVisible();
 }
 
 EmbeddedShellSurfaceView *QuickEmbeddedShellSurface::createView(const QString &appId,

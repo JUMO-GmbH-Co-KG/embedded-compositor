@@ -37,6 +37,7 @@ public:
   Q_PROPERTY(QString appLabel READ appLabel WRITE setAppLabel NOTIFY appLabelChanged)
   Q_PROPERTY(QString appIcon READ appIcon WRITE setAppIcon NOTIFY appIconChanged)
   Q_PROPERTY(bool completed READ completed NOTIFY completedChanged)
+  Q_PROPERTY(bool visible READ visible NOTIFY visibleChanged)
 
   void classBegin() override;
   void componentComplete() override;
@@ -69,6 +70,7 @@ public:
   void setAppIcon(const QString &appIcon);
 
   bool completed() const;
+  bool visible() const;
 
   Q_INVOKABLE EmbeddedShellSurfaceView *createView(const QString &appId,
                                                    const QString &appLabel,
@@ -93,6 +95,7 @@ signals:
   void appLabelChanged(const QString &appLabel);
   void appIconChanged(const QString &appIcon);
   void completedChanged(bool completed);
+  void visibleChanged(bool visible);
 
 private:
   QWindow *m_window;
@@ -105,6 +108,7 @@ private:
   QString m_appLabel;
   QString m_appIcon;
   bool m_componentComplete;
+  bool m_visible;
 };
 
 #endif // QUICKEMBEDDEDSHELLSURFACE_H

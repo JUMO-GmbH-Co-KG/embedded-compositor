@@ -67,8 +67,7 @@ public:
   QString appLabel() const { return m_appLabel; }
   QString appIcon() const { return m_appIcon; }
   Q_PROPERTY(QSize size READ getSize NOTIFY sizeChanged)
-  Q_PROPERTY(
-      EmbeddedShellTypes::Anchor anchor READ getAnchor NOTIFY anchorChanged)
+  Q_PROPERTY(EmbeddedShellTypes::Anchor anchor READ getAnchor NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ getMargin NOTIFY marginChanged)
   Q_PROPERTY(unsigned int sortIndex READ sortIndex NOTIFY sortIndexChanged)
   Q_PROPERTY(QString appId READ appId CONSTANT)
@@ -84,6 +83,7 @@ public:
   void setAppLabel(const QString &appLabel);
   void setAppIcon(const QString &appIcon);
   Q_INVOKABLE void sendConfigure(const QSize size);
+  Q_INVOKABLE void sendVisibleChanged(bool visible);
   QString getUuid() const;
   pid_t getClientPid() const;
 
