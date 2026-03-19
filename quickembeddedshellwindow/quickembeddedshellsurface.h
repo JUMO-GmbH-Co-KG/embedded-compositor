@@ -5,12 +5,12 @@
 
 #include "embeddedplatform.h"
 #include "quickembeddedshellwindow_global.h"
+#include "embeddedshellsurfaceview.h"
 
 #include <QQmlParserStatus>
 #include <QObject>
 #include <QtQml>
 
-class EmbeddedShellSurfaceView;
 class EmbeddedShellSurface;
 
 Q_DECLARE_LOGGING_CATEGORY(quickShell)

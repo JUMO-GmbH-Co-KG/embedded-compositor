@@ -1,0 +1,57 @@
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef EMBEDDEDSHELLSURFACEVIEW_H
+#define EMBEDDEDSHELLSURFACEVIEW_H
+
+#include "embeddedshellsurface.h"
+
+#include <QObject>
+
+class EmbeddedShellSurfaceViewPrivate;
+
+struct surface_view;
+
+class EmbeddedShellSurfaceView : public QObject
+{
+  Q_OBJECT
+  Q_DECLARE_PRIVATE(EmbeddedShellSurfaceView)
+  QScopedPointer<EmbeddedShellSurfaceViewPrivate> d_ptr;
+  Q_PROPERTY(QString appLabel READ appLabel WRITE setAppLabel NOTIFY appLabelChanged)
+  Q_PROPERTY(QString appIcon READ appIcon WRITE setAppIcon NOTIFY appIconChanged)
+  Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
+  Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
+  Q_PROPERTY(int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
+  Q_PROPERTY(bool selected READ selected WRITE setSelected NOTIFY selectedChanged)
+
+public:
+  QString appLabel() const;
+  void setAppLabel(const QString &appLabel);
+  Q_SIGNAL void appLabelChanged(const QString &appLabel);
+
+  QString appIcon() const;
+  void setAppIcon(const QString &appIcon);
+  Q_SIGNAL void appIconChanged(const QString &appIcon);
+
+  QString label() const;
+  void setLabel(const QString &label);
+  Q_SIGNAL void labelChanged(const QString &label);
+
+  QString icon() const;
+  void setIcon(const QString &icon);
+  Q_SIGNAL void iconChanged(const QString &icon);
+
+  unsigned int sortIndex() const;
+  void setSortIndex(unsigned int sortIndex);
+  Q_SIGNAL void sortIndexChanged(unsigned int sortIndex);
+
+  bool selected() const;
+  void setSelected(bool selected);
+  Q_SIGNAL void selectedChanged(bool selected);
+
+private:
+  friend class EmbeddedShellSurface;
+  EmbeddedShellSurfaceView(struct ::surface_view *view,
+                           EmbeddedShellSurface *surf);
+};
+
+#endif // EMBEDDEDSHELLSURFACEVIEW_H

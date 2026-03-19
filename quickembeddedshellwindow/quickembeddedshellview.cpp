@@ -4,7 +4,7 @@
 QuickEmbeddedShellView::QuickEmbeddedShellView(QQuickItem *parent)
     : QQuickItem(parent)
     , m_surface(nullptr)
-    , m_isCurrentView(false)
+    , m_selected(false)
     , m_sortIndex(0)
     , m_completed(false)
 {
@@ -36,16 +36,16 @@ void QuickEmbeddedShellView::setSurface(QuickEmbeddedShellSurface *surface)
   }
 }
 
-bool QuickEmbeddedShellView::isCurrentView() const
+bool QuickEmbeddedShellView::selected() const
 {
-  return m_isCurrentView;
+  return m_selected;
 }
 
-void QuickEmbeddedShellView::setIsCurrentView(bool isCurrentView)
+void QuickEmbeddedShellView::setSelected(bool selected)
 {
-  if (m_isCurrentView != isCurrentView) {
-    m_isCurrentView = isCurrentView;
-    Q_EMIT isCurrentViewChanged(isCurrentView);
+  if (m_selected != selected) {
+    m_selected = selected;
+    Q_EMIT selectedChanged(selected);
   }
 }
 
@@ -54,12 +54,7 @@ void QuickEmbeddedShellView::createView()
   auto view = m_surface->createView(m_appId, m_appLabel, m_appIcon, m_label, m_icon, m_sortIndex);
   Q_ASSERT(view);
 
-  connect(view, &EmbeddedShellSurfaceView::selected, this, [view, this]() {
-    setIsCurrentView(true);
-  });
-  connect(view, &EmbeddedShellSurfaceView::deselected, this, [view, this]() {
-    setIsCurrentView(false);
-  });
+  connect(view, &EmbeddedShellSurfaceView::selectedChanged, this, &QuickEmbeddedShellView::setSelected);
   connect(this, &QuickEmbeddedShellView::appLabelChanged, view, &EmbeddedShellSurfaceView::setAppLabel);
   connect(this, &QuickEmbeddedShellView::appIconChanged, view, &EmbeddedShellSurfaceView::setAppIcon);
   connect(this, &QuickEmbeddedShellView::labelChanged, view, &EmbeddedShellSurfaceView::setLabel);

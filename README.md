@@ -136,7 +136,7 @@ For convenience of QML applications, we also implement a QML interface to embedd
                 var label = "My View"
                 var sortIndex = 0
                 var view = myWindow.surface.createView(appId, appLabel, label, sortIndex);
-                view.selected.connect(function(){ console.log("view", view.label, "was selected"); })
+                view.selectedChanged.connect(function(){ if (view.selected) console.log("view", view.label, "was selected"); })
             }
         }
     }
