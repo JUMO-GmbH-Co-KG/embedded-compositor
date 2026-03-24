@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "embeddedplatform.h"
 #include "embeddedshellsurface.h"
+#include "embeddedshellsurfaceview.h"
 #include "qscreen.h"
 #include <QDebug>
 #include <QLabel>

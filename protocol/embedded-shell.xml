@@ -50,6 +50,10 @@
 			<arg name="height" type="int" />
 		</event>
 
+                <event name="visible_changed">
+		        <arg name="visible" type="int" />
+		</event>
+
 		<request name="view_create">
 			<description summary="create an embedded shell surface_view">
 				Creates an Embedded Shell Surface.

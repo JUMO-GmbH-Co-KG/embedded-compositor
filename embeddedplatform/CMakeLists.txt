@@ -12,6 +12,7 @@ qt_add_library(${PROJECT_NAME}
     embeddedshellanchor.h
     embeddedshelltypes.h
     embeddedshellsurface.cpp embeddedshellsurface.h embeddedshellsurface_p.h
+    embeddedshellsurfaceview.cpp embeddedshellsurfaceview.h embeddedshellsurfaceview_p.h
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -80,6 +81,7 @@ set(INTERFACE_HEADERS
     embeddedshelltypes.h
     embeddedshellanchor.h
     embeddedshellsurface.h
+    embeddedshellsurfaceview.h
     embeddedcompositordbusclient.h)
 
 install(FILES ${INTERFACE_HEADERS}

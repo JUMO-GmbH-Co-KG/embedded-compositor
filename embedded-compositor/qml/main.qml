@@ -233,6 +233,7 @@ WaylandCompositor {
 
     ListModel {
         id: centerApplicationViewModel
+
         property var surfaces: ({});
 
         function addSurface(shellSurface, shellSurfaceItem) {
@@ -265,21 +266,7 @@ WaylandCompositor {
 
         function createView(shellSurface, view) {
             var entry = surfaces[shellSurface];
-            console.log("compositor: create view! "+ view +" have entry "+entry);
-            if(entry.views.length === 0) {
-                console.log("setting first view!");
-                entry.views.push(view);
-                append({data: {view: view, surface: shellSurface}});
-                for (var i = 0; i < count; i++) {
-                    if(get(i).data.surface === shellSurface) {
-                        remove(i);
-                        break;
-                    }
-                }
-                if (centerArea.surfaceItem.shellSurface === shellSurface)
-                    centerArea.selectSurface(shellSurface, view);
-                return;
-            }
+            console.log("compositor: create view", view , "with entry", entry);
 
             view.aboutToBeDestroyed.connect(function() {
                 for (var i = 0; i < count; i++) {
@@ -287,6 +274,10 @@ WaylandCompositor {
                     if (data.view === view) {
                         var surface = data.surface;
                         remove(i);
+
+                        if (!findByUuid(data.surface.uuid)) {
+                            append({data: {view: null, surface: shellSurface}});
+                        }
 
                         // Fall back to uuid of surface
                         if (taskSwitcherInterface.currentView === view.uuid) {
@@ -299,12 +290,31 @@ WaylandCompositor {
                             entry.views.splice(index, 1);
                         }
 
-                        break;
+                        return;
                     }
                 }
+
+                console.warn("view", view, "not found in view model!")
             });
 
             append({data: {view: view, surface: shellSurface}});
+
+            if(entry.views.length === 0) {
+                console.log("setting first view!");
+                entry.views.push(view);
+
+                for (var i = 0; i < count; i++) {
+                    var data = get(i).data
+                    if(data.surface === shellSurface && !data.view) {
+                        remove(i);
+                        break;
+                    }
+                }
+
+                if (centerArea.surfaceItem.shellSurface === shellSurface) {
+                    centerArea.selectSurface(shellSurface, view);
+                }
+            }
         }
 
         function findByUuid(uuid) {
@@ -323,21 +333,30 @@ WaylandCompositor {
         ShellSurfaceItem {
             id: shellSurfaceItem
 
-            visible: parent.surfaceItem === shellSurfaceItem
+            property bool isCurrentSurface: parent.surfaceItem === shellSurfaceItem
+            visible: isCurrentSurface
 
             onSurfaceDestroyed:  destroy()
             onWidthChanged: Qt.callLater(handleResized)
             onHeightChanged: Qt.callLater(handleResized)
             Component.onCompleted: {
                 handleAnchor();
+                updateVisibility();
             }
 
             property int margin: shellSurface.margin
             property string uuid: currentView ? currentView.uuid : shellSurface.uuid
             property var currentView: null
 
-            onCurrentViewChanged: if(currentView != null) currentView.select();
+            onCurrentViewChanged: {
+                if(currentView != null) {
+                    currentView.select();
+                }
+            }
 
+            onIsCurrentSurfaceChanged: {
+                updateVisibility();
+            }
 
             Connections {
                 target: shellSurface
@@ -351,6 +370,12 @@ WaylandCompositor {
 
                 function onCreateView(view) {
                     centerApplicationViewModel.createView(shellSurface, view);
+                }
+            }
+
+            function updateVisibility() {
+                if (shellSurface) {
+                    shellSurface.sendVisibleChanged(isCurrentSurface);
                 }
             }
 
@@ -407,7 +432,9 @@ WaylandCompositor {
     }
 
     EmbeddedShell {
-        onSurfaceAdded: chromeComponent.createObject(limboArea, { "shellSurface": surface } );
+        onSurfaceAdded: (surface) => {
+            chromeComponent.createObject(limboArea, { "shellSurface": surface } );
+        }
     }
 
     TaskSwitcherInterface {
@@ -417,7 +444,12 @@ WaylandCompositor {
         viewModel: centerApplicationViewModel
         onCurrentViewChanged: {
             var entry = centerApplicationViewModel.findByUuid(currentView);
-            centerArea.selectSurface(entry.surface, entry.view);
+
+            if (entry) {
+                centerArea.selectSurface(entry.surface, entry.view);
+            } else {
+                console.warn("Could not find", currentView, "in centerApplicationViewModel!");
+            }
         }
     }
 

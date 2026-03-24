@@ -8,16 +8,13 @@
 #include <QObject>
 
 class EmbeddedShellSurfaceView;
-class EmbeddedShellSurfaceViewPrivate;
 class EmbeddedShellSurfacePrivate;
 
 struct embedded_shell_surface;
-struct surface_view;
-class QWindow;
 
 namespace QtWaylandClient {
-class QWaylandWindow;
-class QWaylandShellSurface;
+  class QWaylandWindow;
+  class QWaylandShellSurface;
 } // namespace QtWaylandClient
 
 class Q_DECL_EXPORT EmbeddedShellSurface : public QObject
@@ -36,6 +33,8 @@ public:
   QSize getSize() const;
   EmbeddedShellTypes::Anchor getAnchor() const;
   unsigned int getSortIndex() const;
+  bool getVisible();
+
   EmbeddedShellSurfaceView *createView(const QString &label,
                                        const QString &icon,
                                        uint32_t sort_index);
@@ -51,7 +50,9 @@ public:
                                        uint32_t sort_index);
 
   QtWaylandClient::QWaylandShellSurface *shellSurface();
+
 signals:
+  void visibleChanged(bool visible);
 
 public slots:
   void sendSize(const QSize &size);
@@ -61,44 +62,6 @@ public slots:
   void sendAppId(const QString &appId);
   void sendAppLabel(const QString &appLabe);
   void sendAppIcon(const QString &appIcon);
-};
-
-class EmbeddedShellSurfaceView : public QObject
-{
-  Q_OBJECT
-  Q_DECLARE_PRIVATE(EmbeddedShellSurfaceView)
-  QScopedPointer<EmbeddedShellSurfaceViewPrivate> d_ptr;
-  Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
-
-public:
-  QString appLabel() const;
-  void setAppLabel(const QString &appLabel);
-  Q_SIGNAL void appLabelChanged(const QString &appLabel);
-
-  QString appIcon() const;
-  void setAppIcon(const QString &appIcon);
-  Q_SIGNAL void appIconChanged(const QString &appIcon);
-
-  QString label() const;
-  void setLabel(const QString &label);
-  Q_SIGNAL void labelChanged(const QString &label);
-
-  QString icon() const;
-  void setIcon(const QString &icon);
-  Q_SIGNAL void iconChanged(const QString &icon);
-
-  unsigned int sortIndex() const;
-  void setSortIndex(unsigned int sortIndex);
-  Q_SIGNAL void sortIndexChanged(unsigned int sortIndex);
-
-signals:
-  void selected();
-  void deselected();
-
-private:
-  friend class EmbeddedShellSurface;
-  EmbeddedShellSurfaceView(struct ::surface_view *view,
-                           EmbeddedShellSurface *surf);
 };
 
 #endif // EMBEDDEDSHELLSURFACE_H

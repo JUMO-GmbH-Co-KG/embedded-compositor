@@ -5,6 +5,7 @@
 
 #include "embeddedplatform.h"
 #include "embeddedshellsurface.h"
+#include "embeddedshellsurfaceview.h"
 #include "embeddedshelltypes.h"
 
 #include <QtQml>

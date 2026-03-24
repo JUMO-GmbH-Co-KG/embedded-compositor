@@ -3,7 +3,7 @@
 #ifndef QUICKEMBEDDEDSHELLVIEW_H
 #define QUICKEMBEDDEDSHELLVIEW_H
 
-#include "quickembeddedshellwindow.h"
+#include "quickembeddedshellsurface.h"
 #include "quickembeddedshellwindow_global.h"
 
 #include <QQuickItem>
@@ -13,8 +13,8 @@ class EMBEDDEDSHELLWINDOW_EXPORT QuickEmbeddedShellView : public QQuickItem
   Q_OBJECT
   QML_NAMED_ELEMENT(View)
 
-  Q_PROPERTY(QuickEmbeddedShellWindow *embeddedShellWindow READ embeddedShellWindow WRITE setEmbeddedShellWindow NOTIFY embeddedShellWindowChanged)
-  Q_PROPERTY(bool isCurrentView READ isCurrentView NOTIFY isCurrentViewChanged)
+  Q_PROPERTY(QuickEmbeddedShellSurface *surface READ surface WRITE setSurface NOTIFY surfaceChanged)
+  Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
 
   Q_PROPERTY(QString appId READ appId WRITE setAppId NOTIFY appIdChanged)
   Q_PROPERTY(QString appLabel READ appLabel WRITE setAppLabel NOTIFY appLabelChanged)
@@ -28,10 +28,10 @@ public:
 
   void componentComplete() override;
 
-  QuickEmbeddedShellWindow *embeddedShellWindow() const;
-  void setEmbeddedShellWindow(QuickEmbeddedShellWindow *embeddedShellWindow);
+  QuickEmbeddedShellSurface *surface() const;
+  void setSurface(QuickEmbeddedShellSurface *surface);
 
-  bool isCurrentView() const;
+  bool selected() const;
 
   QString appId() const;
   void setAppId(const QString &appId);
@@ -52,8 +52,8 @@ public:
   void setSortIndex(quint32 sortIndex);
 
 signals:
-  void embeddedShellWindowChanged(QuickEmbeddedShellWindow *embeddedShellWindow);
-  void isCurrentViewChanged(bool isCurrentView);
+  void surfaceChanged(QuickEmbeddedShellSurface *surface);
+  void selectedChanged(bool selected);
   void appIdChanged(const QString &appId);
   void appLabelChanged(const QString &appLabel);
   void appIconChanged(const QString &appIcon);
@@ -62,11 +62,11 @@ signals:
   void sortIndexChanged(quint32 sortIndex);
 
 private:
-  void setIsCurrentView(bool isCurrentView);
+  void setSelected(bool selected);
   void createView();
 
-  QuickEmbeddedShellWindow *m_embeddedShellWindow;
-  bool m_isCurrentView;
+  QuickEmbeddedShellSurface *m_surface;
+  bool m_selected;
 
   QString m_appId;
   QString m_appLabel;

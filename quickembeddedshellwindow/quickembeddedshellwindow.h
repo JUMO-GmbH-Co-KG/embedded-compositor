@@ -4,6 +4,7 @@
 #define QUICKEMBEDDEDSHELLWINDOW_H
 
 #include "embeddedplatform.h"
+#include "quickembeddedshellsurface.h"
 #include "quickembeddedshellwindow_global.h"
 
 #include <QLoggingCategory>
@@ -26,57 +27,17 @@ public:
 
   QuickEmbeddedShellWindow(QWindow *parent = nullptr);
   ~QuickEmbeddedShellWindow() override;
-  // Changes "size" but using "implicit" API style to be consistent with what QtQuick usually does for "wanted size".
-  Q_PROPERTY(int implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY implicitWidthChanged)
-  Q_PROPERTY(int implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
-  Q_PROPERTY(EmbeddedShellTypes::Anchor anchor READ anchor WRITE setAnchor
-                 NOTIFY anchorChanged)
-  Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
-  Q_PROPERTY(
-      unsigned int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
-  Q_PROPERTY(bool completed READ completed NOTIFY completedChanged)
 
-  EmbeddedShellTypes::Anchor anchor() const;
-  void setAnchor(EmbeddedShellTypes::Anchor newAnchor);
+  Q_PROPERTY(QuickEmbeddedShellSurface *surface READ surface CONSTANT)
 
   // QQmlParserStatus interface
   void classBegin() override;
   void componentComplete() override;
 
-  int implicitWidth() const;
-  void setImplicitWidth(int implicitWidth);
-  int implicitHeight() const;
-  void setImplicitHeight(int implicitHeight);
-  int margin() const;
-  void setMargin(int newMargin);
-  unsigned int sortIndex() const;
-  void setSortIndex(unsigned int sortIndex);
-  bool completed() const;
-
-public slots:
-  EmbeddedShellSurfaceView *createView(const QString &appId, const QString &appLabel, const QString &label, unsigned int sort_index);
-  EmbeddedShellSurfaceView *createView(const QString &appId,
-                                       const QString &appLabel,
-                                       const QString &appIcon,
-                                       const QString &label,
-                                       const QString &icon,
-                                       uint32_t sort_index);
-
-signals:
-  void implicitWidthChanged(int implicitWidth);
-  void implicitHeightChanged(int implicitHeight);
-  void anchorChanged(EmbeddedShellTypes::Anchor anchor);
-  void marginChanged(int margin);
-  void sortIndexChanged(unsigned int sortIndex);
-  void completedChanged(bool completed);
+  QuickEmbeddedShellSurface *surface();
 
 private:
-  QSize m_size;
-  EmbeddedShellTypes::Anchor m_anchor = EmbeddedShellTypes::Anchor::Undefined;
-  EmbeddedShellSurface *m_surface = nullptr;
-  int m_margin = -1;
-  unsigned int m_sortIndex = 0;
-  bool m_componentComplete = false;
+  QuickEmbeddedShellSurface m_surface;
 };
 
 #endif // QUICKEMBEDDEDSHELLWINDOW_H

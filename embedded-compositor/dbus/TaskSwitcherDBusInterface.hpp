@@ -10,6 +10,7 @@
 #include <QList>
 #include <QAbstractListModel>
 
+class EmbeddedShellSurface;
 
 class TaskSwitcherDBusInterface : public DBusInterface
 {
@@ -51,4 +52,5 @@ private:
 
     QString m_currentView;
     QAbstractListModel *m_viewModel = nullptr;
+    QHash<EmbeddedShellSurface *, int> m_ConnectedEmbeddedShellSurfaces;
 };
