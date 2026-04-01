@@ -84,15 +84,15 @@ EmbeddedShellIntegration::createShellSurface(
 
   const QString appId = qEnvironmentVariable("EMBEDDED_SHELL_APP_ID");
   if (!appId.isEmpty()) {
-    ess->sendAppId(appId);
+    ess->setAppId(appId);
   }
   const QString appLabel = qEnvironmentVariable("EMBEDDED_SHELL_APP_LABEL");
   if (!appLabel.isEmpty()) {
-    ess->sendAppLabel(appLabel);
+    ess->setAppLabel(appLabel);
   }
   const QString appIcon = qEnvironmentVariable("EMBEDDED_SHELL_APP_ICON");
   if (!appIcon.isEmpty()) {
-    ess->sendAppIcon(appIcon);
+    ess->setAppIcon(appIcon);
   }
 
   m_windows.insert(window, ess);
@@ -109,7 +109,7 @@ EmbeddedShellIntegration::nativeResourceForWindow(const QByteArray &resource,
     if (found != m_windows.end()) {
       return found.value();
     }
-    qDebug() << __PRETTY_FUNCTION__ << " ... not found";
+    qDebug() << Q_FUNC_INFO << " ... not found";
     return nullptr;
   }
   return QWaylandShellIntegration::nativeResourceForWindow(resource, window);

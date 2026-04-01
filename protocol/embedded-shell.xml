@@ -1,122 +1,143 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <protocol name="embedded_shell">
-	<copyright>
+        <copyright>
 	FIXME
 	</copyright>
 
-	<interface name="embedded_shell_surface" version="1">
-		<request name="destroy" type="destructor"></request>
-		<request name="set_anchor">
-			<arg name="anchor" type="uint" />
+        <interface name="embedded_shell_surface" version="1">
+	        <request name="destroy" type="destructor"/>
+
+                <request name="set_anchor">
+		        <arg name="anchor" type="uint"/>
 		</request>
-		<request name="set_sort_index">
-			<arg name="sort_index" type="uint" />
+
+                <request name="set_margin">
+		        <arg name="margin" type="int"/>
 		</request>
-		<request name="set_margin">
-			<arg name="margin" type="int" />
+
+                <request name="set_sort_index">
+		        <arg name="sort_index" type="uint"/>
 		</request>
-		<request name="set_app_id"><!-- TODO should probably be since="3" -->
-			<description summary="Set the application ID of the application"/>
+
+                <request name="set_app_id">
+		        <description summary="Set the application ID of the application"/>
 			<arg name="label" type="string"/>
 		</request>
-		<request name="set_app_label"><!-- TODO should probably be since="3" -->
-			<description summary="Set the user-visible name of the application"/>
+
+                <request name="set_app_label">
+		        <description summary="Set the user-visible name of the application"/>
 			<arg name="label" type="string"/>
 		</request>
-		<request name="set_app_icon"><!-- TODO should probably be since="3" -->
-			<description summary="Set the icon name of this application"/>
+
+                <request name="set_app_icon">
+		        <description summary="Set the icon name of this application"/>
 			<arg name="icon" type="string"/>
 		</request>
 
-		<request name="set_size"><!-- TODO should probably be since="2" -->
-			<description summary="Sets the size of the surface">
-				Sets the size of the surface in surface-local coordinates. The compositor will display the surface
+                <request name="set_size">
+		        <description summary="Sets the size of the surface">
+			        Sets the size of the surface in surface-local coordinates. The compositor will display the surface
 				with respect to its anchors.
 
-				If you pass 0 for either value, the compositor will assign it and inform you of the assignment in the
+                                If you pass 0 for either value, the compositor will assign it and inform you of the assignment in the
 				configure event. You must set your anchor to opposite edges in the dimensions you omit.
 			</description>
-			<arg name="width" type="uint" />
-			<arg name="height" type="uint" />
+			<arg name="width" type="uint"/>
+			<arg name="height" type="uint"/>
 		</request>
 
-		<event name="configure">
-			<description summary="suggest resize">
-		The configure event asks the client to resize its surface.
-		The width and height arguments specify the size of the window
-		in surface local coordinates.
-		</description>
-			<arg name="width" type="int" />
-			<arg name="height" type="int" />
-		</event>
+                <request name="set_custom_data">
+		        <arg name="custom_data" type="array"/>
+		</request>
 
-                <event name="visible_changed">
-		        <arg name="visible" type="int" />
-		</event>
+                <request name="view_create">
+		        <description summary="create an embedded shell surface_view">
+			        Creates an Embedded Shell Surface.
 
-		<request name="view_create">
-			<description summary="create an embedded shell surface_view">
-				Creates an Embedded Shell Surface.
-
-				The app_id identifies the logical application this surface belongs to.
+                                The app_id identifies the logical application this surface belongs to.
 				The app_label can be empty at which point the label will be used.
 				The app_icon can be empty at which point the icon will be used.
 			</description>
-			<arg name="shell_surface" type="object" interface="embedded_shell_surface" />
+			<arg name="shell_surface" type="object" interface="embedded_shell_surface"/>
 			<arg name="app_id" type="string" summary="The application ID"/>
 			<arg name="app_label" type="string" summary="The user-visible name of the application"/>
 			<arg name="app_icon" type="string" summary="The icon name of the application"/>
 			<arg name="label" type="string" summary="The user-visible label for this particular view"/>
 			<arg name="icon" type="string" summary="The icon name of this particular view"/>
-			<arg name="sort_index" type="uint" />
-			<arg name="new_view_id" type="new_id" interface="surface_view" />
+			<arg name="sort_index" type="uint"/>
+			<arg name="custom_data" type="array"/>
+			<arg name="new_view_id" type="new_id" interface="surface_view"/>
 		</request>
+
+                <event name="configure">
+		        <description summary="suggest resize">
+			        The configure event asks the client to resize its surface.
+				The width and height arguments specify the size of the window
+				in surface local coordinates.
+			</description>
+			<arg name="width" type="int"/>
+			<arg name="height" type="int"/>
+		</event>
+
+                <event name="visible_changed">
+		        <arg name="visible" type="int"/>
+		</event>
 	</interface>
 
-	<interface name="embedded_shell" version="1">
-		<request name="surface_create">
-			<arg name="surface" type="object" interface="wl_surface" />
-			<arg name="new_shellsurface_id" type="new_id" interface="embedded_shell_surface" />
-			<arg name="anchor" type="uint" />
-			<arg name="margin" type="uint" />
-			<arg name="sort_index" type="uint" />
+        <interface name="embedded_shell" version="1">
+	        <request name="surface_create">
+		        <arg name="surface" type="object" interface="wl_surface"/>
+			<arg name="new_shellsurface_id" type="new_id" interface="embedded_shell_surface"/>
+			<arg name="anchor" type="uint"/>
+			<arg name="margin" type="uint"/>
+			<arg name="sort_index" type="uint"/>
 		</request>
 
-		<enum name="error">
-			<entry name="role" value="0" summary="wl_surface already has a different role" />
+                <enum name="error">
+		        <entry name="role" value="0" summary="wl_surface already has a different role"/>
 		</enum>
 
-		<enum name="anchor_border">
-			<description summary="screen border anchor"> Which screen border the surface will be anchored to </description>
-			<entry name="undefined" value="0" />
-			<entry name="top" value="1" />
-			<entry name="bottom" value="2" />
-			<entry name="left" value="3" />
-			<entry name="right" value="4" />
-			<entry name="center" value="5" />
+                <enum name="anchor_border">
+		        <description summary="screen border anchor"> Which screen border the surface will be anchored to </description>
+			<entry name="undefined" value="0"/>
+			<entry name="top" value="1"/>
+			<entry name="bottom" value="2"/>
+			<entry name="left" value="3"/>
+			<entry name="right" value="4"/>
+			<entry name="center" value="5"/>
 		</enum>
 	</interface>
 
-	<interface name="surface_view" version="1">
-		<request name="set_app_label">
-			<description summary="Set the user-visible application name"/>
-			<arg name="label" type="string" />
+        <interface name="surface_view" version="1">
+	        <request name="set_app_label">
+		        <description summary="Set the user-visible application name"/>
+			<arg name="label" type="string"/>
 		</request>
-		<request name="set_app_icon">
-			<description summary="Set the application icon name"/>
-			<arg name="label" type="string" />
+
+                <request name="set_app_icon">
+		        <description summary="Set the application icon name"/>
+			<arg name="label" type="string"/>
 		</request>
-		<request name="set_label">
-			<arg name="text" type="string" />
+
+                <request name="set_label">
+		        <arg name="text" type="string"/>
 		</request>
-		<request name="set_icon">
-			<description summary="Set the icon name for this view"/>
-			<arg name="text" type="string" />
+
+                <request name="set_icon">
+		        <description summary="Set the icon name for this view"/>
+			<arg name="text" type="string"/>
 		</request>
-		<request name="set_sort_index">
-			<arg name="sort_index" type="uint" />
+
+                <request name="set_sort_index">
+		        <arg name="sort_index" type="uint"/>
 		</request>
-		<event name="selected"></event>
-		<request name="destroy" type="destructor"></request>
+
+                <request name="set_custom_data">
+		        <arg name="custom_data" type="array"/>
+		</request>
+
+                <request name="destroy" type="destructor"/>
+
+                <event name="selected"/>
 	</interface>
 </protocol>

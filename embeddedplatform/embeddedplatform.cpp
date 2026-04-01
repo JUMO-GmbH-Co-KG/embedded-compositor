@@ -10,7 +10,7 @@ EmbeddedPlatform *EmbeddedPlatform::s_instance = nullptr;
 
 EmbeddedPlatform::EmbeddedPlatform()
 {
-  qDebug() << __PRETTY_FUNCTION__;
+  qDebug() << Q_FUNC_INFO;
 }
 
 EmbeddedPlatform *EmbeddedPlatform::instance()

@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef EMBEDDEDPLATFORM_H
-#define EMBEDDEDPLATFORM_H
+#pragma once
 
 #include "embeddedshellsurface.h"
 
@@ -24,5 +23,3 @@ public:
 signals:
   void shellSurfaceCreated(EmbeddedShellSurface *, QWindow *);
 };
-
-#endif // EMBEDDEDPLATFORM_H
