@@ -3,8 +3,6 @@
 #include "embeddedshellsurfaceview.h"
 #include "embeddedshellsurfaceview_p.h"
 
-#include <QDebug>
-
 EmbeddedShellSurfaceViewPrivate::EmbeddedShellSurfaceViewPrivate(EmbeddedShellSurfaceView *q,
                                                                  ::surface_view *view,
                                                                  EmbeddedShellSurface *surf)
@@ -28,9 +26,24 @@ EmbeddedShellSurfaceViewPrivate *EmbeddedShellSurfaceViewPrivate::get(EmbeddedSh
 
 void EmbeddedShellSurfaceViewPrivate::surface_view_selected()
 {
-  qDebug() << __PRETTY_FUNCTION__;
   Q_Q(EmbeddedShellSurfaceView);
   q->setSelected(true);
+}
+
+QByteArray EmbeddedShellSurfaceViewPrivate::serializeVariant(const QVariant &variant)
+{
+  QByteArray byteArray;
+  QDataStream stream(&byteArray, QDataStream::WriteOnly);
+  stream.setVersion(QDataStream::Qt_6_8);
+  stream << variant;
+
+  if (stream.status() != QDataStream::Status::Ok)
+  {
+    qWarning() << Q_FUNC_INFO << "Could not serialize" << variant << "!";
+    byteArray.clear();
+  }
+
+  return byteArray;
 }
 
 EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(::surface_view *view,
@@ -52,7 +65,7 @@ void EmbeddedShellSurfaceView::setAppLabel(const QString &appLabel)
     return;
   d->m_appLabel = appLabel;
   d->set_app_label(appLabel);
-  Q_EMIT appLabelChanged(appLabel);
+  emit appLabelChanged(appLabel);
 }
 
 QString EmbeddedShellSurfaceView::appIcon() const
@@ -68,7 +81,7 @@ void EmbeddedShellSurfaceView::setAppIcon(const QString &appIcon)
     return;
   d->m_appIcon = appIcon;
   d->set_app_icon(appIcon);
-  Q_EMIT appIconChanged(appIcon);
+  emit appIconChanged(appIcon);
 }
 
 QString EmbeddedShellSurfaceView::label() const
@@ -84,7 +97,7 @@ void EmbeddedShellSurfaceView::setLabel(const QString &label)
     return;
   d->m_label = label;
   d->set_label(label);
-  Q_EMIT labelChanged(label);
+  emit labelChanged(label);
 }
 
 QString EmbeddedShellSurfaceView::icon() const
@@ -100,7 +113,7 @@ void EmbeddedShellSurfaceView::setIcon(const QString &icon)
     return;
   d->m_icon = icon;
   d->set_icon(icon);
-  Q_EMIT iconChanged(icon);
+  emit iconChanged(icon);
 }
 
 unsigned int EmbeddedShellSurfaceView::sortIndex() const
@@ -116,7 +129,23 @@ void EmbeddedShellSurfaceView::setSortIndex(unsigned int sortIndex)
     return;
   d->m_sortIndex = sortIndex;
   d->set_sort_index(sortIndex);
-  Q_EMIT sortIndexChanged(sortIndex);
+  emit sortIndexChanged(sortIndex);
+}
+
+QVariant EmbeddedShellSurfaceView::customData() const
+{
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_customData;
+}
+
+void EmbeddedShellSurfaceView::setCustomData(const QVariant &customData)
+{
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_customData == customData)
+    return;
+  d->m_customData = customData;
+  d->set_custom_data(EmbeddedShellSurfaceViewPrivate::serializeVariant(customData));
+  emit customDataChanged(customData);
 }
 
 bool EmbeddedShellSurfaceView::selected() const
@@ -131,5 +160,12 @@ void EmbeddedShellSurfaceView::setSelected(bool selected)
   if (d->m_selected == selected)
     return;
   d->m_selected = selected;
-  Q_EMIT selectedChanged(selected);
+  emit selectedChanged(selected);
 }
+
+void EmbeddedShellSurfaceView::select()
+{
+  Q_D(EmbeddedShellSurfaceView);
+  d->select();
+}
+

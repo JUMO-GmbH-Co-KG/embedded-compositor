@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef EMBEDDEDSHELLWINDOW_GLOBAL_H
-#define EMBEDDEDSHELLWINDOW_GLOBAL_H
+#pragma once
 
 #include <QtCore/qglobal.h>
 
@@ -10,5 +9,3 @@
 #else
 #  define EMBEDDEDSHELLWINDOW_EXPORT Q_DECL_IMPORT
 #endif
-
-#endif // EMBEDDEDSHELLWINDOW_GLOBAL_H

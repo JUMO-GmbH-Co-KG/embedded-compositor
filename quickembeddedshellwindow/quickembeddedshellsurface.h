@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef QUICKEMBEDDEDSHELLSURFACE_H
-#define QUICKEMBEDDEDSHELLSURFACE_H
+#pragma once
 
 #include "embeddedplatform.h"
 #include "quickembeddedshellwindow_global.h"
@@ -33,6 +32,7 @@ public:
   Q_PROPERTY(EmbeddedShellTypes::Anchor anchor READ anchor WRITE setAnchor NOTIFY anchorChanged)
   Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
   Q_PROPERTY(unsigned int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
+  Q_PROPERTY(QVariant customData READ customData WRITE setCustomData NOTIFY customDataChanged)
   Q_PROPERTY(QString appId READ appId WRITE setAppId NOTIFY appIdChanged)
   Q_PROPERTY(QString appLabel READ appLabel WRITE setAppLabel NOTIFY appLabelChanged)
   Q_PROPERTY(QString appIcon READ appIcon WRITE setAppIcon NOTIFY appIconChanged)
@@ -60,6 +60,9 @@ public:
   unsigned int sortIndex() const;
   void setSortIndex(unsigned int sortIndex);
 
+  QVariant customData() const;
+  void setCustomData(const QVariant &customData);
+
   QString appId() const;
   void setAppId(const QString &appId);
 
@@ -70,32 +73,35 @@ public:
   void setAppIcon(const QString &appIcon);
 
   bool completed() const;
+
   bool visible() const;
 
   Q_INVOKABLE EmbeddedShellSurfaceView *createView(const QString &appId,
                                                    const QString &appLabel,
                                                    const QString &label,
-                                                   unsigned int sort_index);
+                                                   unsigned int sortIndex);
 
   Q_INVOKABLE EmbeddedShellSurfaceView *createView(const QString &appId,
                                                    const QString &appLabel,
                                                    const QString &appIcon,
                                                    const QString &label,
                                                    const QString &icon,
-                                                   uint32_t sort_index);
+                                                   uint32_t sortIndex,
+                                                   const QVariant &customData);
 
 signals:
-  void windowChanged(QWindow *window);
-  void implicitWidthChanged(int implicitWidth);
-  void implicitHeightChanged(int implicitHeight);
-  void anchorChanged(EmbeddedShellTypes::Anchor anchor);
-  void marginChanged(int margin);
-  void sortIndexChanged(unsigned int sortIndex);
-  void appIdChanged(const QString &appId);
-  void appLabelChanged(const QString &appLabel);
-  void appIconChanged(const QString &appIcon);
-  void completedChanged(bool completed);
-  void visibleChanged(bool visible);
+  void windowChanged();
+  void implicitWidthChanged();
+  void implicitHeightChanged();
+  void anchorChanged();
+  void marginChanged();
+  void sortIndexChanged();
+  void customDataChanged();
+  void appIdChanged();
+  void appLabelChanged();
+  void appIconChanged();
+  void completedChanged();
+  void visibleChanged();
 
 private:
   QWindow *m_window;
@@ -104,11 +110,10 @@ private:
   EmbeddedShellSurface *m_surface;
   int m_margin;
   unsigned int m_sortIndex;
+  QVariant m_customData;
   QString m_appId;
   QString m_appLabel;
   QString m_appIcon;
   bool m_componentComplete;
   bool m_visible;
 };
-
-#endif // QUICKEMBEDDEDSHELLSURFACE_H

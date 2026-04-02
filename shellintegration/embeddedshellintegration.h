@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef EMBEDDEDSHELLINTEGRATION_H
-#define EMBEDDEDSHELLINTEGRATION_H
+#pragma once
 
 #include <QScopedPointer>
 #include <QtWaylandClient/private/qwaylandshellintegration_p.h>
@@ -33,5 +32,3 @@ private:
   QScopedPointer<EmbeddedShell> m_shell;
   QMap<QtWaylandClient::QWaylandWindow *, EmbeddedShellSurface *> m_windows;
 };
-
-#endif // EMBEDDEDSHELLINTEGRATION_H

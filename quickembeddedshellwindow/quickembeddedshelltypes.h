@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef QUICKEMBEDDEDSHELLTYPES_H
-#define QUICKEMBEDDEDSHELLTYPES_H
+#pragma once
 
 #include "embeddedplatform.h"
 #include "embeddedshellsurface.h"
@@ -31,5 +30,3 @@ struct EmbeddedPlatformForeign
   QML_FOREIGN(EmbeddedPlatform)
   QML_NAMED_ELEMENT(Platform)
 };
-
-#endif // QUICKEMBEDDEDSHELLTYPES_H

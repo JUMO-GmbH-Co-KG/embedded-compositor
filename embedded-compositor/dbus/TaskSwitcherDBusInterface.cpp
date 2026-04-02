@@ -64,7 +64,7 @@ QList<TaskSwitcherEntry> TaskSwitcherDBusInterface::views() const
             }
 
             entries.append({
-                view ? view->getUuid() : surface->getUuid(),
+                view ? view->uuid() : surface->uuid(),
                 appId,
                 appLabel,
                 appIcon,
@@ -126,9 +126,9 @@ void TaskSwitcherDBusInterface::setViewModel(QAbstractListModel *newViewModel)
                 &TaskSwitcherDBusInterface::viewsChanged);
     }
 
-    Q_EMIT viewModelChanged(m_viewModel);
+    emit viewModelChanged(m_viewModel);
 
-    Q_EMIT viewsChanged();
+    emit viewsChanged();
 }
 
 void TaskSwitcherDBusInterface::onViewsInserted(const QModelIndex &parent, int first, int last)
