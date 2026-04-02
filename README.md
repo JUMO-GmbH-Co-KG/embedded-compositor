@@ -95,12 +95,12 @@ private slots:
     auto v1 = shellSurface->createView("View One", 3);
     auto v2 = shellSurface->createView("View Two", 2);
     auto v3 = shellSurface->createView("View Three", 1);
-    connect(v1, &EmbeddedShellSurfaceView::selected, this,
-            [=] { m_label->setText(v1->label()); });
-    connect(v2, &EmbeddedShellSurfaceView::selected, this,
-            [=] { m_label->setText(v2->label()); });
-    connect(v3, &EmbeddedShellSurfaceView::selected, this,
-            [=] { m_label->setText(v3->label()); });
+    connect(v1, &EmbeddedShellSurfaceView::selectedChanged, this,
+            [=](bool selected) { if (selected) m_label->setText(v1->label()); });
+    connect(v2, &EmbeddedShellSurfaceView::selectedChanged, this,
+            [=](bool selected) { if (selected) m_label->setText(v2->label()); });
+    connect(v3, &EmbeddedShellSurfaceView::selectedChanged, this,
+            [=](bool selected) { if (selected) m_label->setText(v3->label()); });
   }
 ```
 

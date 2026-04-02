@@ -32,7 +32,7 @@ void QuickEmbeddedShellView::setSurface(QuickEmbeddedShellSurface *surface)
 {
   if (!m_surface && surface) {
     m_surface = surface;
-    emit surfaceChanged(surface);
+    emit surfaceChanged();
   }
 }
 
@@ -45,7 +45,7 @@ void QuickEmbeddedShellView::setSelected(bool selected)
 {
   if (m_selected != selected) {
     m_selected = selected;
-    emit selectedChanged(selected);
+    emit selectedChanged();
   }
 }
 
@@ -55,12 +55,13 @@ void QuickEmbeddedShellView::createView()
   Q_ASSERT(view);
 
   connect(view, &EmbeddedShellSurfaceView::selectedChanged, this, &QuickEmbeddedShellView::setSelected);
-  connect(this, &QuickEmbeddedShellView::appLabelChanged, view, &EmbeddedShellSurfaceView::setAppLabel);
-  connect(this, &QuickEmbeddedShellView::appIconChanged, view, &EmbeddedShellSurfaceView::setAppIcon);
-  connect(this, &QuickEmbeddedShellView::labelChanged, view, &EmbeddedShellSurfaceView::setLabel);
-  connect(this, &QuickEmbeddedShellView::iconChanged, view, &EmbeddedShellSurfaceView::setIcon);
-  connect(this, &QuickEmbeddedShellView::sortIndexChanged, view, &EmbeddedShellSurfaceView::setSortIndex);
-  connect(this, &QuickEmbeddedShellView::customDataChanged, view, &EmbeddedShellSurfaceView::setCustomData);
+  connect(this, &QuickEmbeddedShellView::appLabelChanged, view, [this, view]() { view->setAppLabel(appLabel()); });
+  connect(this, &QuickEmbeddedShellView::appIconChanged, view, [this, view]() { view->setAppIcon(appIcon()); });
+  connect(this, &QuickEmbeddedShellView::labelChanged, view, [this, view]() { view->setLabel(label()); });
+  connect(this, &QuickEmbeddedShellView::iconChanged, view, [this, view]() { view->setIcon(icon()); });
+  connect(this, &QuickEmbeddedShellView::sortIndexChanged, view, [this, view]() { view->setSortIndex(sortIndex()); });
+  connect(this, &QuickEmbeddedShellView::customDataChanged, view, [this, view]() { view->setCustomData(customData()); });
+  connect(this, &QuickEmbeddedShellView::select, view, &EmbeddedShellSurfaceView::select);
   connect(this, &QObject::destroyed, view, &QObject::deleteLater);
 
   m_completed = true;
@@ -80,7 +81,7 @@ void QuickEmbeddedShellView::setAppId(const QString &appId)
 
   if (m_appId != appId) {
     m_appId = appId;
-    emit appIdChanged(appId);
+    emit appIdChanged();
   }
 }
 
@@ -93,7 +94,7 @@ void QuickEmbeddedShellView::setAppLabel(const QString &appLabel)
 {
   if (m_appLabel != appLabel) {
     m_appLabel = appLabel;
-    emit appLabelChanged(appLabel);
+    emit appLabelChanged();
   }
 }
 
@@ -106,7 +107,7 @@ void QuickEmbeddedShellView::setAppIcon(const QString &appIcon)
 {
   if (m_appIcon != appIcon) {
     m_appIcon = appIcon;
-    emit appIconChanged(appIcon);
+    emit appIconChanged();
   }
 }
 
@@ -119,7 +120,7 @@ void QuickEmbeddedShellView::setLabel(const QString &label)
 {
   if (m_label != label) {
     m_label = label;
-    emit labelChanged(label);
+    emit labelChanged();
   }
 }
 
@@ -132,7 +133,7 @@ void QuickEmbeddedShellView::setIcon(const QString &icon)
 {
   if (m_icon != icon) {
     m_icon = icon;
-    emit iconChanged(icon);
+    emit iconChanged();
   }
 }
 
@@ -145,7 +146,7 @@ void QuickEmbeddedShellView::setSortIndex(quint32 sortIndex)
 {
   if (m_sortIndex != sortIndex) {
     m_sortIndex = sortIndex;
-    emit sortIndexChanged(sortIndex);
+    emit sortIndexChanged();
   }
 }
 
@@ -158,6 +159,6 @@ void QuickEmbeddedShellView::setCustomData(const QVariant &customData)
 {
   if (m_customData != customData) {
     m_customData = customData;
-    emit customDataChanged(customData);
+    emit customDataChanged();
   }
 }

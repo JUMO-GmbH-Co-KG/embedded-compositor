@@ -90,18 +90,18 @@ public:
                                                    const QVariant &customData);
 
 signals:
-  void windowChanged(QWindow *window);
-  void implicitWidthChanged(int implicitWidth);
-  void implicitHeightChanged(int implicitHeight);
-  void anchorChanged(EmbeddedShellTypes::Anchor anchor);
-  void marginChanged(int margin);
-  void sortIndexChanged(unsigned int sortIndex);
-  void customDataChanged(const QVariant &customData);
-  void appIdChanged(const QString &appId);
-  void appLabelChanged(const QString &appLabel);
-  void appIconChanged(const QString &appIcon);
-  void completedChanged(bool completed);
-  void visibleChanged(bool visible);
+  void windowChanged();
+  void implicitWidthChanged();
+  void implicitHeightChanged();
+  void anchorChanged();
+  void marginChanged();
+  void sortIndexChanged();
+  void customDataChanged();
+  void appIdChanged();
+  void appLabelChanged();
+  void appIconChanged();
+  void completedChanged();
+  void visibleChanged();
 
 private:
   QWindow *m_window;

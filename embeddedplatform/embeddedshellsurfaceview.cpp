@@ -3,8 +3,6 @@
 #include "embeddedshellsurfaceview.h"
 #include "embeddedshellsurfaceview_p.h"
 
-#include <QDebug>
-
 EmbeddedShellSurfaceViewPrivate::EmbeddedShellSurfaceViewPrivate(EmbeddedShellSurfaceView *q,
                                                                  ::surface_view *view,
                                                                  EmbeddedShellSurface *surf)
@@ -28,7 +26,6 @@ EmbeddedShellSurfaceViewPrivate *EmbeddedShellSurfaceViewPrivate::get(EmbeddedSh
 
 void EmbeddedShellSurfaceViewPrivate::surface_view_selected()
 {
-  qDebug() << Q_FUNC_INFO;
   Q_Q(EmbeddedShellSurfaceView);
   q->setSelected(true);
 }
@@ -165,3 +162,10 @@ void EmbeddedShellSurfaceView::setSelected(bool selected)
   d->m_selected = selected;
   emit selectedChanged(selected);
 }
+
+void EmbeddedShellSurfaceView::select()
+{
+  Q_D(EmbeddedShellSurfaceView);
+  d->select();
+}
+

@@ -73,11 +73,11 @@ void QuickEmbeddedShellSurface::componentComplete()
 
     if (m_surface->visible())
     {
-      emit visibleChanged(true);
+      emit visibleChanged();
     }
 
     m_componentComplete = true;
-    emit completedChanged(m_componentComplete);
+    emit completedChanged();
     qCDebug(quickShell) << Q_FUNC_INFO << m_surface << m_anchor << m_margin << m_size << m_sortIndex;
   }
 }
@@ -91,7 +91,7 @@ void QuickEmbeddedShellSurface::setWindow(QWindow *window)
 {
   if (!m_window && window) {
     m_window = window;
-    emit windowChanged(window);
+    emit windowChanged();
   } else {
     qCWarning(quickShell) << "Invalid window assignment from" << m_window << "to" << window << "!";
   }
@@ -111,7 +111,7 @@ void QuickEmbeddedShellSurface::setAnchor(EmbeddedShellTypes::Anchor newAnchor)
   qCDebug(quickShell) << Q_FUNC_INFO << m_anchor << "->" << newAnchor;
 
   m_anchor = newAnchor;
-  emit anchorChanged(newAnchor);
+  emit anchorChanged();
 
   if (m_componentComplete && m_surface) {
     m_surface->setAnchor(m_anchor);
@@ -135,7 +135,7 @@ void QuickEmbeddedShellSurface::setImplicitWidth(int implicitWidth)
   qCDebug(quickShell) << Q_FUNC_INFO << implicitWidth;
 
   m_size = newSize;
-  emit implicitWidthChanged(implicitWidth);
+  emit implicitWidthChanged();
 
   if (m_componentComplete && m_surface) {
     m_surface->setSize(m_size);
@@ -157,7 +157,7 @@ void QuickEmbeddedShellSurface::setImplicitHeight(int implicitHeight)
   qCDebug(quickShell) << Q_FUNC_INFO << implicitHeight;
 
   m_size = newSize;
-  emit implicitHeightChanged(implicitHeight);
+  emit implicitHeightChanged();
 
   if (m_componentComplete && m_surface) {
     m_surface->setSize(m_size);
@@ -178,7 +178,7 @@ void QuickEmbeddedShellSurface::setMargin(int newMargin)
   qCDebug(quickShell) << Q_FUNC_INFO << newMargin;
 
   m_margin = newMargin;
-  emit marginChanged(newMargin);
+  emit marginChanged();
 
   if (m_componentComplete && m_surface) {
     m_surface->setMargin(m_margin);
@@ -199,7 +199,7 @@ void QuickEmbeddedShellSurface::setSortIndex(unsigned int sortIndex)
   qCDebug(quickShell) << Q_FUNC_INFO << sortIndex;
 
   m_sortIndex = sortIndex;
-  emit sortIndexChanged(sortIndex);
+  emit sortIndexChanged();
 
   if (m_componentComplete && m_surface) {
     m_surface->setSortIndex(m_sortIndex);
@@ -220,7 +220,7 @@ void QuickEmbeddedShellSurface::setCustomData(const QVariant &customData)
   qCDebug(quickShell) << Q_FUNC_INFO << customData;
 
   m_customData = customData;
-  emit customDataChanged(customData);
+  emit customDataChanged();
 
   if (m_componentComplete && m_surface) {
     m_surface->setCustomData(m_customData);
@@ -246,7 +246,7 @@ void QuickEmbeddedShellSurface::setAppId(const QString &appId)
   qCDebug(quickShell) << Q_FUNC_INFO << appId;
 
   m_appId = appId;
-  emit appIdChanged(appId);
+  emit appIdChanged();
 }
 
 QString QuickEmbeddedShellSurface::appLabel() const
@@ -263,7 +263,7 @@ void QuickEmbeddedShellSurface::setAppLabel(const QString &appLabel)
   qCDebug(quickShell) << Q_FUNC_INFO << appLabel;
 
   m_appLabel = appLabel;
-  emit appLabelChanged(appLabel);
+  emit appLabelChanged();
 
   if (m_componentComplete && m_surface) {
     m_surface->setAppLabel(m_appLabel);
@@ -284,7 +284,7 @@ void QuickEmbeddedShellSurface::setAppIcon(const QString &appIcon)
   qCDebug(quickShell) << Q_FUNC_INFO << appIcon;
 
   m_appIcon = appIcon;
-  emit appIconChanged(appIcon);
+  emit appIconChanged();
 
   if (m_componentComplete && m_surface) {
     m_surface->setAppIcon(m_appIcon);

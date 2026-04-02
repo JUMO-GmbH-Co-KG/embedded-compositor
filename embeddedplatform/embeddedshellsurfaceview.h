@@ -45,6 +45,8 @@ public:
   bool selected() const;
   void setSelected(bool selected);
 
+  void select();
+
 signals:
   void appLabelChanged(const QString &appLabel);
   void appIconChanged(const QString &appIcon);

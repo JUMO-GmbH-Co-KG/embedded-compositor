@@ -215,6 +215,7 @@ signals:
   void iconChanged(const QString &icon);
   void sortIndexChanged(unsigned int index);
   void customDataChanged(const QVariant &customData);
+  void aboutToBeSelected();
   void aboutToBeDestroyed();
 
 protected:
@@ -230,6 +231,7 @@ protected:
                                    uint32_t sort_index) override;
   void surface_view_set_custom_data(Resource *resource,
                                     wl_array *custom_data) override;
+  void surface_view_select(Resource *resource) override;
   void surface_view_destroy(Resource *resource) override;
 
 private:

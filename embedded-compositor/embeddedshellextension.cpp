@@ -493,6 +493,13 @@ void EmbeddedShellSurfaceView::surface_view_set_custom_data(Resource *resource,
   setCustomData(array_to_variant(custom_data));
 }
 
+void EmbeddedShellSurfaceView::surface_view_select(Resource *resource)
+{
+  Q_UNUSED(resource)
+  emit aboutToBeSelected();
+  QtWaylandServer::surface_view::surface_view_select(resource);
+}
+
 void EmbeddedShellSurfaceView::surface_view_destroy(Resource *resource)
 {
   Q_UNUSED(resource)

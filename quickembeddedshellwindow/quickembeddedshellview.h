@@ -54,16 +54,18 @@ public:
   QVariant customData() const;
   void setCustomData(const QVariant &customData);
 
+
 signals:
-  void surfaceChanged(QuickEmbeddedShellSurface *surface);
-  void selectedChanged(bool selected);
-  void appIdChanged(const QString &appId);
-  void appLabelChanged(const QString &appLabel);
-  void appIconChanged(const QString &appIcon);
-  void labelChanged(const QString &label);
-  void iconChanged(const QString &icon);
-  void sortIndexChanged(quint32 sortIndex);
-  void customDataChanged(const QVariant &customData);
+  void select();
+  void surfaceChanged();
+  void selectedChanged();
+  void appIdChanged();
+  void appLabelChanged();
+  void appIconChanged();
+  void labelChanged();
+  void iconChanged();
+  void sortIndexChanged();
+  void customDataChanged();
 
 private:
   void setSelected(bool selected);
