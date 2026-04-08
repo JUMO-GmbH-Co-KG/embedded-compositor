@@ -28,12 +28,11 @@ public:
 
   EmbeddedShellSurfaceView *q_ptr = nullptr;
 
-  QString m_appId;
-  QString m_appLabel;
-  QString m_appIcon;
+  EmbeddedShellSurfaceView *m_parentView = nullptr;
   QString m_label;
   QString m_icon;
-  uint32_t m_sortIndex;
+  uint32_t m_sortIndex = 0;
   QVariant m_customData;
   bool m_selected;
+  bool m_topLevel;
 };

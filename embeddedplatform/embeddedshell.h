@@ -23,8 +23,7 @@ public:
   explicit EmbeddedShell(QtWayland::embedded_shell *embeddedShell);
   EmbeddedShellSurface *createSurface(QtWaylandClient::QWaylandWindow *window,
                                       EmbeddedShellTypes::Anchor anchor,
-                                      uint32_t margin,
-                                      unsigned int sort_index);
+                                      uint32_t margin);
 
 private:
   QtWayland::embedded_shell *m_embeddedShell;

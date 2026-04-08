@@ -16,7 +16,6 @@ QuickEmbeddedShellSurface::QuickEmbeddedShellSurface(QObject *parent)
     , m_anchor(EmbeddedShellTypes::Anchor::Undefined)
     , m_surface(nullptr)
     , m_margin(-1)
-    , m_sortIndex(0)
     , m_componentComplete(false)
     , m_visible(false)
 {
@@ -63,11 +62,6 @@ void QuickEmbeddedShellSurface::componentComplete()
     }
     m_surface->setAnchor(m_anchor);
     m_surface->setMargin(m_margin);
-    m_surface->setSortIndex(m_sortIndex);
-    m_surface->setCustomData(m_customData);
-    m_surface->setAppId(m_appId);
-    m_surface->setAppLabel(m_appLabel);
-    m_surface->setAppIcon(m_appIcon);
 
     connect(m_surface, &EmbeddedShellSurface::visibleChanged, this, &QuickEmbeddedShellSurface::visibleChanged);
 
@@ -78,22 +72,7 @@ void QuickEmbeddedShellSurface::componentComplete()
 
     m_componentComplete = true;
     emit completedChanged();
-    qCDebug(quickShell) << Q_FUNC_INFO << m_surface << m_anchor << m_margin << m_size << m_sortIndex;
-  }
-}
-
-QWindow *QuickEmbeddedShellSurface::window() const
-{
-  return m_window;
-}
-
-void QuickEmbeddedShellSurface::setWindow(QWindow *window)
-{
-  if (!m_window && window) {
-    m_window = window;
-    emit windowChanged();
-  } else {
-    qCWarning(quickShell) << "Invalid window assignment from" << m_window << "to" << window << "!";
+    qCDebug(quickShell) << Q_FUNC_INFO << m_surface << m_anchor << m_margin << m_size;
   }
 }
 
@@ -118,7 +97,20 @@ void QuickEmbeddedShellSurface::setAnchor(EmbeddedShellTypes::Anchor newAnchor)
   }
 }
 
+QWindow *QuickEmbeddedShellSurface::window() const
+{
+  return m_window;
+}
 
+void QuickEmbeddedShellSurface::setWindow(QWindow *window)
+{
+  if (!m_window && window) {
+    m_window = window;
+    emit windowChanged();
+  } else {
+    qCWarning(quickShell) << "Invalid window assignment from" << m_window << "to" << window << "!";
+  }
+}
 
 int QuickEmbeddedShellSurface::implicitWidth() const
 {
@@ -185,112 +177,6 @@ void QuickEmbeddedShellSurface::setMargin(int newMargin)
   }
 }
 
-unsigned int QuickEmbeddedShellSurface::sortIndex() const
-{
-  return m_sortIndex;
-}
-
-void QuickEmbeddedShellSurface::setSortIndex(unsigned int sortIndex)
-{
-  if (m_sortIndex == sortIndex) {
-    return;
-  }
-
-  qCDebug(quickShell) << Q_FUNC_INFO << sortIndex;
-
-  m_sortIndex = sortIndex;
-  emit sortIndexChanged();
-
-  if (m_componentComplete && m_surface) {
-    m_surface->setSortIndex(m_sortIndex);
-  }
-}
-
-QVariant QuickEmbeddedShellSurface::customData() const
-{
-  return m_customData;
-}
-
-void QuickEmbeddedShellSurface::setCustomData(const QVariant &customData)
-{
-  if (m_customData == customData) {
-    return;
-  }
-
-  qCDebug(quickShell) << Q_FUNC_INFO << customData;
-
-  m_customData = customData;
-  emit customDataChanged();
-
-  if (m_componentComplete && m_surface) {
-    m_surface->setCustomData(m_customData);
-  }
-}
-
-QString QuickEmbeddedShellSurface::appId() const
-{
-  return m_appId;
-}
-
-void QuickEmbeddedShellSurface::setAppId(const QString &appId)
-{
-  if (m_componentComplete) {
-    qCWarning(quickShell) << Q_FUNC_INFO << "AppId cannot be changed after the component has been completed!";
-    return;
-  }
-
-  if (m_appId == appId) {
-    return;
-  }
-
-  qCDebug(quickShell) << Q_FUNC_INFO << appId;
-
-  m_appId = appId;
-  emit appIdChanged();
-}
-
-QString QuickEmbeddedShellSurface::appLabel() const
-{
-  return m_appLabel;
-}
-
-void QuickEmbeddedShellSurface::setAppLabel(const QString &appLabel)
-{
-  if (m_appLabel == appLabel) {
-    return;
-  }
-
-  qCDebug(quickShell) << Q_FUNC_INFO << appLabel;
-
-  m_appLabel = appLabel;
-  emit appLabelChanged();
-
-  if (m_componentComplete && m_surface) {
-    m_surface->setAppLabel(m_appLabel);
-  }
-}
-
-QString QuickEmbeddedShellSurface::appIcon() const
-{
-  return m_appIcon;
-}
-
-void QuickEmbeddedShellSurface::setAppIcon(const QString &appIcon)
-{
-  if (m_appIcon == appIcon) {
-    return;
-  }
-
-  qCDebug(quickShell) << Q_FUNC_INFO << appIcon;
-
-  m_appIcon = appIcon;
-  emit appIconChanged();
-
-  if (m_componentComplete && m_surface) {
-    m_surface->setAppIcon(m_appIcon);
-  }
-}
-
 bool QuickEmbeddedShellSurface::completed() const
 {
   return m_componentComplete;
@@ -301,32 +187,15 @@ bool QuickEmbeddedShellSurface::visible() const
   return m_surface && m_surface->visible();
 }
 
-EmbeddedShellSurfaceView *QuickEmbeddedShellSurface::createView(const QString &appId,
-                                                                const QString &appLabel,
-                                                                const QString &label,
-                                                                unsigned int sortIndex)
-{
-  if (m_surface) {
-    auto view = m_surface->createView(appId, appLabel, label, sortIndex);
-    qCDebug(quickShell) << Q_FUNC_INFO << appId << appLabel << view << label;
-    return view;
-  } else {
-    qCDebug(quickShell) << Q_FUNC_INFO << "Surface has not been created yet!";
-    return nullptr;
-  }
-}
-
-EmbeddedShellSurfaceView* QuickEmbeddedShellSurface::createView(const QString& appId,
-                                                                const QString& appLabel,
-                                                                const QString& appIcon,
-                                                                const QString& label,
+EmbeddedShellSurfaceView* QuickEmbeddedShellSurface::createView(const QString& label,
                                                                 const QString& icon,
                                                                 uint32_t sortIndex,
-                                                                const QVariant &customData)
+                                                                const QVariant &customData,
+                                                                EmbeddedShellSurfaceView *parentView)
 {
   if (m_surface) {
-    auto view = m_surface->createView(appId, appLabel, appIcon, label, icon, sortIndex, customData);
-    qCDebug(quickShell) << Q_FUNC_INFO << appId << appLabel << appIcon << label << icon << view << sortIndex << customData;
+    auto view = m_surface->createView(label, icon, sortIndex, customData, parentView);
+    qCDebug(quickShell) << Q_FUNC_INFO << label << icon << view << sortIndex << customData << parentView;
     return view;
   } else {
     qCDebug(quickShell) << Q_FUNC_INFO << "Surface has not been created yet!";

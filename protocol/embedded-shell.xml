@@ -15,25 +15,6 @@
 			<arg name="margin" type="int"/>
 		</request>
 
-		<request name="set_sort_index">
-			<arg name="sort_index" type="uint"/>
-		</request>
-
-		<request name="set_app_id">
-			<description summary="Set the application ID of the application"/>
-			<arg name="label" type="string"/>
-		</request>
-
-		<request name="set_app_label">
-			<description summary="Set the user-visible name of the application"/>
-			<arg name="label" type="string"/>
-		</request>
-
-		<request name="set_app_icon">
-			<description summary="Set the icon name of this application"/>
-			<arg name="icon" type="string"/>
-		</request>
-
 		<request name="set_size">
 			<description summary="Sets the size of the surface">
 				Sets the size of the surface in surface-local coordinates. The compositor will display the surface
@@ -46,26 +27,18 @@
 			<arg name="height" type="uint"/>
 		</request>
 
-		<request name="set_custom_data">
-			<arg name="custom_data" type="array"/>
-		</request>
-
 		<request name="view_create">
 			<description summary="create an embedded shell surface_view">
-				Creates an Embedded Shell Surface.
+				Creates an Embedded Shell Surface View.
 
-				The app_id identifies the logical application this surface belongs to.
-				The app_label can be empty at which point the label will be used.
-				The app_icon can be empty at which point the icon will be used.
+				The parent_view can be empty, indicating that this is a top level view.
 			</description>
 			<arg name="shell_surface" type="object" interface="embedded_shell_surface"/>
-			<arg name="app_id" type="string" summary="The application ID"/>
-			<arg name="app_label" type="string" summary="The user-visible name of the application"/>
-			<arg name="app_icon" type="string" summary="The icon name of the application"/>
 			<arg name="label" type="string" summary="The user-visible label for this particular view"/>
 			<arg name="icon" type="string" summary="The icon name of this particular view"/>
 			<arg name="sort_index" type="uint"/>
 			<arg name="custom_data" type="array"/>
+			<arg name="parent_view" type="object" interface="surface_view" allow-null="true"/>
 			<arg name="new_view_id" type="new_id" interface="surface_view"/>
 		</request>
 
@@ -90,7 +63,6 @@
 			<arg name="new_shellsurface_id" type="new_id" interface="embedded_shell_surface"/>
 			<arg name="anchor" type="uint"/>
 			<arg name="margin" type="uint"/>
-			<arg name="sort_index" type="uint"/>
 		</request>
 
 		<enum name="error">
@@ -109,16 +81,6 @@
 	</interface>
 
 	<interface name="surface_view" version="1">
-		<request name="set_app_label">
-			<description summary="Set the user-visible application name"/>
-			<arg name="label" type="string"/>
-		</request>
-
-		<request name="set_app_icon">
-			<description summary="Set the application icon name"/>
-			<arg name="label" type="string"/>
-		</request>
-
 		<request name="set_label">
 			<arg name="text" type="string"/>
 		</request>

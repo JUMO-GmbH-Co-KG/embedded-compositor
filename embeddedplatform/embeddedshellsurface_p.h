@@ -21,8 +21,7 @@ public:
                               QtWaylandClient::QWaylandWindow *window,
                               const QSize &size,
                               EmbeddedShellTypes::Anchor anchor,
-                              uint32_t margin,
-                              uint32_t sort_index);
+                              uint32_t margin);
 
   ~EmbeddedShellSurfacePrivate() override;
 
@@ -32,11 +31,6 @@ private:
   QSize m_size;
   EmbeddedShellTypes::Anchor m_anchor;
   uint32_t m_margin = 0;
-  uint32_t m_sort_index = 0;
-  QString m_app_id;
-  QString m_app_label;
-  QString m_app_icon;
-  QVariant m_custom_data;
 
   bool m_visible = false;
   QSize m_pendingSize = {0, 0};

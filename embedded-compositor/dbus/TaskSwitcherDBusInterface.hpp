@@ -20,11 +20,9 @@ public:
     explicit TaskSwitcherDBusInterface(QObject *parent = nullptr);
     virtual ~TaskSwitcherDBusInterface() override = default;
 
-    Q_PROPERTY(QString currentView READ currentView WRITE setCurrentView NOTIFY
-                   currentViewChanged)
+    Q_PROPERTY(QString currentView READ currentView WRITE setCurrentView NOTIFY currentViewChanged)
     Q_PROPERTY(QList<TaskSwitcherEntry> views READ views NOTIFY viewsChanged)
-    Q_PROPERTY(QAbstractListModel *viewModel READ viewModel WRITE setViewModel
-                   NOTIFY viewModelChanged)
+    Q_PROPERTY(QAbstractListModel *viewModel READ viewModel WRITE setViewModel NOTIFY viewModelChanged)
 
     // DBus
     void Open();
@@ -48,9 +46,7 @@ signals:
 
 private:
     void onViewsInserted(const QModelIndex &parent, int first, int last);
-    void onViewsAboutToBeRemoved(const QModelIndex &parent, int first, int last);
 
     QString m_currentView;
     QAbstractListModel *m_viewModel = nullptr;
-    QHash<EmbeddedShellSurface *, int> m_ConnectedEmbeddedShellSurfaces;
 };

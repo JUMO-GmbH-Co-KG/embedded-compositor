@@ -62,37 +62,14 @@ EmbeddedShellIntegration::createShellSurface(
 
   uint32_t sort_index = 0;
 
-  auto env_sort_index = qgetenv("EMBEDDED_SHELL_SORT_INDEX");
-  if (!env_sort_index.isNull()) {
-    bool ok = false;
-    sort_index = env_sort_index.toUInt(&ok);
-    if (!ok) {
-      qWarning() << "failed to read sort index from EMBEDDED_SORT_INDEX:"
-                 << env_sort_index << "is not an integer";
-    }
-  }
-
   prop = window->window()->property("sortIndex");
   if (prop.isValid())
     sort_index = prop.toUInt();
 
-  auto ess = m_shell->createSurface(window, anchor, margin, sort_index);
+  auto ess = m_shell->createSurface(window, anchor, margin);
 
   if (ess == nullptr) {
     return nullptr;
-  }
-
-  const QString appId = qEnvironmentVariable("EMBEDDED_SHELL_APP_ID");
-  if (!appId.isEmpty()) {
-    ess->setAppId(appId);
-  }
-  const QString appLabel = qEnvironmentVariable("EMBEDDED_SHELL_APP_LABEL");
-  if (!appLabel.isEmpty()) {
-    ess->setAppLabel(appLabel);
-  }
-  const QString appIcon = qEnvironmentVariable("EMBEDDED_SHELL_APP_ICON");
-  if (!appIcon.isEmpty()) {
-    ess->setAppIcon(appIcon);
   }
 
   m_windows.insert(window, ess);

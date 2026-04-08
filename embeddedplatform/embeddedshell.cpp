@@ -14,21 +14,18 @@ EmbeddedShell::EmbeddedShell(QtWayland::embedded_shell *embeddedShell)
 
 EmbeddedShellSurface *EmbeddedShell::createSurface(QtWaylandClient::QWaylandWindow *window,
                                                    EmbeddedShellTypes::Anchor anchor,
-                                                   uint32_t margin,
-                                                   unsigned int sort_index) {
-  qCDebug(shellExt) << Q_FUNC_INFO << anchor << margin << sort_index;
+                                                   uint32_t margin) {
+  qCDebug(shellExt) << Q_FUNC_INFO << anchor << margin;
   auto surface = m_embeddedShell->surface_create(
       window->wlSurface(),
       static_cast<embedded_shell_anchor_border>(anchor),
-      margin,
-      sort_index);
+      margin);
 
   const QSize size{0, 0};
   auto ess = new EmbeddedShellSurface(surface,
                                       window,
                                       size,
                                       anchor,
-                                      margin,
-                                      sort_index);
+                                      margin);
   return ess;
 }

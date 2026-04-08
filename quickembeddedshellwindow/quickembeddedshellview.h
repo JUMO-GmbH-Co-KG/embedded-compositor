@@ -14,14 +14,14 @@ class EMBEDDEDSHELLWINDOW_EXPORT QuickEmbeddedShellView : public QQuickItem
 
   Q_PROPERTY(QuickEmbeddedShellSurface *surface READ surface WRITE setSurface NOTIFY surfaceChanged)
   Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
+  Q_PROPERTY(bool topLevel READ topLevel NOTIFY topLevelChanged)
 
-  Q_PROPERTY(QString appId READ appId WRITE setAppId NOTIFY appIdChanged)
-  Q_PROPERTY(QString appLabel READ appLabel WRITE setAppLabel NOTIFY appLabelChanged)
-  Q_PROPERTY(QString appIcon READ appIcon WRITE setAppIcon NOTIFY appIconChanged)
+  Q_PROPERTY(EmbeddedShellSurfaceView *view READ view NOTIFY viewChanged)
   Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
   Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
   Q_PROPERTY(quint32 sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
   Q_PROPERTY(QVariant customData READ customData WRITE setCustomData NOTIFY customDataChanged)
+  Q_PROPERTY(QuickEmbeddedShellView *parentView READ parentView WRITE setParentView NOTIFY parentViewChanged)
 
 public:
   explicit QuickEmbeddedShellView(QQuickItem *parent = nullptr);
@@ -33,14 +33,9 @@ public:
 
   bool selected() const;
 
-  QString appId() const;
-  void setAppId(const QString &appId);
+  bool topLevel() const;
 
-  QString appLabel() const;
-  void setAppLabel(const QString &appLabel);
-
-  QString appIcon() const;
-  void setAppIcon(const QString &appIcon);
+  EmbeddedShellSurfaceView *view() const;
 
   QString label() const;
   void setLabel(const QString &label);
@@ -54,29 +49,32 @@ public:
   QVariant customData() const;
   void setCustomData(const QVariant &customData);
 
+  QuickEmbeddedShellView *parentView() const;
+  void setParentView(QuickEmbeddedShellView *parentView);
 
 signals:
   void select();
   void surfaceChanged();
   void selectedChanged();
-  void appIdChanged();
-  void appLabelChanged();
-  void appIconChanged();
+  void topLevelChanged();
+  void viewChanged();
+  void parentViewChanged();
   void labelChanged();
   void iconChanged();
   void sortIndexChanged();
   void customDataChanged();
 
 private:
-  void setSelected(bool selected);
+  void updateSelected(bool selected);
+  void updateTopLevel(bool topLevel);
   void createView();
 
   QuickEmbeddedShellSurface *m_surface;
   bool m_selected;
+  bool m_topLevel;
 
-  QString m_appId;
-  QString m_appLabel;
-  QString m_appIcon;
+  EmbeddedShellSurfaceView *m_view;
+  QuickEmbeddedShellView *m_parentView;
   QString m_label;
   QString m_icon;
   quint32 m_sortIndex;

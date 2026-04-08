@@ -9,8 +9,8 @@ EmbeddedShellSurfaceViewPrivate::EmbeddedShellSurfaceViewPrivate(EmbeddedShellSu
     : QObject(surf)
     , QtWayland::surface_view(view)
     , q_ptr(q)
-    , m_sortIndex(0)
     , m_selected(false)
+    , m_topLevel(false)
 {
 }
 
@@ -27,7 +27,7 @@ EmbeddedShellSurfaceViewPrivate *EmbeddedShellSurfaceViewPrivate::get(EmbeddedSh
 void EmbeddedShellSurfaceViewPrivate::surface_view_selected()
 {
   Q_Q(EmbeddedShellSurfaceView);
-  q->setSelected(true);
+  q->updateSelected(true, true);
 }
 
 QByteArray EmbeddedShellSurfaceViewPrivate::serializeVariant(const QVariant &variant)
@@ -46,42 +46,16 @@ QByteArray EmbeddedShellSurfaceViewPrivate::serializeVariant(const QVariant &var
   return byteArray;
 }
 
-EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(::surface_view *view,
-                                                   EmbeddedShellSurface *surf)
-    : d_ptr(new EmbeddedShellSurfaceViewPrivate(this, view, surf))
+EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(::surface_view *view, EmbeddedShellSurface *surface)
+    : d_ptr(new EmbeddedShellSurfaceViewPrivate(this, view, surface))
 {
+  connect(this, &EmbeddedShellSurfaceView::selectedUpdated, this, &EmbeddedShellSurfaceView::selectedChanged);
 }
 
-QString EmbeddedShellSurfaceView::appLabel() const
+EmbeddedShellSurfaceView *EmbeddedShellSurfaceView::parentView() const
 {
   Q_D(const EmbeddedShellSurfaceView);
-  return d->m_appLabel;
-}
-
-void EmbeddedShellSurfaceView::setAppLabel(const QString &appLabel)
-{
-  Q_D(EmbeddedShellSurfaceView);
-  if (d->m_appLabel == appLabel)
-    return;
-  d->m_appLabel = appLabel;
-  d->set_app_label(appLabel);
-  emit appLabelChanged(appLabel);
-}
-
-QString EmbeddedShellSurfaceView::appIcon() const
-{
-  Q_D(const EmbeddedShellSurfaceView);
-  return d->m_appIcon;
-}
-
-void EmbeddedShellSurfaceView::setAppIcon(const QString &appIcon)
-{
-  Q_D(EmbeddedShellSurfaceView);
-  if (d->m_appIcon == appIcon)
-    return;
-  d->m_appIcon = appIcon;
-  d->set_app_icon(appIcon);
-  emit appIconChanged(appIcon);
+  return d->m_parentView;
 }
 
 QString EmbeddedShellSurfaceView::label() const
@@ -154,13 +128,10 @@ bool EmbeddedShellSurfaceView::selected() const
   return d->m_selected;
 }
 
-void EmbeddedShellSurfaceView::setSelected(bool selected)
+bool EmbeddedShellSurfaceView::topLevel() const
 {
-  Q_D(EmbeddedShellSurfaceView);
-  if (d->m_selected == selected)
-    return;
-  d->m_selected = selected;
-  emit selectedChanged(selected);
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_topLevel;
 }
 
 void EmbeddedShellSurfaceView::select()
@@ -169,3 +140,27 @@ void EmbeddedShellSurfaceView::select()
   d->select();
 }
 
+const surface_view *EmbeddedShellSurfaceView::view() const
+{
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->object();
+}
+
+void EmbeddedShellSurfaceView::updateSelected(bool selected, bool explicitly)
+{
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_selected == selected)
+    return;
+
+  d->m_selected = selected;
+  emit selectedUpdated(selected, explicitly);
+}
+
+void EmbeddedShellSurfaceView::updateTopLevel(bool topLevel)
+{
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_topLevel == topLevel)
+    return;
+  d->m_topLevel = topLevel;
+  emit topLevelChanged(topLevel);
+}

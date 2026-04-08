@@ -10,21 +10,14 @@
 struct TaskSwitcherEntry
 {
     QString uuid;
-    QString appId;
-    QString appLabel;
-    QString appIcon;
+    QString parentUuid;
     QString label;
     QString icon;
-    uint32_t pid;
     uint32_t sortIndex;
-    QVariantMap args; // for future extension
 };
 
 Q_DECLARE_METATYPE(TaskSwitcherEntry)
 Q_DECLARE_METATYPE(QList<TaskSwitcherEntry>)
 
-QDBusArgument &operator<<(QDBusArgument &argument,
-                          const TaskSwitcherEntry &entry);
-
-const QDBusArgument &operator>>(const QDBusArgument &argument,
-                                TaskSwitcherEntry &entry);
+QDBusArgument &operator<<(QDBusArgument &argument, const TaskSwitcherEntry &entry);
+const QDBusArgument &operator>>(const QDBusArgument &argument, TaskSwitcherEntry &entry);
