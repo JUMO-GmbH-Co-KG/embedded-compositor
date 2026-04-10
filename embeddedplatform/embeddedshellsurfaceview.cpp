@@ -3,16 +3,14 @@
 #include "embeddedshellsurfaceview.h"
 #include "embeddedshellsurfaceview_p.h"
 
-#include <QDebug>
-
 EmbeddedShellSurfaceViewPrivate::EmbeddedShellSurfaceViewPrivate(EmbeddedShellSurfaceView *q,
                                                                  ::surface_view *view,
                                                                  EmbeddedShellSurface *surf)
     : QObject(surf)
     , QtWayland::surface_view(view)
     , q_ptr(q)
-    , m_sortIndex(0)
     , m_selected(false)
+    , m_topLevel(false)
 {
 }
 
@@ -28,47 +26,36 @@ EmbeddedShellSurfaceViewPrivate *EmbeddedShellSurfaceViewPrivate::get(EmbeddedSh
 
 void EmbeddedShellSurfaceViewPrivate::surface_view_selected()
 {
-  qDebug() << __PRETTY_FUNCTION__;
   Q_Q(EmbeddedShellSurfaceView);
-  q->setSelected(true);
+  q->updateSelected(true, true);
 }
 
-EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(::surface_view *view,
-                                                   EmbeddedShellSurface *surf)
-    : d_ptr(new EmbeddedShellSurfaceViewPrivate(this, view, surf))
+QByteArray EmbeddedShellSurfaceViewPrivate::serializeVariantMap(const QVariantMap &variantMap)
 {
+  QByteArray byteArray;
+  QDataStream stream(&byteArray, QDataStream::WriteOnly);
+  stream.setVersion(QDataStream::Qt_6_8);
+  stream << variantMap;
+
+  if (stream.status() != QDataStream::Status::Ok)
+  {
+    qWarning() << Q_FUNC_INFO << "Could not serialize" << variantMap << "!";
+    byteArray.clear();
+  }
+
+  return byteArray;
 }
 
-QString EmbeddedShellSurfaceView::appLabel() const
+EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(::surface_view *view, EmbeddedShellSurface *surface)
+    : d_ptr(new EmbeddedShellSurfaceViewPrivate(this, view, surface))
+{
+  connect(this, &EmbeddedShellSurfaceView::selectedUpdated, this, &EmbeddedShellSurfaceView::selectedChanged);
+}
+
+EmbeddedShellSurfaceView *EmbeddedShellSurfaceView::parentView() const
 {
   Q_D(const EmbeddedShellSurfaceView);
-  return d->m_appLabel;
-}
-
-void EmbeddedShellSurfaceView::setAppLabel(const QString &appLabel)
-{
-  Q_D(EmbeddedShellSurfaceView);
-  if (d->m_appLabel == appLabel)
-    return;
-  d->m_appLabel = appLabel;
-  d->set_app_label(appLabel);
-  Q_EMIT appLabelChanged(appLabel);
-}
-
-QString EmbeddedShellSurfaceView::appIcon() const
-{
-  Q_D(const EmbeddedShellSurfaceView);
-  return d->m_appIcon;
-}
-
-void EmbeddedShellSurfaceView::setAppIcon(const QString &appIcon)
-{
-  Q_D(EmbeddedShellSurfaceView);
-  if (d->m_appIcon == appIcon)
-    return;
-  d->m_appIcon = appIcon;
-  d->set_app_icon(appIcon);
-  Q_EMIT appIconChanged(appIcon);
+  return d->m_parentView;
 }
 
 QString EmbeddedShellSurfaceView::label() const
@@ -84,7 +71,7 @@ void EmbeddedShellSurfaceView::setLabel(const QString &label)
     return;
   d->m_label = label;
   d->set_label(label);
-  Q_EMIT labelChanged(label);
+  emit labelChanged(label);
 }
 
 QString EmbeddedShellSurfaceView::icon() const
@@ -100,7 +87,7 @@ void EmbeddedShellSurfaceView::setIcon(const QString &icon)
     return;
   d->m_icon = icon;
   d->set_icon(icon);
-  Q_EMIT iconChanged(icon);
+  emit iconChanged(icon);
 }
 
 unsigned int EmbeddedShellSurfaceView::sortIndex() const
@@ -116,7 +103,29 @@ void EmbeddedShellSurfaceView::setSortIndex(unsigned int sortIndex)
     return;
   d->m_sortIndex = sortIndex;
   d->set_sort_index(sortIndex);
-  Q_EMIT sortIndexChanged(sortIndex);
+  emit sortIndexChanged(sortIndex);
+}
+
+QString EmbeddedShellSurfaceView::persistentId() const
+{
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_persistentId;
+}
+
+QVariantMap EmbeddedShellSurfaceView::customData() const
+{
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_customData;
+}
+
+void EmbeddedShellSurfaceView::setCustomData(const QVariantMap &customData)
+{
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_customData == customData)
+    return;
+  d->m_customData = customData;
+  d->set_custom_data(EmbeddedShellSurfaceViewPrivate::serializeVariantMap(customData));
+  emit customDataChanged(customData);
 }
 
 bool EmbeddedShellSurfaceView::selected() const
@@ -125,11 +134,39 @@ bool EmbeddedShellSurfaceView::selected() const
   return d->m_selected;
 }
 
-void EmbeddedShellSurfaceView::setSelected(bool selected)
+bool EmbeddedShellSurfaceView::topLevel() const
+{
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_topLevel;
+}
+
+void EmbeddedShellSurfaceView::select()
 {
   Q_D(EmbeddedShellSurfaceView);
-  if (d->m_selected == selected)
+  d->select();
+}
+
+const surface_view *EmbeddedShellSurfaceView::view() const
+{
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->object();
+}
+
+void EmbeddedShellSurfaceView::updateSelected(bool selected, bool explicitly)
+{
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_selected == selected && !explicitly)
     return;
+
   d->m_selected = selected;
-  Q_EMIT selectedChanged(selected);
+  emit selectedUpdated(selected, explicitly);
+}
+
+void EmbeddedShellSurfaceView::updateTopLevel(bool topLevel)
+{
+  Q_D(EmbeddedShellSurfaceView);
+  if (d->m_topLevel == topLevel)
+    return;
+  d->m_topLevel = topLevel;
+  emit topLevelChanged(topLevel);
 }
