@@ -30,16 +30,16 @@ void EmbeddedShellSurfaceViewPrivate::surface_view_selected()
   q->updateSelected(true, true);
 }
 
-QByteArray EmbeddedShellSurfaceViewPrivate::serializeVariant(const QVariant &variant)
+QByteArray EmbeddedShellSurfaceViewPrivate::serializeVariantMap(const QVariantMap &variantMap)
 {
   QByteArray byteArray;
   QDataStream stream(&byteArray, QDataStream::WriteOnly);
   stream.setVersion(QDataStream::Qt_6_8);
-  stream << variant;
+  stream << variantMap;
 
   if (stream.status() != QDataStream::Status::Ok)
   {
-    qWarning() << Q_FUNC_INFO << "Could not serialize" << variant << "!";
+    qWarning() << Q_FUNC_INFO << "Could not serialize" << variantMap << "!";
     byteArray.clear();
   }
 
@@ -106,19 +106,19 @@ void EmbeddedShellSurfaceView::setSortIndex(unsigned int sortIndex)
   emit sortIndexChanged(sortIndex);
 }
 
-QVariant EmbeddedShellSurfaceView::customData() const
+QVariantMap EmbeddedShellSurfaceView::customData() const
 {
   Q_D(const EmbeddedShellSurfaceView);
   return d->m_customData;
 }
 
-void EmbeddedShellSurfaceView::setCustomData(const QVariant &customData)
+void EmbeddedShellSurfaceView::setCustomData(const QVariantMap &customData)
 {
   Q_D(EmbeddedShellSurfaceView);
   if (d->m_customData == customData)
     return;
   d->m_customData = customData;
-  d->set_custom_data(EmbeddedShellSurfaceViewPrivate::serializeVariant(customData));
+  d->set_custom_data(EmbeddedShellSurfaceViewPrivate::serializeVariantMap(customData));
   emit customDataChanged(customData);
 }
 

@@ -120,7 +120,7 @@ void EmbeddedShellSurfacePrivate::embedded_shell_surface_visible_changed(int32_t
 EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
                                                            const QString &icon,
                                                            uint32_t sortIndex,
-                                                           const QVariant &customData,
+                                                           const QVariantMap &customData,
                                                            EmbeddedShellSurfaceView* parentView)
 {
   Q_D(EmbeddedShellSurface);
@@ -128,7 +128,7 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
                                     label,
                                     icon,
                                     sortIndex,
-                                    EmbeddedShellSurfaceViewPrivate::serializeVariant(customData),
+                                    EmbeddedShellSurfaceViewPrivate::serializeVariantMap(customData),
                                     parentView ? const_cast<::surface_view *>(parentView->view()) : nullptr);
 
   auto view = new EmbeddedShellSurfaceView(waylandView, this);

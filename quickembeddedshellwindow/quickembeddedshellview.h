@@ -20,7 +20,7 @@ class EMBEDDEDSHELLWINDOW_EXPORT QuickEmbeddedShellView : public QQuickItem
   Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
   Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
   Q_PROPERTY(quint32 sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
-  Q_PROPERTY(QVariant customData READ customData WRITE setCustomData NOTIFY customDataChanged)
+  Q_PROPERTY(QVariantMap customData READ customData WRITE setCustomData NOTIFY customDataChanged)
   Q_PROPERTY(QuickEmbeddedShellView *parentView READ parentView WRITE setParentView NOTIFY parentViewChanged)
 
 public:
@@ -46,8 +46,8 @@ public:
   quint32 sortIndex() const;
   void setSortIndex(quint32 sortIndex);
 
-  QVariant customData() const;
-  void setCustomData(const QVariant &customData);
+  QVariantMap customData() const;
+  void setCustomData(const QVariantMap &customData);
 
   QuickEmbeddedShellView *parentView() const;
   void setParentView(QuickEmbeddedShellView *parentView);
@@ -78,6 +78,6 @@ private:
   QString m_label;
   QString m_icon;
   quint32 m_sortIndex;
-  QVariant m_customData;
+  QVariantMap m_customData;
   bool m_completed;
 };

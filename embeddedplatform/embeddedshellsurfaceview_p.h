@@ -24,7 +24,7 @@ public:
 
   void surface_view_selected() override;
 
-  static QByteArray serializeVariant(const QVariant &variant);
+  static QByteArray serializeVariantMap(const QVariantMap &variantMap);
 
   EmbeddedShellSurfaceView *q_ptr = nullptr;
 
@@ -32,7 +32,7 @@ public:
   QString m_label;
   QString m_icon;
   uint32_t m_sortIndex = 0;
-  QVariant m_customData;
+  QVariantMap m_customData;
   bool m_selected;
   bool m_topLevel;
 };

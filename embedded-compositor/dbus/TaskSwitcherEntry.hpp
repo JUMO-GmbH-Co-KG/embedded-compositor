@@ -14,6 +14,7 @@ struct TaskSwitcherEntry
     QString label;
     QString icon;
     uint32_t sortIndex;
+    QVariantMap customData;
 };
 
 Q_DECLARE_METATYPE(TaskSwitcherEntry)

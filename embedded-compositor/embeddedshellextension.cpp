@@ -11,9 +11,9 @@ Q_LOGGING_CATEGORY(shellExt, "embeddedshell.compositor")
 
 namespace
 {
-QVariant array_to_variant(wl_array *custom_data)
+QVariantMap array_to_variant_map(wl_array *custom_data)
 {
-  QVariant result;
+  QVariantMap result;
 
   if (custom_data) {
     auto byteArray = QByteArray(static_cast<const char *>(custom_data->data), custom_data->size);
@@ -24,7 +24,7 @@ QVariant array_to_variant(wl_array *custom_data)
 
     if (stream.status() != QDataStream::Status::Ok) {
       qCWarning(shellExt) << Q_FUNC_INFO << "Could not deserialize" << byteArray << "!";
-      result = QVariant();
+      result.clear();
     }
   }
 
@@ -232,7 +232,7 @@ void EmbeddedShellSurface::embedded_shell_surface_view_create(Resource *resource
     Q_ASSERT(parentView);
   }
 
-  auto customDataVariant = array_to_variant(custom_data);
+  auto customDataVariant = array_to_variant_map(custom_data);
   qCDebug(shellExt) << Q_FUNC_INFO << label << icon << id;
   auto view = new EmbeddedShellSurfaceView(label,
                                            icon,
@@ -248,7 +248,7 @@ void EmbeddedShellSurface::embedded_shell_surface_view_create(Resource *resource
 EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(const QString &label,
                                                    const QString &icon,
                                                    uint32_t sortIndex,
-                                                   const QVariant &customData,
+                                                   const QVariantMap &customData,
                                                    wl_client *client,
                                                    EmbeddedShellSurfaceView *parentView,
                                                    int id,
@@ -277,7 +277,7 @@ unsigned int EmbeddedShellSurfaceView::sortIndex() const
   return m_sortIndex;
 }
 
-QVariant EmbeddedShellSurfaceView::customData() const
+QVariantMap EmbeddedShellSurfaceView::customData() const
 {
   return m_customData;
 }
@@ -329,7 +329,7 @@ void EmbeddedShellSurfaceView::updateSortIndex(unsigned int newSortIndex)
 
 
 
-void EmbeddedShellSurfaceView::updateCustomData(const QVariant &customData)
+void EmbeddedShellSurfaceView::updateCustomData(const QVariantMap &customData)
 {
   if (m_customData == customData)
     return;
@@ -364,7 +364,7 @@ void EmbeddedShellSurfaceView::surface_view_set_custom_data(Resource *resource,
                                                             wl_array *custom_data)
 {
   Q_UNUSED(resource)
-  updateCustomData(array_to_variant(custom_data));
+  updateCustomData(array_to_variant_map(custom_data));
 }
 
 void EmbeddedShellSurfaceView::surface_view_select(Resource *resource)

@@ -19,7 +19,7 @@ class EmbeddedShellSurfaceView : public QObject
   Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
   Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
   Q_PROPERTY(int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
-  Q_PROPERTY(QVariant customData READ customData WRITE setCustomData NOTIFY customDataChanged)
+  Q_PROPERTY(QVariantMap customData READ customData WRITE setCustomData NOTIFY customDataChanged)
   Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
   Q_PROPERTY(bool topLevel READ topLevel NOTIFY topLevelChanged)
 
@@ -35,8 +35,8 @@ public:
   unsigned int sortIndex() const;
   void setSortIndex(unsigned int sortIndex);
 
-  QVariant customData() const;
-  void setCustomData(const QVariant &customData);
+  QVariantMap customData() const;
+  void setCustomData(const QVariantMap &customData);
 
   bool selected() const;
 
@@ -50,7 +50,7 @@ signals:
   void labelChanged(const QString &label);
   void iconChanged(const QString &icon);
   void sortIndexChanged(unsigned int sortIndex);
-  void customDataChanged(const QVariant &customData);
+  void customDataChanged(const QVariantMap &customData);
   void selectedUpdated(bool selected, bool explicitly = false);
   void selectedChanged(bool selected);
   void topLevelChanged(bool topLevel);

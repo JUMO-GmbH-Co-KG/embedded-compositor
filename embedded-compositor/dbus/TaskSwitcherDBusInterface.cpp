@@ -55,6 +55,7 @@ QList<TaskSwitcherEntry> TaskSwitcherDBusInterface::views() const
                   view->label(),
                   view->icon(),
                   view->sortIndex(),
+                  view->customData()
               });
             }
         }
@@ -66,7 +67,7 @@ QList<TaskSwitcherEntry> TaskSwitcherDBusInterface::views() const
 QDBusArgument &operator<<(QDBusArgument &argument, const TaskSwitcherEntry &entry)
 {
     argument.beginStructure();
-    argument << entry.uuid << entry.parentUuid << entry.label << entry.icon << entry.sortIndex;
+    argument << entry.uuid << entry.parentUuid << entry.label << entry.icon << entry.sortIndex << entry.customData;
     argument.endStructure();
     return argument;
 }
@@ -74,7 +75,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const TaskSwitcherEntry &entr
 const QDBusArgument &operator>>(const QDBusArgument &argument, TaskSwitcherEntry &entry)
 {
     argument.beginStructure();
-    argument >> entry.uuid >> entry.parentUuid >> entry.label >> entry.icon >> entry.sortIndex;
+    argument >> entry.uuid >> entry.parentUuid >> entry.label >> entry.icon >> entry.sortIndex >> entry.customData;
     argument.endStructure();
     return argument;
 }

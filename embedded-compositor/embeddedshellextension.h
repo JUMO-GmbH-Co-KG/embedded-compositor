@@ -117,7 +117,7 @@ class EmbeddedShellSurfaceView : public QObject,
   Q_PROPERTY(QString label READ label NOTIFY labelChanged)
   Q_PROPERTY(QString icon READ icon NOTIFY iconChanged)
   Q_PROPERTY(unsigned int sortIndex READ sortIndex NOTIFY sortIndexChanged)
-  Q_PROPERTY(QVariant customData NOTIFY customDataChanged)
+  Q_PROPERTY(QVariantMap customData NOTIFY customDataChanged)
   Q_PROPERTY(QString parentUuid READ parentUuid CONSTANT)
   Q_PROPERTY(QString uuid READ uuid CONSTANT)
 
@@ -125,7 +125,7 @@ public:
   EmbeddedShellSurfaceView(const QString &label,
                            const QString &icon,
                            uint32_t sortIndex,
-                           const QVariant &customData,
+                           const QVariantMap &customData,
                            wl_client *client,
                            EmbeddedShellSurfaceView *parentView,
                            int id,
@@ -134,7 +134,7 @@ public:
   QString label() const;
   QString icon() const;
   unsigned int sortIndex() const;
-  QVariant customData() const;
+  QVariantMap customData() const;
   QString parentUuid() const;
   QString uuid() const;
 
@@ -144,7 +144,7 @@ signals:
   void labelChanged(const QString &label);
   void iconChanged(const QString &icon);
   void sortIndexChanged(unsigned int index);
-  void customDataChanged(const QVariant &customData);
+  void customDataChanged(const QVariantMap &customData);
   void aboutToBeSelected();
   void aboutToBeDestroyed();
 
@@ -152,7 +152,7 @@ private:
   void updateLabel(const QString &label);
   void updateIcon(const QString &icon);
   void updateSortIndex(unsigned int newSortIndex);
-  void updateCustomData(const QVariant &customData);
+  void updateCustomData(const QVariantMap &customData);
 
 protected:
   void surface_view_set_label(Resource *resource,
@@ -171,7 +171,7 @@ private:
   QString m_label;
   QString m_icon;
   uint32_t m_sortIndex = 0;
-  QVariant m_customData;
+  QVariantMap m_customData;
   EmbeddedShellSurfaceView * m_parentView = nullptr;
 };
 

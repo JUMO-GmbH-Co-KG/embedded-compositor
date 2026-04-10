@@ -50,7 +50,7 @@ public:
   EmbeddedShellSurfaceView *createView(const QString &label,
                                        const QString &icon,
                                        uint32_t sortIndex,
-                                       const QVariant &customData = QVariant(),
+                                       const QVariantMap &customData = QVariantMap(),
                                        EmbeddedShellSurfaceView* parentView = nullptr);
 
   QtWaylandClient::QWaylandShellSurface *shellSurface();

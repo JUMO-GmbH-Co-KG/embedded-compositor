@@ -110,12 +110,12 @@ void QuickEmbeddedShellView::setSortIndex(quint32 sortIndex)
   }
 }
 
-QVariant QuickEmbeddedShellView::customData() const
+QVariantMap QuickEmbeddedShellView::customData() const
 {
   return m_customData;
 }
 
-void QuickEmbeddedShellView::setCustomData(const QVariant &customData)
+void QuickEmbeddedShellView::setCustomData(const QVariantMap &customData)
 {
   if (m_customData != customData) {
     m_customData = customData;

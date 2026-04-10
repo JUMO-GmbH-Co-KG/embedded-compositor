@@ -190,7 +190,7 @@ bool QuickEmbeddedShellSurface::visible() const
 EmbeddedShellSurfaceView* QuickEmbeddedShellSurface::createView(const QString& label,
                                                                 const QString& icon,
                                                                 uint32_t sortIndex,
-                                                                const QVariant &customData,
+                                                                const QVariantMap &customData,
                                                                 EmbeddedShellSurfaceView *parentView)
 {
   if (m_surface) {
