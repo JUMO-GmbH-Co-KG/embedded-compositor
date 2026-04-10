@@ -190,12 +190,18 @@ bool QuickEmbeddedShellSurface::visible() const
 EmbeddedShellSurfaceView* QuickEmbeddedShellSurface::createView(const QString& label,
                                                                 const QString& icon,
                                                                 uint32_t sortIndex,
+                                                                const QString &persistentId,
                                                                 const QVariantMap &customData,
                                                                 EmbeddedShellSurfaceView *parentView)
 {
   if (m_surface) {
-    auto view = m_surface->createView(label, icon, sortIndex, customData, parentView);
-    qCDebug(quickShell) << Q_FUNC_INFO << label << icon << view << sortIndex << customData << parentView;
+    auto view = m_surface->createView(label,
+                                      icon,
+                                      sortIndex,
+                                      persistentId,
+                                      customData,
+                                      parentView);
+    qCDebug(quickShell) << Q_FUNC_INFO << view << label << icon << sortIndex << persistentId << customData << parentView;
     return view;
   } else {
     qCDebug(quickShell) << Q_FUNC_INFO << "Surface has not been created yet!";

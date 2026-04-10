@@ -59,6 +59,7 @@ public:
   Q_INVOKABLE EmbeddedShellSurfaceView *createView(const QString &label,
                                                    const QString &icon,
                                                    uint32_t sortIndex,
+                                                   const QString &persistentId = QString(),
                                                    const QVariantMap &customData = QVariantMap(),
                                                    EmbeddedShellSurfaceView *parentView = nullptr);
 

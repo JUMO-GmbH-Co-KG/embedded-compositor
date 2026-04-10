@@ -37,6 +37,7 @@
 			<arg name="label" type="string" summary="The user-visible label for this particular view"/>
 			<arg name="icon" type="string" summary="The icon name of this particular view"/>
 			<arg name="sort_index" type="uint"/>
+			<arg name="persistentId" type="string" summary="Optional id to identify the views across session boundaries"/>
 			<arg name="custom_data" type="array"/>
 			<arg name="parent_view" type="object" interface="surface_view" allow-null="true"/>
 			<arg name="new_view_id" type="new_id" interface="surface_view"/>

@@ -51,6 +51,7 @@ QList<TaskSwitcherEntry> TaskSwitcherDBusInterface::views() const
             if (view) {
               entries.append({
                   view->uuid(),
+                  view->isPersistent(),
                   view->parentUuid(),
                   view->label(),
                   view->icon(),
@@ -67,7 +68,7 @@ QList<TaskSwitcherEntry> TaskSwitcherDBusInterface::views() const
 QDBusArgument &operator<<(QDBusArgument &argument, const TaskSwitcherEntry &entry)
 {
     argument.beginStructure();
-    argument << entry.uuid << entry.parentUuid << entry.label << entry.icon << entry.sortIndex << entry.customData;
+    argument << entry.uuid << entry.isPresistent << entry.parentUuid << entry.label << entry.icon << entry.sortIndex << entry.customData;
     argument.endStructure();
     return argument;
 }
@@ -75,7 +76,7 @@ QDBusArgument &operator<<(QDBusArgument &argument, const TaskSwitcherEntry &entr
 const QDBusArgument &operator>>(const QDBusArgument &argument, TaskSwitcherEntry &entry)
 {
     argument.beginStructure();
-    argument >> entry.uuid >> entry.parentUuid >> entry.label >> entry.icon >> entry.sortIndex >> entry.customData;
+    argument >> entry.uuid >> entry.isPresistent >> entry.parentUuid >> entry.label >> entry.icon >> entry.sortIndex >> entry.customData;
     argument.endStructure();
     return argument;
 }
