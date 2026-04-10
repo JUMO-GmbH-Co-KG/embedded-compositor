@@ -9,18 +9,13 @@ use of the [Qt Wayland module](https://doc.qt.io/qt-6/qtwaylandcompositor-index.
 [![build embedded compositor main](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
 [![CodeFactor](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor/badge)](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor)
 
-### Qt5 on the **qt5** branch
-[![build embedded compositor qt5](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml/badge.svg?branch=qt5)](https://github.com/JUMO-GmbH-Co-KG/embedded-compositor/actions/workflows/main.yml)
-[![CodeFactor](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor/badge/qt5)](https://www.codefactor.io/repository/github/jumo-gmbh-co-kg/embedded-compositor/overview/qt5)
-
-
 ## Layouting and general behavior
 
 The compositor implements window management through its QML UI.
-It is based around a custom wayland shell interface that allows windows to specify
+It is based around a custom wayland shell interface and uses an interface called "embedded_shell_surface" that allows clients to specify:
 
-* an anchor representing a screen edge or the center area, and
-* a margin representing the width in pixels the window will reserve from that edge (if not placed in the center).
+* An anchor representing a screen edge or the center area.
+* A margin representing the width in pixels the window will reserve from that edge (if not placed in the center).
 
 After the reserved amount of screen space is subtracted from each edge, the remaining
 screen area is provided to applications displayed in the center area.
@@ -35,13 +30,15 @@ The compositor also implements a default task switcher.
 
 ## Virtual Surface Views
 
-We expect some applications having multiple views that should be listed in a task switcher independently, while belonging to the same logical window/wayland surface.
-For this purpose we devised an interface called "surface_view" that represents a view within the applications logic that can be switched to via tha global task switch UI.
+Besides the "embedded_shell_surface" interface, another interface "surface_view" is provided, which can be used to define a hierarchy of views that can be shown
+within a global task switcher UI. It allows to specify the following values:
 
-## Sorting Windows and Views
+* A name under which it shall be shown in the task switcher.
+* An optional icon identifier that the task switcher can use.
+* An optional parent view to define a view hierarchy.
+* An optional index that the task switcher can use to sort the views on the same level.
 
-It can be desirable to provide a predictable order of surfaces in the task switcher and for this purpose we added an index that surfaces and surface views can be sorted by.
-It is expected that clients read their sort index from configuration provided by the system integrator.
+Each surface_view belongs to one embedded_shell_surface. One embedded_shell_surface can have multiple surface_views.
 
 ## Wayland Protocol Extension
 
@@ -131,11 +128,10 @@ For convenience of QML applications, we also implement a QML interface to embedd
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                var appId = "MyApp"
-                var appLabel = "My App"
-                var label = "My View"
+                var label = "My App"
+                var icon = "qrc:/Preview.jpg"
                 var sortIndex = 0
-                var view = myWindow.surface.createView(appId, appLabel, label, sortIndex);
+                var view = myWindow.surface.createView(label, icon, sortIndex);
                 view.selectedChanged.connect(function(){ if (view.selected) console.log("view", view.label, "was selected"); })
             }
         }
@@ -179,9 +175,8 @@ A declarative QML interface to embedded_shell_surface_view is also available (se
         View {
             id: myView
             surface: myWindow.surface
-            appId: "MyApp"
-            appLabel: "My App"
-            label: "My View"
+            label: "My App"
+            icon: "qrc:/Preview.jpg"
             sortIndex: 0
             
             Text { text: myView.label }
@@ -231,7 +226,7 @@ The compositor implements a couple of DBus interfaces to provide system/window m
 * /taskswitcher (de.EmbeddedCompositor.taskswitcher) - allows the task switcher to be opened or closed from e.g. a menu button. Provides List of currently active views (/taskswitcher/views) and allows currently active view to be queried and set (taskswitcher/currentView). Views are identified by a GUID and the list of surfaces includes process id and view label for convenience.
   * properties
     * currentView (type:string, access:readwrite)
-    * views (type:a(ssu), access:read)
+    * views (type:a(ssssua{sv}), access:read)
       * annotation name="org.qtproject.QtDBus.QtTypeName" value="QList&lt;TaskSwitcherEntry&gt;" 
 * /globaloverlay (de.EmbeddedCompositor.globaloverlay) - displays a global overlay hiding all other UI elements for a boot or shutdown message.
 * /screen (de.EmbeddedCompositor.screen) - control screen orientation via the orientation property. allowed values: "0", "90", "180", "270"

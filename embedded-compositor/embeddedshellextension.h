@@ -106,6 +106,7 @@ protected:
                                           const QString &label,
                                           const QString &icon,
                                           unsigned int sort_index,
+                                          const QString &persistentId,
                                           wl_array *custom_data,
                                           wl_resource *parent_view,
                                           uint32_t id) override;
@@ -120,11 +121,13 @@ class EmbeddedShellSurfaceView : public QObject,
   Q_PROPERTY(QVariantMap customData NOTIFY customDataChanged)
   Q_PROPERTY(QString parentUuid READ parentUuid CONSTANT)
   Q_PROPERTY(QString uuid READ uuid CONSTANT)
+  Q_PROPERTY(bool isPersistent READ isPersistent CONSTANT)
 
 public:
   EmbeddedShellSurfaceView(const QString &label,
                            const QString &icon,
                            uint32_t sortIndex,
+                           const QString &persistentId,
                            const QVariantMap &customData,
                            wl_client *client,
                            EmbeddedShellSurfaceView *parentView,
@@ -137,6 +140,7 @@ public:
   QVariantMap customData() const;
   QString parentUuid() const;
   QString uuid() const;
+  bool isPersistent() const;
 
   Q_INVOKABLE void select();
 
@@ -167,7 +171,8 @@ protected:
   void surface_view_destroy(Resource *resource) override;
 
 private:
-  QUuid m_uuid = QUuid::createUuid();
+  bool m_isPersistent = false;
+  QString m_uuid;
   QString m_label;
   QString m_icon;
   uint32_t m_sortIndex = 0;

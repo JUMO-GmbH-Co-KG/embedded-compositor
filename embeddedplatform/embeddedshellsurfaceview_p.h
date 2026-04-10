@@ -32,6 +32,7 @@ public:
   QString m_label;
   QString m_icon;
   uint32_t m_sortIndex = 0;
+  QString m_persistentId;
   QVariantMap m_customData;
   bool m_selected;
   bool m_topLevel;

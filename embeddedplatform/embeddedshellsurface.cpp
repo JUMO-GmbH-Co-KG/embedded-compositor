@@ -120,6 +120,7 @@ void EmbeddedShellSurfacePrivate::embedded_shell_surface_visible_changed(int32_t
 EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
                                                            const QString &icon,
                                                            uint32_t sortIndex,
+                                                           const QString &persistentId,
                                                            const QVariantMap &customData,
                                                            EmbeddedShellSurfaceView* parentView)
 {
@@ -128,6 +129,7 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
                                     label,
                                     icon,
                                     sortIndex,
+                                    persistentId,
                                     EmbeddedShellSurfaceViewPrivate::serializeVariantMap(customData),
                                     parentView ? const_cast<::surface_view *>(parentView->view()) : nullptr);
 
@@ -139,6 +141,7 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
   viewPrivate->m_label = label;
   viewPrivate->m_icon = icon;
   viewPrivate->m_sortIndex = sortIndex;
+  viewPrivate->m_persistentId = persistentId;
   viewPrivate->m_customData = customData;
 
   connect(view, &EmbeddedShellSurfaceView::selectedUpdated, d, [view, d](bool selected, bool explicitly) {

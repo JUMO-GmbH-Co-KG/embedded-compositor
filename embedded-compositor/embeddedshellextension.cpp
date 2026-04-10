@@ -214,6 +214,7 @@ void EmbeddedShellSurface::embedded_shell_surface_view_create(Resource *resource
                                                               const QString &label,
                                                               const QString &icon,
                                                               unsigned int sort_index,
+                                                              const QString &persistentId,
                                                               wl_array *custom_data,
                                                               wl_resource *parent_view,
                                                               uint32_t id)
@@ -233,10 +234,11 @@ void EmbeddedShellSurface::embedded_shell_surface_view_create(Resource *resource
   }
 
   auto customDataVariant = array_to_variant_map(custom_data);
-  qCDebug(shellExt) << Q_FUNC_INFO << label << icon << id;
+  qCDebug(shellExt) << Q_FUNC_INFO << label << icon << sort_index << persistentId << custom_data;
   auto view = new EmbeddedShellSurfaceView(label,
                                            icon,
                                            sort_index,
+                                           persistentId,
                                            customDataVariant,
                                            resource->client(),
                                            parentView,
@@ -248,12 +250,15 @@ void EmbeddedShellSurface::embedded_shell_surface_view_create(Resource *resource
 EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(const QString &label,
                                                    const QString &icon,
                                                    uint32_t sortIndex,
+                                                   const QString &persistentId,
                                                    const QVariantMap &customData,
                                                    wl_client *client,
                                                    EmbeddedShellSurfaceView *parentView,
                                                    int id,
                                                    int version)
     : QtWaylandServer::surface_view(client, id, version)
+    , m_isPersistent(!persistentId.isEmpty())
+    , m_uuid(m_isPersistent ? persistentId : QUuid::createUuid().toString(QUuid::WithoutBraces))
     , m_label(label)
     , m_icon(icon)
     , m_sortIndex(sortIndex)
@@ -289,7 +294,12 @@ QString EmbeddedShellSurfaceView::parentUuid() const
 
 QString EmbeddedShellSurfaceView::uuid() const
 {
-  return m_uuid.toString(QUuid::WithoutBraces);
+  return m_uuid;
+}
+
+bool EmbeddedShellSurfaceView::isPersistent() const
+{
+  return m_isPersistent;
 }
 
 void EmbeddedShellSurfaceView::select()

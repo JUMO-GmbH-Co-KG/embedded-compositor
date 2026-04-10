@@ -33,9 +33,17 @@ QuickEmbeddedShellSurface *QuickEmbeddedShellView::surface() const
 
 void QuickEmbeddedShellView::setSurface(QuickEmbeddedShellSurface *surface)
 {
-  if (!m_surface && surface) {
+  if (m_surface == surface) {
+    return;
+  }
+
+  if (!m_completed) {
     m_surface = surface;
     emit surfaceChanged();
+  }
+  else
+  {
+    qWarning() << "surface cannot be changed from" << m_surface << "to" << surface << ":" << m_completed;
   }
 }
 
@@ -110,6 +118,28 @@ void QuickEmbeddedShellView::setSortIndex(quint32 sortIndex)
   }
 }
 
+QString QuickEmbeddedShellView::persistentId() const
+{
+  return m_persistentId;
+}
+
+void QuickEmbeddedShellView::setPersistentId(const QString &persistentId)
+{
+  if (m_persistentId == persistentId) {
+    return;
+  }
+
+  if (!m_completed)
+  {
+    m_persistentId = persistentId;
+    emit persistentIdChanged();
+  }
+  else
+  {
+    qWarning() << "persistentId cannot be changed from" << m_persistentId << "to" << persistentId << ":" << m_completed;
+  }
+}
+
 QVariantMap QuickEmbeddedShellView::customData() const
 {
   return m_customData;
@@ -130,9 +160,18 @@ QuickEmbeddedShellView *QuickEmbeddedShellView::parentView() const
 
 void QuickEmbeddedShellView::setParentView(QuickEmbeddedShellView *parentView)
 {
-  if (!m_parentView && parentView) {
+  if (m_parentView == parentView) {
+    return;
+  }
+
+  if (!m_completed)
+  {
     m_parentView = parentView;
     emit parentViewChanged();
+  }
+  else
+  {
+    qWarning() << "parentView cannot be changed from" << m_parentView << "to" << parentView << ":" << m_completed;
   }
 }
 
@@ -150,7 +189,12 @@ void QuickEmbeddedShellView::createView()
     }
   }
 
-  m_view = m_surface->createView(m_label, m_icon, m_sortIndex, m_customData, parentView);
+  m_view = m_surface->createView(m_label,
+                                 m_icon,
+                                 m_sortIndex,
+                                 m_persistentId,
+                                 m_customData,
+                                 parentView);
   Q_ASSERT(m_view);
 
   connect(m_view, &EmbeddedShellSurfaceView::selectedChanged, this, &QuickEmbeddedShellView::updateSelected);

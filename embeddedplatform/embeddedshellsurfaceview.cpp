@@ -106,6 +106,12 @@ void EmbeddedShellSurfaceView::setSortIndex(unsigned int sortIndex)
   emit sortIndexChanged(sortIndex);
 }
 
+QString EmbeddedShellSurfaceView::persistentId() const
+{
+  Q_D(const EmbeddedShellSurfaceView);
+  return d->m_persistentId;
+}
+
 QVariantMap EmbeddedShellSurfaceView::customData() const
 {
   Q_D(const EmbeddedShellSurfaceView);
@@ -149,7 +155,7 @@ const surface_view *EmbeddedShellSurfaceView::view() const
 void EmbeddedShellSurfaceView::updateSelected(bool selected, bool explicitly)
 {
   Q_D(EmbeddedShellSurfaceView);
-  if (d->m_selected == selected)
+  if (d->m_selected == selected && !explicitly)
     return;
 
   d->m_selected = selected;

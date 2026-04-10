@@ -19,6 +19,7 @@ class EmbeddedShellSurfaceView : public QObject
   Q_PROPERTY(QString label READ label WRITE setLabel NOTIFY labelChanged)
   Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
   Q_PROPERTY(int sortIndex READ sortIndex WRITE setSortIndex NOTIFY sortIndexChanged)
+  Q_PROPERTY(QString persistentId READ persistentId CONSTANT)
   Q_PROPERTY(QVariantMap customData READ customData WRITE setCustomData NOTIFY customDataChanged)
   Q_PROPERTY(bool selected READ selected NOTIFY selectedChanged)
   Q_PROPERTY(bool topLevel READ topLevel NOTIFY topLevelChanged)
@@ -34,6 +35,8 @@ public:
 
   unsigned int sortIndex() const;
   void setSortIndex(unsigned int sortIndex);
+
+  QString persistentId() const;
 
   QVariantMap customData() const;
   void setCustomData(const QVariantMap &customData);

@@ -10,10 +10,11 @@
 struct TaskSwitcherEntry
 {
     QString uuid;
+    bool isPresistent{false};
     QString parentUuid;
     QString label;
     QString icon;
-    uint32_t sortIndex;
+    uint32_t sortIndex{0};
     QVariantMap customData;
 };
 
