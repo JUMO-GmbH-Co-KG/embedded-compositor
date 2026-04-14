@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef EMBEDDEDSHELLTYPES_H
-#define EMBEDDEDSHELLTYPES_H
+#pragma once
 
 #include <QObject>
 
@@ -12,5 +11,3 @@ namespace EmbeddedShellTypes
   #include "embeddedshellanchor.h"
   Q_ENUM_NS(Anchor)
 } // namespace EmbeddedShellTypes
-
-#endif // EMBEDDEDSHELLTYPES_H

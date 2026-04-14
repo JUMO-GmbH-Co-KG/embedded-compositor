@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef EMBEDDEDSHELLSURFACE_H
-#define EMBEDDEDSHELLSURFACE_H
+#pragma once
 
 #include "embeddedshelltypes.h"
 
 #include <QObject>
+#include <QVariant>
 
 class EmbeddedShellSurfaceView;
 class EmbeddedShellSurfacePrivate;
@@ -22,46 +22,43 @@ class Q_DECL_EXPORT EmbeddedShellSurface : public QObject
   Q_OBJECT
   Q_DECLARE_PRIVATE(EmbeddedShellSurface)
   QScopedPointer<EmbeddedShellSurfacePrivate> d_ptr;
+  Q_PROPERTY(EmbeddedShellTypes::Anchor anchor READ anchor WRITE setAnchor NOTIFY anchorChanged)
+  Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
+  Q_PROPERTY(QSize size READ size WRITE setSize NOTIFY sizeChanged)
+
+  Q_PROPERTY(bool visible READ visible NOTIFY visibleChanged)
 
 public:
-  EmbeddedShellSurface(struct ::embedded_shell_surface *shell_surface,
+  EmbeddedShellSurface(struct ::embedded_shell_surface *shellSurface,
                        QtWaylandClient::QWaylandWindow *window,
                        const QSize &size,
-                       EmbeddedShellTypes::Anchor anchor, uint32_t margin,
-                       uint32_t sort_index);
+                       EmbeddedShellTypes::Anchor anchor,
+                       uint32_t margin);
 
-  QSize getSize() const;
-  EmbeddedShellTypes::Anchor getAnchor() const;
-  unsigned int getSortIndex() const;
-  bool getVisible();
+public:
+  EmbeddedShellTypes::Anchor anchor() const;
+  void setAnchor(EmbeddedShellTypes::Anchor anchor);
+
+  int margin() const;
+  void setMargin(int margin);
+
+  QSize size() const;
+  void setSize(const QSize &size);
+
+  bool visible() const;
 
   EmbeddedShellSurfaceView *createView(const QString &label,
                                        const QString &icon,
-                                       uint32_t sort_index);
-  EmbeddedShellSurfaceView *createView(const QString &appId,
-                                       const QString &label,
-                                       const QString &icon,
-                                       uint32_t sort_index);
-  EmbeddedShellSurfaceView *createView(const QString &appId,
-                                       const QString &appLabel,
-                                       const QString &appIcon,
-                                       const QString &label,
-                                       const QString &icon,
-                                       uint32_t sort_index);
+                                       uint32_t sortIndex,
+                                       const QString &persistentId = QString(),
+                                       const QVariantMap &customData = QVariantMap(),
+                                       EmbeddedShellSurfaceView* parentView = nullptr);
 
   QtWaylandClient::QWaylandShellSurface *shellSurface();
 
 signals:
+  void anchorChanged(EmbeddedShellTypes::Anchor anchor);
+  void marginChanged(int margin);
+  void sizeChanged(const QSize &size);
   void visibleChanged(bool visible);
-
-public slots:
-  void sendSize(const QSize &size);
-  void sendAnchor(EmbeddedShellTypes::Anchor anchor);
-  void sendMargin(int margin);
-  void sendSortIndex(unsigned int sortIndex);
-  void sendAppId(const QString &appId);
-  void sendAppLabel(const QString &appLabe);
-  void sendAppIcon(const QString &appIcon);
 };
-
-#endif // EMBEDDEDSHELLSURFACE_H
