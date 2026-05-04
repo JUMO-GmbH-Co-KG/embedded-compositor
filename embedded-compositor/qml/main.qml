@@ -268,6 +268,10 @@ WaylandCompositor {
             var entry = surfaces[shellSurface];
             console.log("compositor: create view", view , "with entry", entry);
 
+            view.aboutToBeSelected.connect(function() {
+                taskSwitcherInterface.currentView = view.uuid;
+            })
+
             view.aboutToBeDestroyed.connect(function() {
                 for (var i = 0; i < count; i++) {
                     var data = get(i).data;

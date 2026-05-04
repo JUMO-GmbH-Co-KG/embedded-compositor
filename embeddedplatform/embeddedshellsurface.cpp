@@ -6,19 +6,17 @@
 #include "embeddedshellsurfaceview_p.h"
 #include <QtWaylandClient/private/qwaylandwindow_p.h>
 
-EmbeddedShellSurface::EmbeddedShellSurface(struct ::embedded_shell_surface *shell_surface,
+EmbeddedShellSurface::EmbeddedShellSurface(struct ::embedded_shell_surface *shellSurface,
                                            QtWaylandClient::QWaylandWindow *window,
                                            const QSize &size,
                                            EmbeddedShellTypes::Anchor anchor,
-                                           uint32_t margin,
-                                           uint32_t sort_index)
+                                           uint32_t margin)
     : d_ptr(new EmbeddedShellSurfacePrivate(this,
-                                            shell_surface,
+                                            shellSurface,
                                             window,
                                             size,
                                             anchor,
-                                            margin,
-                                            sort_index))
+                                            margin))
 {
 }
 
@@ -27,14 +25,12 @@ EmbeddedShellSurfacePrivate::EmbeddedShellSurfacePrivate(EmbeddedShellSurface *q
                                                          QtWaylandClient::QWaylandWindow *window,
                                                          const QSize &size,
                                                          EmbeddedShellTypes::Anchor anchor,
-                                                         uint32_t margin,
-                                                         uint32_t sort_index)
+                                                         uint32_t margin)
     : QWaylandShellSurface(window)
     , QtWayland::embedded_shell_surface(shell_surface)
     , m_size(size)
     , m_anchor(anchor)
     , m_margin(margin)
-    , m_sort_index(sort_index)
     , q_ptr(q)
 {
 }
@@ -43,25 +39,57 @@ EmbeddedShellSurfacePrivate::~EmbeddedShellSurfacePrivate()
 {
 }
 
-QSize EmbeddedShellSurface::getSize() const
-{
-  Q_D(const EmbeddedShellSurface);
-  return d->m_size;
-}
-
-EmbeddedShellTypes::Anchor EmbeddedShellSurface::getAnchor() const
+EmbeddedShellTypes::Anchor EmbeddedShellSurface::anchor() const
 {
   Q_D(const EmbeddedShellSurface);
   return d->m_anchor;
 }
 
-unsigned int EmbeddedShellSurface::getSortIndex() const
+void EmbeddedShellSurface::setAnchor(EmbeddedShellTypes::Anchor anchor)
 {
-  Q_D(const EmbeddedShellSurface);
-  return d->m_sort_index;
+  Q_D(EmbeddedShellSurface);
+  if (d->m_anchor != anchor) {
+    d->m_anchor = anchor;
+    d->set_anchor(static_cast<embedded_shell_anchor_border>(anchor));
+    emit anchorChanged(anchor);
+  }
 }
 
-bool EmbeddedShellSurface::getVisible()
+int EmbeddedShellSurface::margin() const
+{
+  Q_D(const EmbeddedShellSurface);
+  return d->m_margin;
+}
+
+void EmbeddedShellSurface::setMargin(int margin)
+{
+  Q_D(EmbeddedShellSurface);
+
+  if (d->m_margin != margin) {
+    d->m_margin = margin;
+    d->set_margin(margin);
+    emit marginChanged(margin);
+  }
+}
+
+QSize EmbeddedShellSurface::size() const
+{
+  Q_D(const EmbeddedShellSurface);
+  return d->m_size;
+}
+
+void EmbeddedShellSurface::setSize(const QSize &size)
+{
+  Q_D(EmbeddedShellSurface);
+
+  if (d->m_size != size) {
+    d->m_size = size;
+    d->set_size(size.width(), size.height());
+    emit sizeChanged(size);
+  }
+}
+
+bool EmbeddedShellSurface::visible() const
 {
   Q_D(const EmbeddedShellSurface);
   return d->m_visible;
@@ -91,51 +119,58 @@ void EmbeddedShellSurfacePrivate::embedded_shell_surface_visible_changed(int32_t
 
 EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
                                                            const QString &icon,
-                                                           uint32_t sort_index)
-{
-  return createView(QString(), QString(), QString(), label, icon, sort_index);
-}
-
-EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &appId,
-                                                           const QString &label,
-                                                           const QString &icon,
-                                                           uint32_t sort_index)
-{
-  return createView(appId, QString(), QString(), label, icon, sort_index);
-}
-
-EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &appId,
-                                                           const QString &appLabel,
-                                                           const QString &appIcon,
-                                                           const QString &label,
-                                                           const QString &icon,
-                                                           uint32_t sort_index)
+                                                           uint32_t sortIndex,
+                                                           const QString &persistentId,
+                                                           const QVariantMap &customData,
+                                                           EmbeddedShellSurfaceView* parentView)
 {
   Q_D(EmbeddedShellSurface);
   auto waylandView = d->view_create(d->embedded_shell_surface::object(),
-                             appId,
-                             appLabel,
-                             appIcon,
-                             label,
-                             icon,
-                             sort_index);
+                                    label,
+                                    icon,
+                                    sortIndex,
+                                    persistentId,
+                                    EmbeddedShellSurfaceViewPrivate::serializeVariantMap(customData),
+                                    parentView ? const_cast<::surface_view *>(parentView->view()) : nullptr);
 
   auto view = new EmbeddedShellSurfaceView(waylandView, this);
 
   auto *viewPrivate = EmbeddedShellSurfaceViewPrivate::get(view);
 
-  viewPrivate->m_appId = appId;
-  viewPrivate->m_appLabel = appLabel;
-  viewPrivate->m_appIcon = appIcon;
+  viewPrivate->m_parentView = parentView;
   viewPrivate->m_label = label;
   viewPrivate->m_icon = icon;
-  viewPrivate->m_sortIndex = sort_index;
+  viewPrivate->m_sortIndex = sortIndex;
+  viewPrivate->m_persistentId = persistentId;
+  viewPrivate->m_customData = customData;
 
-  connect(view, &EmbeddedShellSurfaceView::selectedChanged, d, [view, d](bool selected) {
-    if (selected) {
+  connect(view, &EmbeddedShellSurfaceView::selectedUpdated, d, [view, d](bool selected, bool explicitly) {
+    if (selected && explicitly) {
       if (d->m_selectedView != view) {
+
         if (d->m_selectedView) {
-          d->m_selectedView->setSelected(false);
+          d->m_selectedView->updateTopLevel(false);
+        }
+
+        view->updateTopLevel(true);
+
+        auto selectedViews = QList<EmbeddedShellSurfaceView *>() << view;
+        auto selectedView = view->parentView();
+
+        while (selectedView)
+        {
+          selectedView->updateSelected(true);
+          selectedViews << selectedView;
+          selectedView = selectedView->parentView();
+        }
+
+        EmbeddedShellSurfaceView *previousView = d->m_selectedView;
+        while (previousView) {
+          if (!selectedViews.contains(previousView))
+          {
+            previousView->updateSelected(false);
+          }
+          previousView = previousView->parentView();
         }
 
         d->m_selectedView = view;
@@ -149,47 +184,4 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &appId,
 QtWaylandClient::QWaylandShellSurface *EmbeddedShellSurface::shellSurface()
 {
   return d_ptr.data();
-}
-
-void EmbeddedShellSurface::sendSize(const QSize &size)
-{
-  Q_D(EmbeddedShellSurface);
-  // Check version here if it were versioned.
-  d->set_size(size.width(), size.height());
-}
-
-void EmbeddedShellSurface::sendAnchor(EmbeddedShellTypes::Anchor anchor)
-{
-  Q_D(EmbeddedShellSurface);
-  d->set_anchor(static_cast<embedded_shell_anchor_border>(anchor));
-}
-
-void EmbeddedShellSurface::sendMargin(int margin)
-{
-  Q_D(EmbeddedShellSurface);
-  d->set_margin(margin);
-}
-
-void EmbeddedShellSurface::sendSortIndex(unsigned int sortIndex)
-{
-  Q_D(EmbeddedShellSurface);
-  d->set_sort_index(sortIndex);
-}
-
-void EmbeddedShellSurface::sendAppId(const QString &appId)
-{
-  Q_D(EmbeddedShellSurface);
-  d->set_app_id(appId);
-}
-
-void EmbeddedShellSurface::sendAppLabel(const QString &appLabel)
-{
-  Q_D(EmbeddedShellSurface);
-  d->set_app_label(appLabel);
-}
-
-void EmbeddedShellSurface::sendAppIcon(const QString &appIcon)
-{
-  Q_D(EmbeddedShellSurface);
-  d->set_app_icon(appIcon);
 }

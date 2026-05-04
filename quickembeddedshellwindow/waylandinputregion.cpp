@@ -26,7 +26,7 @@ void WaylandInputRegion::setActive(bool active)
     if (isComponentComplete()) {
         updateRegion();
     }
-    Q_EMIT activeChanged(active);
+    emit activeChanged(active);
 }
 
 void WaylandInputRegion::itemChange(ItemChange c, const ItemChangeData& d) {
@@ -40,7 +40,7 @@ void WaylandInputRegion::geometryChange(const QRectF &newGeometry,
     updateRegion();
 }
 
-void WaylandInputRegion::SetImage(QVariant image, QRect sceneRect)
+void WaylandInputRegion::setImage(QVariant image, QRect sceneRect)
 {
   auto img = image.value<QImage>();
   img = img.createAlphaMask(Qt::AvoidDither);
@@ -77,7 +77,7 @@ void WaylandInputRegion::updateRegion() {
 
   auto result = grabToImage(aligned.size());
   connect(result.data(), &QQuickItemGrabResult::ready, this, [=](){
-      this->SetImage(result->image(), aligned);
+      this->setImage(result->image(), aligned);
       // QSharedPointer captured into this lambda remains alive indefinitely.
       // Disconnect, to dispose of the lambda and subsequently the object held by the shared pointer.
       disconnect(result.data(), &QQuickItemGrabResult::ready, this, nullptr);
@@ -88,4 +88,11 @@ void WaylandInputRegion::componentComplete()
 {
   updateRegion();
   QQuickItem::componentComplete();
+}
+
+void WaylandInputRegion::setPixelMask(bool newMask) {
+  if (m_pixelMask == newMask)
+    return;
+  m_pixelMask = newMask;
+  emit pixelMaskChanged(m_pixelMask);
 }

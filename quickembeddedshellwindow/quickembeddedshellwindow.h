@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef QUICKEMBEDDEDSHELLWINDOW_H
-#define QUICKEMBEDDEDSHELLWINDOW_H
+#pragma once
 
 #include "embeddedplatform.h"
 #include "quickembeddedshellsurface.h"
@@ -39,5 +38,3 @@ public:
 private:
   QuickEmbeddedShellSurface m_surface;
 };
-
-#endif // QUICKEMBEDDEDSHELLWINDOW_H

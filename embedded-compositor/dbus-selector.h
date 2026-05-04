@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-#ifndef DBUSSELECTOR_H
-#define DBUSSELECTOR_H
+#pragma once
+
 #include <QDBusConnection>
 
 inline QDBusConnection getBus() {
@@ -18,4 +18,3 @@ constexpr QDBusConnection::BusType defaultBus =
 #else
     QDBusConnection::BusType::SessionBus;
 #endif
-#endif // DBUSSELECTOR_H

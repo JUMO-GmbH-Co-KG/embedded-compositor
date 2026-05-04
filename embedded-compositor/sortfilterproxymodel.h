@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-#ifndef SORTFILTERPROXYMODEL_H
-#define SORTFILTERPROXYMODEL_H
+#pragma once
 
 #include <QSortFilterProxyModel>
 
@@ -46,12 +45,10 @@ protected:
   bool filterAcceptsRow(int sourceRow,
                         const QModelIndex &sourceParent) const override;
 
-private slots:
+private:
   void initRoles();
 
 private:
   QString m_sortFunction;
   QString m_acceptFunction;
 };
-
-#endif // SORTFILTERPROXYMODEL_H

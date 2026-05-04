@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef EMBEDDEDSHELLSURFACEVIEW_P_H
-#define EMBEDDEDSHELLSURFACEVIEW_P_H
+#pragma once
 
 #include "embeddedshellsurfaceview.h"
 #include "qwayland-embedded-shell.h"
+
+#include <QVariant>
 
 class EmbeddedShellSurfaceViewPrivate : public QObject,
                                         public QtWayland::surface_view
@@ -23,14 +24,16 @@ public:
 
   void surface_view_selected() override;
 
+  static QByteArray serializeVariantMap(const QVariantMap &variantMap);
+
   EmbeddedShellSurfaceView *q_ptr = nullptr;
 
-  QString m_appId;
-  QString m_appLabel;
-  QString m_appIcon;
+  EmbeddedShellSurfaceView *m_parentView = nullptr;
   QString m_label;
   QString m_icon;
-  uint32_t m_sortIndex;
+  uint32_t m_sortIndex = 0;
+  QString m_persistentId;
+  QVariantMap m_customData;
   bool m_selected;
+  bool m_topLevel;
 };
-#endif // EMBEDDEDSHELLSURFACEVIEW_P_H

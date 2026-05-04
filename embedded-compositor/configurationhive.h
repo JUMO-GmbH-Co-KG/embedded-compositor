@@ -1,5 +1,6 @@
-#ifndef CONFIGURATIONHIVE_H
-#define CONFIGURATIONHIVE_H
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#pragma once
 
 #include <QObject>
 #include <QQmlParserStatus>
@@ -13,5 +14,3 @@ public:
   void classBegin() override;
   void componentComplete() override;
 };
-
-#endif // CONFIGURATIONHIVE_H

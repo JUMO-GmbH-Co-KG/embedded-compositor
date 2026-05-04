@@ -59,7 +59,7 @@ void MainWindow::initShell(EmbeddedShellSurface *shellSurface,
     qWarning() << "NO SHELL SURFACE!";
     return;
   }
-  shellSurface->sendAnchor(EmbeddedShellTypes::Anchor::Center);
+  shellSurface->setAnchor(EmbeddedShellTypes::Anchor::Center);
   auto v1 = shellSurface->createView("View One", "View One", 3);
   auto v2 = shellSurface->createView("View Two", "View Two", -2);
   auto v3 = shellSurface->createView("View Three", "View Three", 1);
