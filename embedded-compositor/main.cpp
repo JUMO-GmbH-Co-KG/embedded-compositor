@@ -78,7 +78,7 @@ int main(int argc, char *argv[]) {
       {"socketName", QVariant::fromValue(socketName)}
     });
   }
-  
+
   ScreenShotDBusInterface screenShot(&appEngine);
 
   bool exitOnQmlWarning = qgetenv("QML_WARNING_EXIT") == "1";
