@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
     qInfo() << "Setting socket name to" << socketName;
 
     appEngine.setInitialProperties({
-      {"socketName", QVariant::fromValue(socketName)}
+      {"socketName", socketName}
     });
   }
 
