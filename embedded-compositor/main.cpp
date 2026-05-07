@@ -7,13 +7,12 @@
 #include <QDBusMetaType>
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
+#include <QtCore/qtenvironmentvariables.h>
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
-#include <qlogging.h>
-#include <qobject.h>
-#include <qtenvironmentvariables.h>
-#include <qvariant.h>
+#include <QObject>
+#include <QVariant>
 #include <sortfilterproxymodel.h>
 #include "ScreenShotDBusInterface.hpp"
 #include "TaskSwitcherDBusInterface.hpp"
