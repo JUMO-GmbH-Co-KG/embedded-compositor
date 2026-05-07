@@ -71,8 +71,8 @@ int main(int argc, char *argv[]) {
 
   QString socketName = qEnvironmentVariable("EMBEDDED_COMPOSITOR_SOCKET_NAME");
 
-  if(!socketName.isEmpty()) {
-    qInfo() << "Setting socket name to " << socketName;
+  if (!socketName.isEmpty()) {
+    qInfo() << "Setting socket name to" << socketName;
 
     appEngine.setInitialProperties({
       {"socketName", QVariant::fromValue(socketName)}
