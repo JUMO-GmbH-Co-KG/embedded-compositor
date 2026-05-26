@@ -7,9 +7,12 @@
 #include <QDBusMetaType>
 #include <QtCore/QDebug>
 #include <QtCore/QUrl>
+#include <QtCore/qtenvironmentvariables.h>
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
+#include <QObject>
+#include <QVariant>
 #include <sortfilterproxymodel.h>
 #include "ScreenShotDBusInterface.hpp"
 #include "TaskSwitcherDBusInterface.hpp"
@@ -64,6 +67,17 @@ int main(int argc, char *argv[]) {
                                         "SortFilterProxyModel");
 
   QQmlApplicationEngine appEngine;
+
+  QString socketName = qEnvironmentVariable("EMBEDDED_COMPOSITOR_SOCKET_NAME");
+
+  if (!socketName.isEmpty()) {
+    qInfo() << "Setting socket name to" << socketName;
+
+    appEngine.setInitialProperties({
+      {"socketName", socketName}
+    });
+  }
+
   ScreenShotDBusInterface screenShot(&appEngine);
 
   bool exitOnQmlWarning = qgetenv("QML_WARNING_EXIT") == "1";
