@@ -431,6 +431,14 @@ WaylandCompositor {
                 }
 
                 shellSurface.sendConfigure(Qt.size(newWidth, newHeight));
+
+                if (keyboardLoader.item && shellSurfaceItem.activeFocus) {
+                    // Note: This forces a reevaluation of Qt.inputMethod.keyboardRectangle on the client side.
+                    // Without resetting the activeFocus, the new window size isn't taken into account and
+                    // keyboardRectangle will have an incorrect value for the client.
+                    rootTransformItem.forceActiveFocus()
+                    shellSurfaceItem.forceActiveFocus()
+                }
             }
         }
     }
