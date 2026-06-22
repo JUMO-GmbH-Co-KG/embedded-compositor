@@ -62,6 +62,8 @@ WaylandCompositor {
             state: dbusScreenInterface.orientation
             fullScreen: dbusScreenInterface.fullScreen
 
+            property Item activeArea
+
             Item {
                 Keys.onPressed:
                     (event)=> {
@@ -85,7 +87,9 @@ WaylandCompositor {
 
             Item {
                 id: centerArea
+
                 objectName: "centerArea"
+
                 anchors.top: !rootTransformItem.fullScreen ? topArea.bottom : rootTransformItem.top
                 anchors.left: !rootTransformItem.fullScreen ? leftArea.right : rootTransformItem.left
                 anchors.right: !rootTransformItem.fullScreen ? rightArea.left : rootTransformItem.right
@@ -126,7 +130,11 @@ WaylandCompositor {
 
             Item {
                 id: leftArea
+
                 objectName: "leftArea"
+
+                z: rootTransformItem.activeArea === leftArea ? 1 : 0
+
                 width: surfaceItem ? surfaceItem.margin:window.initialSize
                 anchors.bottom: bottomArea.top
                 anchors.left: parent.left
@@ -137,7 +145,11 @@ WaylandCompositor {
 
             Item {
                 id: rightArea
+
                 objectName: "rightArea"
+
+                z: rootTransformItem.activeArea === rightArea ? 1 : 0
+
                 width: surfaceItem ? surfaceItem.margin :window.initialSize
                 anchors.bottom:bottomArea.top
                 anchors.right: parent.right
@@ -148,7 +160,11 @@ WaylandCompositor {
 
             Item {
                 id: topArea
+
                 objectName: "topArea"
+
+                z: rootTransformItem.activeArea === topArea ? 1 : 0
+
                 height: surfaceItem ? surfaceItem.margin : window.initialSize
                 anchors.top: parent.top
                 anchors.left: parent.left
@@ -159,7 +175,11 @@ WaylandCompositor {
 
             Item {
                 id: bottomArea
+
                 objectName: "bottomArea"
+
+                z: rootTransformItem.activeArea === bottomArea ? 1 : 0
+
                 height: surfaceItem ? surfaceItem.margin : window.initialSize
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
@@ -170,6 +190,9 @@ WaylandCompositor {
 
             Loader {
                 id: taskSwitcherLoader
+
+                z: 2
+
                 anchors.fill:parent
                 source: configuration.taskSwitcherUrl
                 active: true
@@ -178,15 +201,18 @@ WaylandCompositor {
                     item.switchTask.connect(doSwitch)
                 }
 
-                function doSwitch(shellSurface, view)
-                {
+                function doSwitch(shellSurface, view) {
                     centerArea.selectSurface(shellSurface, view);
                 }
             }
 
             Loader {
                 id: keyboardLoader
+
                 readonly property int contentYTranslate: item ? item.contentYTranslate : 0
+
+                z: 2
+
                 source: "Keyboard.qml"
                 anchors.fill: parent
                 onStatusChanged: {
@@ -197,11 +223,16 @@ WaylandCompositor {
             }
 
             Notifications {
+                z: 2
+
                 anchors.fill: parent
             }
 
             Loader {
                 id: globalOverlayLoader
+
+                z: 2
+
                 anchors.fill:parent
                 source: configuration.globalOverlayUrl
                 active: true
@@ -209,12 +240,16 @@ WaylandCompositor {
 
             ScreenSaverController {
                 id: screenSaverController
+
+                z: 2
+
                 timeoutSeconds: dbusScreenInterface.screenSaverTimeoutSeconds
                 screenSaverUrl: configuration.screenSaverUrl
                 screenSaverEnabled: dbusScreenInterface.screenSaverEnabled
                 mouseHoverSupport: configuration.screenSaverMouseHoverSupport
             }
         }
+
         Item {
             id: limboArea
             objectName: "limboArea"
@@ -340,9 +375,18 @@ WaylandCompositor {
             property bool isCurrentSurface: parent.surfaceItem === shellSurfaceItem
             visible: isCurrentSurface
 
+            onActiveFocusChanged: {
+                if (activeFocus) {
+                    rootTransformItem.activeArea = parent
+                } else if (rootTransformItem.activeArea === parent) {
+                    rootTransformItem.activeArea = null
+                }
+            }
+
             onSurfaceDestroyed:  destroy()
             onWidthChanged: Qt.callLater(handleResized)
             onHeightChanged: Qt.callLater(handleResized)
+
             Component.onCompleted: {
                 handleAnchor();
                 updateVisibility();
@@ -469,6 +513,7 @@ WaylandCompositor {
         onShowRequested: (message) => {
             globalOverlayLoader.item.show(message);
         }
+
         onHideRequested: {
             if(globalOverlayLoader.active)
                 globalOverlayLoader.item.hide()
