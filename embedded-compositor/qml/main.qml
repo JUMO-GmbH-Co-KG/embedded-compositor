@@ -7,9 +7,9 @@ import QtWayland.Compositor.XdgShell
 import QtQuick.Window
 import QtQml.Models
 
-import de.EmbeddedCompositor.dbus 1.0
-import de.EmbeddedCompositor.embeddedshell 1.0
-import de.EmbeddedCompositor.configuration 1.0
+import de.EmbeddedCompositor.dbus
+import de.EmbeddedCompositor.embeddedshell
+import de.EmbeddedCompositor.configuration
 
 import "DefaultTaskSwitcher"
 import "Notifications"

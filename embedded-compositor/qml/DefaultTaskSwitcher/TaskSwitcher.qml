@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import QtQuick 2.0
-import QtWayland.Compositor 1.0
-import de.EmbeddedCompositor.embeddedshell 1.0
+import QtQuick
 import QtQuick.Effects
-import de.EmbeddedCompositor.utility 1.0
+import QtWayland.Compositor
+
+import de.EmbeddedCompositor.embeddedshell
+import de.EmbeddedCompositor.utility
 
 Rectangle {
     id: taskSwitcher

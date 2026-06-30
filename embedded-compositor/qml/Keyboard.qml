@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import QtQuick 2.15
-import QtQuick.VirtualKeyboard 2.0
+import QtQuick
+import QtQuick.VirtualKeyboard
 
 Item {
     id: keyboardContainer

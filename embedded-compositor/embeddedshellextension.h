@@ -53,6 +53,7 @@ class EmbeddedShellSurface
   Q_PROPERTY(int margin READ margin NOTIFY marginChanged)
   Q_PROPERTY(QSize size READ size NOTIFY sizeChanged)
   Q_PROPERTY(QString uuid READ uuid CONSTANT)
+  Q_PROPERTY(QWaylandSurface *surface READ surface CONSTANT)
 
 public:
   EmbeddedShellSurface(EmbeddedShellExtension *extension,
