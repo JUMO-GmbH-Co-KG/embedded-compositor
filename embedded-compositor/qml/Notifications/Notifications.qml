@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 
-import QtQuick 2.0
-import QtQuick.Controls 2.15
-import de.EmbeddedCompositor.dbus 1.0
-import de.EmbeddedCompositor.utility 1.0
+import QtQuick
+import QtQuick.Controls
+
+import de.EmbeddedCompositor.dbus
+import de.EmbeddedCompositor.utility
 
 Rectangle {
     color: Qt.rgba(0,0,0,0.5)

@@ -1,4 +1,6 @@
-import QtQuick 2.15
+// SPDX-License-Identifier: GPL-3.0-only
+
+import QtQuick
 
 Rectangle {
     id: screenSaverRoot

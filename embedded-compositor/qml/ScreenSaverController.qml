@@ -1,11 +1,13 @@
-import QtQuick 2.15
-import QtWayland.Compositor 1.0
-import QtQuick.Window 2.2
-import QtQml.Models 2.1
+// SPDX-License-Identifier: GPL-3.0-only
 
-import de.EmbeddedCompositor.dbus 1.0
-import de.EmbeddedCompositor.embeddedshell 1.0
-import de.EmbeddedCompositor.configuration 1.0
+import QtQuick
+import QtWayland.Compositor
+import QtQuick.Window
+import QtQml.Models
+
+import de.EmbeddedCompositor.dbus
+import de.EmbeddedCompositor.embeddedshell
+import de.EmbeddedCompositor.configuration
 
 import "DefaultTaskSwitcher"
 import "Notifications"
