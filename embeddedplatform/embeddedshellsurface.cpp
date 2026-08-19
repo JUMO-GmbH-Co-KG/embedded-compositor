@@ -178,6 +178,8 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
     }
   });
 
+  emit viewCreated(view);
+
   return view;
 }
 

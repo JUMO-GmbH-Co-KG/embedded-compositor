@@ -61,4 +61,5 @@ signals:
   void marginChanged(int margin);
   void sizeChanged(const QSize &size);
   void visibleChanged(bool visible);
+  void viewCreated(EmbeddedShellSurfaceView *view);
 };

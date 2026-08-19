@@ -22,11 +22,13 @@ EmbeddedShellIntegration
 {
 public:
   EmbeddedShellIntegration();
-  QtWaylandClient::QWaylandShellSurface *
-  createShellSurface(QtWaylandClient::QWaylandWindow *window) override;
+  QtWaylandClient::QWaylandShellSurface *createShellSurface(QtWaylandClient::QWaylandWindow *window) override;
+
   // QWaylandShellIntegration interface
-  void *nativeResourceForWindow(const QByteArray &resource,
-                                QWindow *window) override;
+  void *nativeResourceForWindow(const QByteArray &resource, QWindow *window) override;
+
+private:
+  void createDefaultView(EmbeddedShellSurface *shellSurface);
 
 private:
   QScopedPointer<EmbeddedShell> m_shell;
