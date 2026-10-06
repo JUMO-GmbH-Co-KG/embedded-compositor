@@ -80,6 +80,7 @@ signals:
   void marginChanged(int margin);
   void sizeChanged(const QSize &size);
   void createView(EmbeddedShellSurfaceView *view);
+  void activate();
 
 private:
   void updateAnchor(EmbeddedShellTypes::Anchor newAnchor);
@@ -111,6 +112,7 @@ protected:
                                           wl_array *custom_data,
                                           wl_resource *parent_view,
                                           uint32_t id) override;
+  void embedded_shell_surface_activate(Resource *resource) override;
 };
 
 class EmbeddedShellSurfaceView : public QObject,

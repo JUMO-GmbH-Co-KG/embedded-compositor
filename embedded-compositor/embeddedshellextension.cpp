@@ -247,6 +247,11 @@ void EmbeddedShellSurface::embedded_shell_surface_view_create(Resource *resource
   emit createView(view);
 }
 
+void EmbeddedShellSurface::embedded_shell_surface_activate(Resource *resource)
+{
+  emit activate();
+}
+
 EmbeddedShellSurfaceView::EmbeddedShellSurfaceView(const QString &label,
                                                    const QString &icon,
                                                    uint32_t sortIndex,

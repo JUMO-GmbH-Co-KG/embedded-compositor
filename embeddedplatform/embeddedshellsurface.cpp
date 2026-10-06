@@ -183,6 +183,12 @@ EmbeddedShellSurfaceView *EmbeddedShellSurface::createView(const QString &label,
   return view;
 }
 
+void EmbeddedShellSurface::requestActivate()
+{
+  Q_D(EmbeddedShellSurface);
+  d->activate();
+}
+
 QtWaylandClient::QWaylandShellSurface *EmbeddedShellSurface::shellSurface()
 {
   return d_ptr.data();

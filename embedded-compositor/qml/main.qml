@@ -419,6 +419,10 @@ WaylandCompositor {
                 function onCreateView(view) {
                     centerApplicationViewModel.createView(shellSurface, view);
                 }
+
+                function onActivate() {
+                    shellSurfaceItem.forceActiveFocus()
+                }
             }
 
             function updateVisibility() {
