@@ -208,3 +208,12 @@ EmbeddedShellSurfaceView* QuickEmbeddedShellSurface::createView(const QString& l
     return nullptr;
   }
 }
+
+void QuickEmbeddedShellSurface::requestActivate()
+{
+  if (m_surface) {
+    m_surface->requestActivate();
+  } else {
+    qCDebug(quickShell) << Q_FUNC_INFO << "Surface has not been created yet!";
+  }
+}

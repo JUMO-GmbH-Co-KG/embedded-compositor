@@ -54,6 +54,8 @@ public:
                                        const QVariantMap &customData = QVariantMap(),
                                        EmbeddedShellSurfaceView* parentView = nullptr);
 
+  void requestActivate();
+
   QtWaylandClient::QWaylandShellSurface *shellSurface();
 
 signals:

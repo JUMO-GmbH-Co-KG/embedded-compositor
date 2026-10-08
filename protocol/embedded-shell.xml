@@ -42,6 +42,8 @@
 			<arg name="parent_view" type="object" interface="surface_view" allow-null="true"/>
 			<arg name="new_view_id" type="new_id" interface="surface_view"/>
 		</request>
+		
+		<request name="activate"/>
 
 		<event name="configure">
 			<description summary="suggest resize">

@@ -63,6 +63,8 @@ public:
                                                    const QVariantMap &customData = QVariantMap(),
                                                    EmbeddedShellSurfaceView *parentView = nullptr);
 
+  Q_INVOKABLE void requestActivate();
+
 signals:
   void windowChanged();
   void implicitWidthChanged();
