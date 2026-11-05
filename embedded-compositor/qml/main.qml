@@ -51,11 +51,13 @@ WaylandCompositor {
     Window {
         id: window
         objectName: "compositorWindow"
+
         // the window tracks the physical screen dimensions
         width: configuration.screenWidth
         height: configuration.screenHeight
+
+        color: configuration.backgroundColor
         visible: true
-        property real initialSize: 0
 
         RootTransformer {
             id: rootTransformItem
@@ -135,7 +137,7 @@ WaylandCompositor {
 
                 z: rootTransformItem.activeArea === leftArea ? 1 : 0
 
-                width: surfaceItem ? surfaceItem.margin:window.initialSize
+                width: surfaceItem?.margin ?? 0
                 anchors.bottom: bottomArea.top
                 anchors.left: parent.left
                 anchors.top: topArea.bottom
@@ -150,7 +152,7 @@ WaylandCompositor {
 
                 z: rootTransformItem.activeArea === rightArea ? 1 : 0
 
-                width: surfaceItem ? surfaceItem.margin :window.initialSize
+                width: surfaceItem?.margin ?? 0
                 anchors.bottom:bottomArea.top
                 anchors.right: parent.right
                 anchors.top: topArea.bottom
@@ -165,7 +167,7 @@ WaylandCompositor {
 
                 z: rootTransformItem.activeArea === topArea ? 1 : 0
 
-                height: surfaceItem ? surfaceItem.margin : window.initialSize
+                height: surfaceItem?.margin ?? 0
                 anchors.top: parent.top
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -180,7 +182,7 @@ WaylandCompositor {
 
                 z: rootTransformItem.activeArea === bottomArea ? 1 : 0
 
-                height: surfaceItem ? surfaceItem.margin : window.initialSize
+                height: surfaceItem?.margin ?? 0
                 anchors.bottom: parent.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -553,5 +555,6 @@ WaylandCompositor {
         // compositor controlled rotation, i.e. "0", "90", "180", "270"
         property string screenOrientation: "0"
         property bool fullScreen: false
+        property color backgroundColor
     }
 }

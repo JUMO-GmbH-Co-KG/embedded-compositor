@@ -5,8 +5,11 @@
 #include <QObject>
 #include <QQmlParserStatus>
 
-class ConfigurationHive : public QObject, public QQmlParserStatus {
+class ConfigurationHive : public QObject, public QQmlParserStatus
+{
   Q_OBJECT
+  Q_INTERFACES(QQmlParserStatus)
+
 public:
   ConfigurationHive();
 
